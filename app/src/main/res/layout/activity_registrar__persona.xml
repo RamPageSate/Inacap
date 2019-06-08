@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/BlancoInacap"
+    tools:context=".Registrar_Persona">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="110dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logoinacap" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="Registro:"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="1.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="487dp">
+
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="40dp"
+                android:layout_weight="1"
+                android:foregroundGravity="bottom"
+                android:gravity="left"
+                android:text="Foto (Opcional)"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+            <ImageView
+                android:id="@+id/btnImagen"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="right"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="-45dp"
+                android:layout_weight="1"
+                android:background="@drawable/addimagen"
+                android:paddingRight="-6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+            <EditText
+                android:id="@+id/etNombreRegistro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/stylo_editext"
+                android:ems="15"
+                android:hint="Nombre"
+                android:inputType="textPersonName"
+                android:paddingTop="6dp"
+                android:textColor="@color/GrisInacap" />
+
+            <EditText
+                android:id="@+id/etApellidoRegistro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/stylo_editext"
+                android:ems="18"
+                android:hint="Apellido"
+                android:inputType="textPersonName"
+                android:paddingTop="6dp"
+                android:textColor="@color/GrisInacap" />
+
+            <EditText
+                android:id="@+id/etEmailRegistro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/stylo_editext"
+                android:ems="18"
+                android:hint="Correo Electrónico"
+                android:inputType="textEmailAddress"
+                android:paddingTop="6dp"
+                android:textColor="@color/GrisInacap" />
+
+            <EditText
+                android:id="@+id/etContrasenaRegistro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/stylo_editext"
+                android:ems="18"
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                android:paddingTop="6dp"
+                android:textColor="@color/GrisInacap" />
+
+            <EditText
+                android:id="@+id/etRepetirContrasenaRegistro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/stylo_editext"
+                android:ems="18"
+                android:hint="Repetir Contraseña"
+                android:inputType="textPassword"
+                android:paddingTop="6dp"
+                android:textColor="@color/GrisInacap" />
+
+            <Spinner
+                android:id="@+id/spSede"
+                android:layout_width="match_parent"
+                android:layout_height="33dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/stylo_editext"
+                android:ems="18" />
+
+            <Button
+                android:id="@+id/btnRegistrarUsuario"
+                android:layout_width="110dp"
+                android:layout_height="26dp"
+                android:background="@color/RojoInacap"
+                android:text="Registrarse"
+                android:textColor="@color/BlancoInacap"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvRegistrarPoliticas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Politicas de Privacidad"
+                android:textColor="@color/MatisseInacap" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>
