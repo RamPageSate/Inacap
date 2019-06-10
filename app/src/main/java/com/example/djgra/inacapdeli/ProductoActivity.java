@@ -6,12 +6,11 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +30,6 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Fabricante;
-import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.Clases.Tipo;
 import com.example.djgra.inacapdeli.Funciones.BddFabricante;
@@ -55,6 +53,7 @@ public class ProductoActivity extends AppCompatActivity {
     ImageView imgAgregarFoto;
     ArrayList<Fabricante> lstFabricantes  = new ArrayList<>();
     Producto productoSeleccionado ;
+    
    // AdapterProductos adptProducto = new AdapterProductos(this);
     //
    boolean [] marcados;
@@ -71,10 +70,10 @@ public class ProductoActivity extends AppCompatActivity {
         producto.setPrecio(50000);
         producto.setEstado(1);
         lstProductos.add(producto);
-        btnAgregar = (ImageButton) findViewById(R.id.btnAddLstProductos);
-        btnSalir = (ImageButton) findViewById(R.id.btnSalirLstProducto);
-        spCategorias = (Spinner) findViewById(R.id.spCategoriaLstProducto);
-        lstvProductos = (ListView) findViewById(R.id.lstvProductos);
+        btnAgregar = findViewById(R.id.btnAddLstProductos);
+        btnSalir = findViewById(R.id.btnSalirLstProducto);
+        spCategorias = findViewById(R.id.spCategoriaLstProducto);
+        lstvProductos = findViewById(R.id.lstvProductos);
         final AdapterProductos adapterProductos = new AdapterProductos(this);
         ArrayAdapter<Categoria> adapterCategoria = new ArrayAdapter<Categoria>(this,android.R.layout.simple_list_item_1,lstCategoria);
         lstvProductos.setAdapter(adapterProductos);
@@ -82,8 +81,7 @@ public class ProductoActivity extends AppCompatActivity {
         //if(!lstProductos.isEmpty()){
           //  lstvProductos.setAdapter(adptProducto);
         //}
-
-
+        //No esta funcionando
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,73 +98,11 @@ public class ProductoActivity extends AppCompatActivity {
         });
     }
 
-    class AdapterProductos extends ArrayAdapter<Producto> {
-        Activity context;
-
-       public AdapterProductos(Activity context){
-         super(context,R.layout.listviewproductos,lstProductos);
-            this.context = context;
-        }
-
-        public View getView(final int posicion, View view, ViewGroup parent){
-
-            LayoutInflater inflater = context.getLayoutInflater();
-            View item = inflater.inflate(listviewproductos,null);
-            if(!lstProductos.isEmpty()){
-                TextView nombre = (TextView)item.findViewById(R.id.tvNombreLstProducto);
-                nombre.setText(lstProductos.get(posicion).getNombre());
-                TextView precio = (TextView)item.findViewById(R.id.tvPrecioLstProducto);
-                precio.setText(""+ lstProductos.get(posicion).getPrecio());
-                ImageButton btnEdit = (ImageButton) item.findViewById(R.id.btnEditProducto);
-                TextView descripcion = (TextView) item.findViewById(R.id.tvDescripcionListViewProducto);
-                Switch swEstado = (Switch) item.findViewById(R.id.swEstadoListViewProducto);
-                for(int x = 0 ; x < lstProductos.size(); x++){
-                    if(lstProductos.get(x).getEstado() == 1){
-                        swEstado.setChecked(true);
-                    }else{
-                        swEstado.setChecked(false);
-                    }
-                }
-                btnEdit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        productoSeleccionado = (Producto) lstProductos.get(posicion);
-                        isActualizar = true;
-                        CreateUpdateProducto();
-                    }
-                });
-            }
-
-
-            return item;
-        }
-    }
     private void cargarFoto() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/");
-        startActivityForResult(intent.createChooser(intent, "Seleccione la Aplicacion"), 10);
+        startActivityForResult(Intent.createChooser(intent, "Seleccione la Aplicacion"), 10);
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            Uri path = data.getData();
-            try {
-                //Cómo obtener el mapa de bits de la Galería
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
-                //Configuración del mapa de bits en ImageView
-                imgAgregarFoto.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
-
-
-
-
 
     public void CreateUpdateProducto(){
         //cargar tipo y fabricantes
@@ -207,16 +143,16 @@ public class ProductoActivity extends AppCompatActivity {
                             setContentView(R.layout.agregarproducto);
                             progressDialog.dismiss();
                             final Producto producto = new Producto();
-                            final EditText etNombreProducto = (EditText) findViewById(R.id.etNombreProducto);
-                            final EditText etDescripcionProducto = (EditText) findViewById(R.id.etDescripcionProducto);
-                            final EditText etCodigoBarraProducto = (EditText) findViewById(R.id.etSkuProducto);
-                            final EditText etPrecioProducto = (EditText) findViewById(R.id.etPrecioProductos);
-                            Spinner spFabricante = (Spinner) findViewById(R.id.spFabricantesProductos);
-                            Spinner spTipo = (Spinner) findViewById(R.id.spTipoProducto);
-                            imgAgregarFoto = (ImageView) findViewById(R.id.imgAgregarFotoProducto);
-                            Button btnAgregarCategrias = (Button) findViewById(R.id.btnCategoriasAgregarProducto);
-                            ImageButton btnAgregarProducto = (ImageButton) findViewById(R.id.imgAgregarProducto);
-                            ImageButton btnSalir = (ImageButton) findViewById(R.id.btnSalirProducto);
+                            final EditText etNombreProducto = findViewById(R.id.etNombreProducto);
+                            final EditText etDescripcionProducto = findViewById(R.id.etDescripcionProducto);
+                            final EditText etCodigoBarraProducto = findViewById(R.id.etSkuProducto);
+                            final EditText etPrecioProducto = findViewById(R.id.etPrecioProductos);
+                            Spinner spFabricante = findViewById(R.id.spFabricantesProductos);
+                            Spinner spTipo = findViewById(R.id.spTipoProducto);
+                            imgAgregarFoto = findViewById(R.id.imgAgregarFotoProducto);
+                            Button btnAgregarCategrias = findViewById(R.id.btnCategoriasAgregarProducto);
+                            ImageButton btnAgregarProducto = findViewById(R.id.imgAgregarProducto);
+                            ImageButton btnSalir = findViewById(R.id.btnSalirProducto);
                             spFabricante.setAdapter(new ArrayAdapter<Fabricante>(ProductoActivity.this,android.R.layout.simple_list_item_1,lstFabricantes));
                             spTipo.setAdapter(new ArrayAdapter<Tipo>(ProductoActivity.this,android.R.layout.simple_list_item_1,lstTipo));
                             if(isActualizar){
@@ -392,6 +328,65 @@ public class ProductoActivity extends AppCompatActivity {
         }, Functions.FalloInternet(ProductoActivity.this,progressDialog,"No pudo Conectarse"));
         if(!isActualizar){
 
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            Uri path = data.getData();
+            try {
+                //Cómo obtener el mapa de bits de la Galería
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
+                //Configuración del mapa de bits en ImageView
+                imgAgregarFoto.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    class AdapterProductos extends ArrayAdapter<Producto> {
+        Activity context;
+
+        public AdapterProductos(Activity context) {
+            super(context, R.layout.listviewproductos, lstProductos);
+            this.context = context;
+        }
+
+        public View getView(final int posicion, View view, ViewGroup parent) {
+
+            LayoutInflater inflater = context.getLayoutInflater();
+            View item = inflater.inflate(listviewproductos, null);
+            if (!lstProductos.isEmpty()) {
+                TextView nombre = item.findViewById(R.id.tvNombreLstProducto);
+                nombre.setText(lstProductos.get(posicion).getNombre());
+                TextView precio = item.findViewById(R.id.tvPrecioLstProducto);
+                precio.setText("" + lstProductos.get(posicion).getPrecio());
+                ImageButton btnEdit = item.findViewById(R.id.btnEditProducto);
+                TextView descripcion = item.findViewById(R.id.tvDescripcionListViewProducto);
+                Switch swEstado = item.findViewById(R.id.swEstadoListViewProducto);
+                for (int x = 0; x < lstProductos.size(); x++) {
+                    if (lstProductos.get(x).getEstado() == 1) {
+                        swEstado.setChecked(true);
+                    } else {
+                        swEstado.setChecked(false);
+                    }
+                }
+                btnEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        productoSeleccionado = lstProductos.get(posicion);
+                        isActualizar = true;
+                        CreateUpdateProducto();
+                    }
+                });
+            }
+
+
+            return item;
         }
     }
 
