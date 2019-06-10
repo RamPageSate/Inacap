@@ -262,7 +262,7 @@ public class ProductoActivity extends AppCompatActivity {
                                        // validador++;
                                     //}
                                     producto.setFoto("1");
-                                    //jajajajaja
+                                    //Que paja
                                     if(validador == 0){
                                         producto.setNombre(nombre);
                                         producto.setDescripcion(descripcion);
