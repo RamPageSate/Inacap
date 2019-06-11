@@ -43,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static com.example.djgra.inacapdeli.R.layout.listviewproductos;
@@ -74,7 +75,7 @@ public class ProductoActivity extends AppCompatActivity {
         producto.setDescripcion("chocolate de leche");
         producto.setId_fabricante(1);
         producto.setId_tipo(4);
-        producto.setEstado(1);
+        producto.setEstado(0);
         producto.setCodigo(500);
         producto.setFoto("1");
         producto.setStock(1);
@@ -127,9 +128,11 @@ public class ProductoActivity extends AppCompatActivity {
                 precio.setText("" + lstProductos.get(posicion).getPrecio());
                 ImageButton btnEdit = item.findViewById(R.id.btnEditProducto);
                 TextView descripcion = item.findViewById(R.id.tvDescripcionListViewProducto);
+                descripcion.setText(""+ lstProductos.get(posicion).getDescripcion());
                 Switch swEstado = item.findViewById(R.id.swEstadoListViewProducto);
+                //me deja todos encendidos
                 for (int x = 0; x < lstProductos.size(); x++) {
-                    if (lstProductos.get(x).getEstado() == 1) {
+                    if (lstProductos.get(x).getEstado() == 0) {
                         swEstado.setChecked(true);
                     } else {
                         swEstado.setChecked(false);
@@ -139,10 +142,7 @@ public class ProductoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         productoSeleccionado = lstProductos.get(posicion);
-                        isActualizar = true;
-                        Intent intent = new Intent(ProductoActivity.this,CrearEditarProducto.class);
-                        intent.putExtra("producto",productoSeleccionado);
-                        startActivity(intent);
+                        enviarProducto(productoSeleccionado);
                         //abria que sobreescrbir para recibir respuesta
                     }
                 });
@@ -153,6 +153,12 @@ public class ProductoActivity extends AppCompatActivity {
         }
     }
 
+
+    public void enviarProducto(Producto producto){
+        Intent intent = new Intent(ProductoActivity.this,CrearEditarProducto.class);
+        intent.putExtra("producto",producto);
+        startActivity(intent);
+    }
 
 
 }
