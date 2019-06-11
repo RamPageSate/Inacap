@@ -41,47 +41,59 @@ public class Login extends AppCompatActivity {
         btnIniciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String email = etEmail.getText().toString();
-                final String contraseña = etPass.getText().toString();
-                BddPersonas.getPersona(email, Login.this, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (!response.equals("[]")) {
-                            try {
-                                JSONObject objeto = new JSONObject(response);
-                                String correo = objeto.getString("persona_email");
-                                String contrasena = objeto.getString("persona_contrasena");
-                                int rol = objeto.getInt("id_rol");
-                                if (correo.equals(email) && contrasena.equals(contraseña)) {
-                                    switch (rol) {
-                                        case (1):
-                                            break;
-                                        case (2):
-                                            break;
-                                        case (3):
-                                            Intent i = new Intent(Login.this, PrincipalAdministrador.class);
-                                            startActivity(i);
-                                    }
-                                } else {
-                                    etEmail.setError("Correo y/o contraseña Incorrectas");
-                                    etPass.setError("Correo y/o contraseña Incorrectas");
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                Boolean validador = true;
+                if (etEmail.toString().isEmpty()) {
+                    etEmail.setError("CAMPO OBLIGATORIO");
+                    validador = false;
+                }
+                if (etPass.toString().isEmpty()) {
+                    etPass.setError("CAMPO OBLIGATORIO");
+                    validador = false;
+                }
+                if (validador) {
+                    final String email = etEmail.getText().toString();
 
-                        } else {
-                            etEmail.setError("Correo y/o contraseña Incorrectas");
-                            etPass.setError("Correo y/o contraseña Incorrectas");
+                    final String contraseña = etPass.getText().toString();
+
+                    BddPersonas.getPersona(email, Login.this, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if (!response.equals("[]")) {
+                                try {
+                                    JSONObject objeto = new JSONObject(response);
+                                    String correo = objeto.getString("persona_email");
+                                    String contrasena = objeto.getString("persona_contrasena");
+                                    int rol = objeto.getInt("id_rol");
+                                    if (correo.equals(email) && contrasena.equals(contraseña)) {
+                                        switch (rol) {
+                                            case (1):
+                                                break;
+                                            case (2):
+                                                break;
+                                            case (3):
+                                                Intent i = new Intent(Login.this, PrincipalAdministrador.class);
+                                                startActivity(i);
+                                        }
+                                    } else {
+                                        etEmail.setError("Correo y/o contraseña Incorrectas");
+                                        etPass.setError("Correo y/o contraseña Incorrectas");
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            } else {
+                                etEmail.setError("Correo y/o contraseña Incorrectas");
+                                etPass.setError("Correo y/o contraseña Incorrectas");
+                            }
                         }
-                    }
-                });
+                    });
+                }
+
             }
         });
 
     }
 
-    public void Copio() {
 
-    }
 }
