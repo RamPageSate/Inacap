@@ -154,16 +154,16 @@ public class ProductoActivity extends AppCompatActivity {
                                 public void onShow(DialogInterface dialog) {
                                     progressDialog.dismiss();
                                     final Producto producto = new Producto();
-                                    final EditText etNombreProducto = findViewById(R.id.etNombreProducto);
-                                    final EditText etDescripcionProducto = findViewById(R.id.etDescripcionProducto);
-                                    final EditText etCodigoBarraProducto = findViewById(R.id.etSkuProducto);
-                                    final EditText etPrecioProducto = findViewById(R.id.etPrecioProductos);
-                                    Spinner spFabricante = findViewById(R.id.spFabricantesProductos);
-                                    Spinner spTipo = findViewById(R.id.spTipoProducto);
-                                    imgAgregarFoto = findViewById(R.id.imgAgregarFotoProducto);
-                                    Button btnAgregarCategrias = findViewById(R.id.btnCategoriasAgregarProducto);
-                                    ImageButton btnAgregarProducto = findViewById(R.id.imgAgregarProducto);
-                                    ImageButton btnSalir = findViewById(R.id.btnSalirProducto);
+                                    final EditText etNombreProducto =(EditText) formProducto.findViewById(R.id.etNombreProducto);
+                                    final EditText etDescripcionProducto = (EditText) formProducto.findViewById(R.id.etDescripcionProducto);
+                                    final EditText etCodigoBarraProducto = (EditText) formProducto.findViewById(R.id.etSkuProducto);
+                                    final EditText etPrecioProducto = (EditText) formProducto.findViewById(R.id.etPrecioProductos);
+                                    Spinner spFabricante = (Spinner) formProducto.findViewById(R.id.spFabricantesProductos);
+                                    Spinner spTipo =(Spinner) formProducto.findViewById(R.id.spTipoProducto);
+                                    imgAgregarFoto = (ImageView) formProducto.findViewById(R.id.imgAgregarFotoProducto);
+                                    Button btnAgregarCategrias = (Button) formProducto.findViewById(R.id.btnCategoriasAgregarProducto);
+                                    ImageButton btnAgregarProducto = (ImageButton) formProducto.findViewById(R.id.imgAgregarProducto);
+                                    ImageButton btnSalir = (ImageButton) formProducto.findViewById(R.id.btnSalirProducto);
                                     spFabricante.setAdapter(new ArrayAdapter<Fabricante>(ProductoActivity.this,android.R.layout.simple_list_item_1,lstFabricantes));
                                     spTipo.setAdapter(new ArrayAdapter<Tipo>(ProductoActivity.this,android.R.layout.simple_list_item_1,lstTipo));
                                     if(isActualizar){
@@ -188,31 +188,12 @@ public class ProductoActivity extends AppCompatActivity {
                                     btnAgregarCategrias.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            // aqui tendre las categoriass
-                                            int cantidadCategorias = lstCategoria.size();
-                                            final boolean [] marcados = new boolean[cantidadCategorias];
-                                            AlertDialog.Builder builder = new AlertDialog.Builder(ProductoActivity.this);
-                                            builder.setTitle("CATEGORIAS DEL PRODUCTO");
-                                            String [] nombreCategoria = new String[cantidadCategorias];
-                                            for (int x = 0; x < lstCategoria.size();x ++){
-                                                String nombre = lstCategoria.get(x).getNombre();
-                                                nombreCategoria[x] = (nombre);
+
+                                            if(isActualizar){
+                                                categoriasSeleccionadas(productoSeleccionado.getLstCategoriasProducto(), producto);
+                                            } else {
+                                                categoriasSeleccionadas(producto.getLstCategoriasProducto(), producto);
                                             }
-
-                                            builder.setMultiChoiceItems(nombreCategoria, marcados,new DialogInterface.OnMultiChoiceClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                                    marcados[which] = isChecked;
-                                                }
-                                            });
-                                            builder.setPositiveButton("Listo", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-
-                                                }
-                                            });
-                                            builder.setNegativeButton("Salir",null);
-                                            builder.create().show();
 
                                         }
                                     });
