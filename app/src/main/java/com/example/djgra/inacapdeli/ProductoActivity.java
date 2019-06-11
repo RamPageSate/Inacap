@@ -96,7 +96,9 @@ public class ProductoActivity extends AppCompatActivity {
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(ProductoActivity.this,CrearEditarProducto.class);
 
+                startActivity(intent);
             }
         });
         btnSalir.setOnClickListener(new View.OnClickListener() {
@@ -141,8 +143,9 @@ public class ProductoActivity extends AppCompatActivity {
                 btnEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        productoSeleccionado = lstProductos.get(posicion);
+                        productoSeleccionado = (Producto) lstProductos.get(posicion);
                         enviarProducto(productoSeleccionado);
+
                         //abria que sobreescrbir para recibir respuesta
                     }
                 });
