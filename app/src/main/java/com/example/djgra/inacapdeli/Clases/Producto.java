@@ -1,8 +1,9 @@
 package com.example.djgra.inacapdeli.Clases;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Producto {
+public class Producto implements Serializable {
 
     private String nombre, foto, descripcion, sku;
     private int precio, stock, estado, id_fabricante, id_tipo, codigo, id_categoria;

@@ -154,16 +154,16 @@ public class ProductoActivity extends AppCompatActivity {
                                 public void onShow(DialogInterface dialog) {
                                     progressDialog.dismiss();
                                     final Producto producto = new Producto();
-                                    final EditText etNombreProducto =(EditText) formProducto.findViewById(R.id.etNombreProducto);
-                                    final EditText etDescripcionProducto = (EditText) formProducto.findViewById(R.id.etDescripcionProducto);
-                                    final EditText etCodigoBarraProducto = (EditText) formProducto.findViewById(R.id.etSkuProducto);
-                                    final EditText etPrecioProducto = (EditText) formProducto.findViewById(R.id.etPrecioProductos);
-                                    Spinner spFabricante = (Spinner) formProducto.findViewById(R.id.spFabricantesProductos);
-                                    Spinner spTipo =(Spinner) formProducto.findViewById(R.id.spTipoProducto);
-                                    imgAgregarFoto = (ImageView) formProducto.findViewById(R.id.imgAgregarFotoProducto);
-                                    Button btnAgregarCategrias = (Button) formProducto.findViewById(R.id.btnCategoriasAgregarProducto);
-                                    ImageButton btnAgregarProducto = (ImageButton) formProducto.findViewById(R.id.imgAgregarProducto);
-                                    ImageButton btnSalir = (ImageButton) formProducto.findViewById(R.id.btnSalirProducto);
+                                    final EditText etNombreProducto =(EditText) findViewById(R.id.etNombreProducto);
+                                    final EditText etDescripcionProducto = (EditText) findViewById(R.id.etDescripcionProducto);
+                                    final EditText etCodigoBarraProducto = (EditText) findViewById(R.id.etSkuProducto);
+                                    final EditText etPrecioProducto = (EditText) findViewById(R.id.etPrecioProductos);
+                                    Spinner spFabricante = (Spinner) findViewById(R.id.spFabricantesProductos);
+                                    Spinner spTipo =(Spinner) findViewById(R.id.spTipoProducto);
+                                    imgAgregarFoto = (ImageView) findViewById(R.id.imgAgregarFotoProducto);
+                                    Button btnAgregarCategrias = (Button) findViewById(R.id.btnCategoriasAgregarProducto);
+                                    ImageButton btnAgregarProducto = (ImageButton) findViewById(R.id.imgAgregarProducto);
+                                    ImageButton btnSalir = (ImageButton) findViewById(R.id.btnSalirProducto);
                                     spFabricante.setAdapter(new ArrayAdapter<Fabricante>(ProductoActivity.this,android.R.layout.simple_list_item_1,lstFabricantes));
                                     spTipo.setAdapter(new ArrayAdapter<Tipo>(ProductoActivity.this,android.R.layout.simple_list_item_1,lstTipo));
                                     if(isActualizar){
