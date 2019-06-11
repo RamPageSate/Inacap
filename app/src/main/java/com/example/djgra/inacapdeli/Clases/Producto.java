@@ -1,14 +1,25 @@
 package com.example.djgra.inacapdeli.Clases;
 
+import java.util.ArrayList;
+
 public class Producto {
 
     private String nombre, foto, descripcion, sku;
     private int precio, stock, estado, id_fabricante, id_tipo, codigo, id_categoria;
+    private ArrayList<Categoria> lstCategoriasProducto = new ArrayList<>();
 
     public String getNombre() {
         return nombre;
     }
 
+
+    public ArrayList<Categoria> getLstCategoriasProducto() {
+        return lstCategoriasProducto;
+    }
+
+    public void setLstCategoriasProducto(ArrayList<Categoria> lstCategoriaProducto) {
+        this.lstCategoriasProducto = lstCategoriaProducto;
+    }
 
     public int getId_categoria() {
         return id_categoria;
