@@ -3,20 +3,16 @@ package com.example.djgra.inacapdeli;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
-import com.example.djgra.inacapdeli.Clases.Persona;
-import com.example.djgra.inacapdeli.Funciones.Functions;
+import com.example.djgra.inacapdeli.Funciones.BddPersonas;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,72 +31,57 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        etEmail = (EditText) findViewById(R.id.etEmail);
-        etPass = (EditText) findViewById(R.id.etPass);
-        btnIniciar = (Button) findViewById(R.id.btnIngresar);
-        cbRecordarme = (CheckBox) findViewById(R.id.cbRecordarme);
-        tvRecuperarPass = (TextView) findViewById(R.id.tvRecuperarPass);
-        tvPoliticas = (TextView) findViewById(R.id.tvPolitica);
+        etEmail = findViewById(R.id.etEmail);
+        etPass = findViewById(R.id.etPass);
+        btnIniciar = findViewById(R.id.btnIngresar);
+        cbRecordarme = findViewById(R.id.cbRecordarme);
+        tvRecuperarPass = findViewById(R.id.tvRecuperarPass);
+        tvPoliticas = findViewById(R.id.tvPolitica);
 
         btnIniciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog = new ProgressDialog(Login.this);
-                progressDialog.setMessage("Cargando...");
-                progressDialog.show();
-                Response.Listener<String> respuesta = new Response.Listener<String>() {
+                final String email = etEmail.getText().toString();
+                final String contraseña = etPass.getText().toString();
+                BddPersonas.getPersona(email, Login.this, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        try {
-                            progressDialog.hide();
-                            JSONObject jsonRespuesta = new JSONObject(response);
-                            String clave = jsonRespuesta.getString("persona_contrasena");
-                            if(clave.equalsIgnoreCase(etPass.getText().toString())){
-                                Persona persona = new Persona();
-                                persona.setNombre(jsonRespuesta.getString("persona_nombre"));
-                                persona.setApellido(jsonRespuesta.getString("persona_apellido"));
-                                persona.setContrasena(jsonRespuesta.getString("persona_contrasena"));
-                                //persona.setFoto(jsonRespuesta.getInt("persona_foto"));
-                                persona.setCorreo(jsonRespuesta.getString("persona_email"));
-                                //persona.setCodigoQr(jsonRespuesta.getInt("persona_codigo_qr"));
-                                persona.setSaldo(jsonRespuesta.getInt("persona_saldo"));
-                                persona.setEstado(jsonRespuesta.getInt("persona_estado"));
-                                persona.setSede(jsonRespuesta.getInt("id_sede"));
-                                persona.setRol(jsonRespuesta.getInt("id_rol"));
-                                if(persona.getRol() == 3){
-                                    Intent intent = new Intent(Login.this,PrincipalAdministrador.class);
-                                    intent.putExtra("persona",persona);
-                                    startActivity(intent);
+                        if (!response.equals("[]")) {
+                            try {
+                                JSONObject objeto = new JSONObject(response);
+                                String correo = objeto.getString("persona_email");
+                                String contrasena = objeto.getString("persona_contrasena");
+                                int rol = objeto.getInt("id_rol");
+                                if (correo.equals(email) && contrasena.equals(contraseña)) {
+                                    switch (rol) {
+                                        case (1):
+                                            break;
+                                        case (2):
+                                            break;
+                                        case (3):
+                                            Intent i = new Intent(Login.this, PrincipalAdministrador.class);
+                                            startActivity(i);
+                                    }
+                                } else {
+                                    etEmail.setError("Correo y/o contraseña Incorrectas");
+                                    etPass.setError("Correo y/o contraseña Incorrectas");
                                 }
-                                if(persona.getRol() == 1){
-                                    Intent intent = new Intent(Login.this,PrincipalCliente.class);
-                                    intent.putExtra("persona",persona);
-                                    startActivity(intent);
-                                }
-                                if(persona.getRol() == 2){
-                                    Intent intent = new Intent(Login.this,PrincipalCliente.class);
-                                    intent.putExtra("persona",persona);
-                                    startActivity(intent);
-                                }
-                            }else{
-                                AlertDialog.Builder alerta = new AlertDialog.Builder(Login.this);
-                                alerta.setMessage("Datos Incorrectos")
-                                        .setNegativeButton("Reintentar",null)
-                                        .create()
-                                        .show();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        } else {
+                            etEmail.setError("Correo y/o contraseña Incorrectas");
+                            etPass.setError("Correo y/o contraseña Incorrectas");
                         }
                     }
-                };
-                //parametros de la consulta
-
-                    Intent intent = new Intent(Login.this,PrincipalAdministrador.class);
-                    startActivity(intent);
+                });
             }
         });
+
+    }
+
+    public void Copio() {
 
     }
 }
