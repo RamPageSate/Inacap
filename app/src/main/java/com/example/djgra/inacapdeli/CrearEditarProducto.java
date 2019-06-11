@@ -52,6 +52,10 @@ public class CrearEditarProducto extends AppCompatActivity {
     private Tipo tipoSeleccionado = new Tipo();
     private Fabricante fabricanteSeleccionado = new Fabricante();
     boolean isActualizar = false;
+    EditText etPrecioProducto ,etCodigoBarraProducto, etNombreProducto, etDescripcionProducto;
+    ImageButton btnAgregarProducto, btnSalir;
+    Spinner spFabricante, spTipo;
+    Button btnAgregarCategrias;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,16 +109,16 @@ public class CrearEditarProducto extends AppCompatActivity {
                 }, Functions.FalloInternet(CrearEditarProducto.this,progressDialog,"No pudo Cargar"));
             }
         }, Functions.FalloInternet(CrearEditarProducto.this,progressDialog,"No pudo Cargar"));
-        final EditText etNombreProducto =(EditText) findViewById(R.id.etNombreProducto);
-        final EditText etDescripcionProducto = (EditText) findViewById(R.id.etDescripcionProducto);
-        final EditText etCodigoBarraProducto = (EditText) findViewById(R.id.etSkuProducto);
-        final EditText etPrecioProducto = (EditText) findViewById(R.id.etPrecioProductos);
-        Spinner spFabricante = (Spinner) findViewById(R.id.spFabricantesProductos);
-        Spinner spTipo =(Spinner) findViewById(R.id.spTipoProducto);
+        etNombreProducto =(EditText) findViewById(R.id.etNombreProducto);
+        etDescripcionProducto = (EditText) findViewById(R.id.etDescripcionProducto);
+        etCodigoBarraProducto = (EditText) findViewById(R.id.etSkuProducto);
+        etPrecioProducto = (EditText) findViewById(R.id.etPrecioProductos);
+        spFabricante = (Spinner) findViewById(R.id.spFabricantesProductos);
+        spTipo =(Spinner) findViewById(R.id.spTipoProducto);
         imgAgregarFoto = (ImageView) findViewById(R.id.imgAgregarFotoProducto);
-        Button btnAgregarCategrias = (Button) findViewById(R.id.btnCategoriasAgregarProducto);
-        ImageButton btnAgregarProducto = (ImageButton) findViewById(R.id.imgAgregarProducto);
-        ImageButton btnSalir = (ImageButton) findViewById(R.id.btnSalirProducto);
+        btnAgregarCategrias = (Button) findViewById(R.id.btnCategoriasAgregarProducto);
+        btnAgregarProducto = (ImageButton) findViewById(R.id.imgAgregarProducto);
+        btnSalir = (ImageButton) findViewById(R.id.btnSalirProducto);
         spFabricante.setAdapter(new ArrayAdapter<Fabricante>(CrearEditarProducto.this,android.R.layout.simple_list_item_1,listaFabricante));
         spTipo.setAdapter(new ArrayAdapter<Tipo>(CrearEditarProducto.this,android.R.layout.simple_list_item_1,listaTipo));
         Bundle bundle = getIntent().getExtras();
