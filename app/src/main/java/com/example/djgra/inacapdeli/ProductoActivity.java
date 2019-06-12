@@ -54,6 +54,7 @@ public class ProductoActivity extends AppCompatActivity {
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                lstProductos.removeAll(lstProductos);
                 Intent i = new Intent(ProductoActivity.this, PrincipalAdministrador.class);
                 startActivity(i);
                 finish();
