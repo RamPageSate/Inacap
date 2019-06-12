@@ -170,17 +170,12 @@
 
             <ImageView
                 android:id="@+id/imgAgregarFotoProducto"
-                android:layout_width="127dp"
-                android:layout_height="67dp"
-                android:layout_marginLeft="200dp"
-                android:layout_marginTop="-30dp"
+                android:layout_width="135dp"
+                android:layout_height="79dp"
+                android:layout_marginLeft="180dp"
+                android:layout_marginTop="-40dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/stylo_editextazul"
-                android:paddingLeft="25dp"
-                android:paddingTop="25dp"
-                android:paddingRight="25dp"
-                android:paddingBottom="25dp"
-                app:srcCompat="@drawable/picture" />
+                app:srcCompat="@drawable/fotoproducto" />
         </LinearLayout>
     </ScrollView>
 

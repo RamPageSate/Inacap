@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -44,7 +45,7 @@ import static com.example.djgra.inacapdeli.ProductoActivity.lstCategoria;
 public class CrearEditarProducto extends AppCompatActivity {
     ImageView imgAgregarFoto;
     Bitmap bitmap;
-    boolean [] marcados;
+    boolean[] marcados;
     TextView tvTitulo;
     public static ArrayList<Tipo> listaTipo = new ArrayList<>();
     public static ArrayList<Fabricante> listaFabricante = new ArrayList<>();
@@ -52,13 +53,15 @@ public class CrearEditarProducto extends AppCompatActivity {
     public static ArrayList<Categoria> categoriasSeleccionadas = new ArrayList<>();
     public static ArrayList<Producto> ProductosAgregados = new ArrayList<>();
     private Producto productoSeleccionado = new Producto();
+    private String fotoDefault = "";
     private Tipo tipoSeleccionado = new Tipo();
     private Fabricante fabricanteSeleccionado = new Fabricante();
     boolean isActualizar = false;
-    EditText etPrecioProducto ,etCodigoBarraProducto, etNombreProducto, etDescripcionProducto;
+    EditText etPrecioProducto, etCodigoBarraProducto, etNombreProducto, etDescripcionProducto;
     ImageButton btnAgregarProducto, btnSalir;
     Spinner spFabricante, spTipo;
     Button btnAgregarCategrias;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +70,7 @@ public class CrearEditarProducto extends AppCompatActivity {
         BddFabricante.getFabricantes(this, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                if (!response.toString().equals("[]")){
+                if (!response.toString().equals("[]")) {
                     for (int x = 0; x < response.length(); ++x) {
                         try {
                             Fabricante fabricante = new Fabricante();
@@ -78,7 +81,7 @@ public class CrearEditarProducto extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                    spFabricante.setAdapter(new ArrayAdapter<Fabricante>(CrearEditarProducto.this,android.R.layout.simple_list_item_1,listaFabricante));
+                    spFabricante.setAdapter(new ArrayAdapter<Fabricante>(CrearEditarProducto.this, android.R.layout.simple_list_item_1, listaFabricante));
                 }
                 BddTipo.getTipo(CrearEditarProducto.this, new Response.Listener<JSONArray>() {
                     @Override
@@ -94,7 +97,7 @@ public class CrearEditarProducto extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             }
-                            spTipo.setAdapter(new ArrayAdapter<Tipo>(CrearEditarProducto.this,android.R.layout.simple_list_item_1,listaTipo));
+                            spTipo.setAdapter(new ArrayAdapter<Tipo>(CrearEditarProducto.this, android.R.layout.simple_list_item_1, listaTipo));
                         }
                         BddCategoria.getCategoria(CrearEditarProducto.this, new Response.Listener<JSONArray>() {
                             @Override
@@ -110,25 +113,27 @@ public class CrearEditarProducto extends AppCompatActivity {
                                 }
                                 progressDialogF.hide();
                             }
-                        }, Functions.FalloInternet(CrearEditarProducto.this,progressDialogF,"No pudo Cargar"));
+                        }, Functions.FalloInternet(CrearEditarProducto.this, progressDialogF, "No pudo Cargar"));
                     }
-                }, Functions.FalloInternet(CrearEditarProducto.this,progressDialogF,"No pudo Cargar"));
+                }, Functions.FalloInternet(CrearEditarProducto.this, progressDialogF, "No pudo Cargar"));
             }
-        }, Functions.FalloInternet(CrearEditarProducto.this,progressDialogF,"No pudo Cargar"));
-        etNombreProducto =(EditText) findViewById(R.id.etNombreProducto);
+        }, Functions.FalloInternet(CrearEditarProducto.this, progressDialogF, "No pudo Cargar"));
+        etNombreProducto = (EditText) findViewById(R.id.etNombreProducto);
         etDescripcionProducto = (EditText) findViewById(R.id.etDescripcionProducto);
         etCodigoBarraProducto = (EditText) findViewById(R.id.etSkuProducto);
         etPrecioProducto = (EditText) findViewById(R.id.etPrecioProductos);
         spFabricante = (Spinner) findViewById(R.id.spFabricantesProductos);
-        spTipo =(Spinner) findViewById(R.id.spTipoProducto);
+        spTipo = (Spinner) findViewById(R.id.spTipoProducto);
         imgAgregarFoto = (ImageView) findViewById(R.id.imgAgregarFotoProducto);
         btnAgregarCategrias = (Button) findViewById(R.id.btnCategoriasAgregarProducto);
         btnAgregarProducto = (ImageButton) findViewById(R.id.imgAgregarProducto);
         btnSalir = (ImageButton) findViewById(R.id.btnSalirProducto);
         tvTitulo = (TextView) findViewById(R.id.tvTituloAgregarProducto);
+        Bitmap bit = ((BitmapDrawable) imgAgregarFoto.getDrawable()).getBitmap();
+        fotoDefault = Functions.getStringImage(bit);
         tvTitulo.setText("Registro Producto");
         Bundle bundle = getIntent().getExtras();
-        if(bundle != null){
+        if (bundle != null) {
             productoSeleccionado = (Producto) bundle.getSerializable("producto");
             etCodigoBarraProducto.setText(productoSeleccionado.getSku());
             etDescripcionProducto.setText(productoSeleccionado.getDescripcion());
@@ -137,13 +142,13 @@ public class CrearEditarProducto extends AppCompatActivity {
             categoriasSeleccionadas.addAll(productoSeleccionado.getLstCategoriasProducto());
             tvTitulo.setText("Actualizar Producto");
             isActualizar = true;
-            for(int x=0; x < listaFabricante.size(); x++ ){
-                if(listaFabricante.get(x).getCodigo() == productoSeleccionado.getId_fabricante()){
+            for (int x = 0; x < listaFabricante.size(); x++) {
+                if (listaFabricante.get(x).getCodigo() == productoSeleccionado.getId_fabricante()) {
                     spFabricante.setSelection(x);
                 }
             }
-            for(int x=0; x < listaTipo.size(); x++ ){
-                if(listaTipo.get(x).getId() == productoSeleccionado.getId_tipo()){
+            for (int x = 0; x < listaTipo.size(); x++) {
+                if (listaTipo.get(x).getId() == productoSeleccionado.getId_tipo()) {
                     spTipo.setSelection(x);
                 }
             }
@@ -154,6 +159,7 @@ public class CrearEditarProducto extends AppCompatActivity {
                 fabricanteSeleccionado = (Fabricante) listaFabricante.get(position);
 
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -164,6 +170,7 @@ public class CrearEditarProducto extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 tipoSeleccionado = (Tipo) listaTipo.get(position);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -177,37 +184,38 @@ public class CrearEditarProducto extends AppCompatActivity {
             }
         });
 
-btnSalir.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-
-    }
-});
-
+        btnSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+// esta devuelve categoriasSeleccionadas
 //region btnAgregarCategorias
+
         btnAgregarCategrias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final ArrayList<Categoria> cargarOpciones = listaCategoria;
-                for (int x = 0 ; x < listaCategoria.size();x++){
-                    Log.d("TAG_", ""+ listaCategoria.get(x).getCodigo());
+                for (int x = 0; x < listaCategoria.size(); x++) {
+                    Log.d("TAG_", "" + listaCategoria.get(x).getCodigo());
                 }
-                for (int x = 0 ; x < categoriasSeleccionadas.size();x++){
-                    Log.d("TAG_", "cSele "+ categoriasSeleccionadas.get(x).getCodigo());
+                for (int x = 0; x < categoriasSeleccionadas.size(); x++) {
+                    Log.d("TAG_", "cSele " + categoriasSeleccionadas.get(x).getCodigo());
                 }
                 final int cantidadCategorias = listaCategoria.size();
                 marcados = new boolean[cantidadCategorias];
                 AlertDialog.Builder builder = new AlertDialog.Builder(CrearEditarProducto.this);
                 builder.setTitle("CATEGORIAS DEL PRODUCTO");
-                String [] nombreCategoria = new String[cantidadCategorias];
-                for (int x = 0; x < cantidadCategorias;x ++){
+                String[] nombreCategoria = new String[cantidadCategorias];
+                for (int x = 0; x < cantidadCategorias; x++) {
                     String nombre = cargarOpciones.get(x).getNombre();
                     nombreCategoria[x] = (nombre);
                 }
-                if(!categoriasSeleccionadas.isEmpty()){
-                    for(int x = 0 ; x < cargarOpciones.size(); x++){
-                        for (int c =0 ; c < categoriasSeleccionadas.size();c++){
-                            if(cargarOpciones.get(x).getCodigo() == categoriasSeleccionadas.get(c).getCodigo()){//SECAE ya que no tienen la misma cantidad
+                if (!categoriasSeleccionadas.isEmpty()) {
+                    for (int x = 0; x < cargarOpciones.size(); x++) {
+                        for (int c = 0; c < categoriasSeleccionadas.size(); c++) {
+                            if (cargarOpciones.get(x).getCodigo() == categoriasSeleccionadas.get(c).getCodigo()) {//SECAE ya que no tienen la misma cantidad
                                 marcados[x] = true;
                             }
                         }
@@ -217,16 +225,16 @@ btnSalir.setOnClickListener(new View.OnClickListener() {
                     builder.setMultiChoiceItems(nombreCategoria, marcados, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                            Log.d("TAG_" ,"Marco con la lista seleccionada  "+which);
+                            Log.d("TAG_", "Marco con la lista seleccionada  " + which);
                             marcados[which] = isChecked;
                         }
                     });
-                }else{
-                    builder.setMultiChoiceItems(nombreCategoria, marcados,new DialogInterface.OnMultiChoiceClickListener() {
+                } else {
+                    builder.setMultiChoiceItems(nombreCategoria, marcados, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                             marcados[which] = isChecked;
-                            Log.d("TAG_" ,"agregando porque esta vacia "+which);
+                            Log.d("TAG_", "agregando porque esta vacia " + which);
                         }
                     });
                 }
@@ -234,11 +242,11 @@ btnSalir.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         categoriasSeleccionadas.removeAll(categoriasSeleccionadas);
-                        for (int x=0; x < cantidadCategorias;x++){
-                            if(marcados[x] == true){
-                                Categoria cate = new Categoria(lstCategoria.get(x).getCodigo(),lstCategoria.get(x).getEstado(),""+lstCategoria.get(x).getNombre());
+                        for (int x = 0; x < cantidadCategorias; x++) {
+                            if (marcados[x] == true) {
+                                Categoria cate = new Categoria(lstCategoria.get(x).getCodigo(), lstCategoria.get(x).getEstado(), "" + lstCategoria.get(x).getNombre());
                                 categoriasSeleccionadas.add(cate);
-                                Log.d("TAG_" ,"agrego -> " + x);
+                                Log.d("TAG_", "agrego -> " + x);
                             }
                         }
                         dialog.dismiss();
@@ -248,7 +256,7 @@ btnSalir.setOnClickListener(new View.OnClickListener() {
                 builder.create().show();
             }
         });
-//endregion
+//endregion     devu
 
 //region btnAgregarProducto
         btnAgregarProducto.setOnClickListener(new View.OnClickListener() {
@@ -256,44 +264,44 @@ btnSalir.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //verifico los campos
                 Producto producto = new Producto();
-                String nombre = "", descripcion="", sku="", foto = "";
+                String nombre = "", descripcion = "", sku = "", foto = "";
                 int precio = 0;
-                int validador  =0 ;
-                if(!etNombreProducto.getText().toString().isEmpty()){
+                int validador = 0;
+                if (!etNombreProducto.getText().toString().isEmpty()) {
                     nombre = etNombreProducto.getText().toString().toUpperCase();
-                }else{
+                } else {
                     validador++;
                     etNombreProducto.setError("");
                 }
-                if(!etDescripcionProducto.getText().toString().isEmpty()){
+                if (!etDescripcionProducto.getText().toString().isEmpty()) {
                     descripcion = etDescripcionProducto.getText().toString().toUpperCase();
-                }else{
+                } else {
                     validador++;
                     etDescripcionProducto.setError("");
                 }
-                if(!etCodigoBarraProducto.getText().toString().isEmpty()){
+                if (!etCodigoBarraProducto.getText().toString().isEmpty()) {
                     sku = etCodigoBarraProducto.getText().toString().toUpperCase();
-                }else{
+                } else {
                     validador++;
                     etCodigoBarraProducto.setError("");
                 }
-                if(!etPrecioProducto.getText().toString().isEmpty()){
+                if (!etPrecioProducto.getText().toString().isEmpty()) {
                     precio = Integer.parseInt(etPrecioProducto.getText().toString());
-                }else{
+                } else {
                     validador++;
                     etPrecioProducto.setError("");
                 }
-                //recuperar las categorias marcadas
-
-
-                //tendriamos que rescatar la foto
-                //if(foto.isEmpty()){
-                //  Toast.makeText(ProductoActivity.this, "Debe Agregar Foto", Toast.LENGTH_SHORT).show();
-                // validador++;
-                //}
-                producto.setFoto("1");
-                //Que Anexo Poran cambiar
-                if(validador == 0){
+                if(categoriasSeleccionadas.isEmpty()){
+                    validador++;
+                    Toast.makeText(CrearEditarProducto.this, "Seleccione Categoria", Toast.LENGTH_SHORT).show();
+                }
+                Bitmap bit = ((BitmapDrawable) imgAgregarFoto.getDrawable()).getBitmap();
+                producto.setFoto(Functions.getStringImage(bit));
+                if (producto.getFoto().equals(fotoDefault)) {
+                    validador++;
+                    Toast.makeText(CrearEditarProducto.this, "Ingrese Foto", Toast.LENGTH_SHORT).show();
+                }
+                if (validador == 0) {
                     producto.setNombre(nombre);
                     producto.setId_tipo(tipoSeleccionado.getId());
                     producto.setId_fabricante(fabricanteSeleccionado.getCodigo());
@@ -302,7 +310,7 @@ btnSalir.setOnClickListener(new View.OnClickListener() {
                     producto.setPrecio(precio);
                     producto.setFoto(foto);
                     producto.setLstCategoriasProducto(categoriasSeleccionadas);
-                    if(!isActualizar){
+                    if (!isActualizar) {
                         final ProgressDialog progressDialog = Functions.CargarDatos("AGREGANDO....", CrearEditarProducto.this);
                         BddProductos.setProducto(producto, CrearEditarProducto.this, new Response.Listener<String>() {
                             @Override
@@ -311,7 +319,7 @@ btnSalir.setOnClickListener(new View.OnClickListener() {
                                 BddProductos.getProducto(CrearEditarProducto.this, new Response.Listener<JSONArray>() {
                                     @Override
                                     public void onResponse(JSONArray response) {
-                                        for (int x= 0; x < response.length(); x++){
+                                        for (int x = 0; x < response.length(); x++) {
                                             try {
                                                 Producto producto = new Producto();
                                                 producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
@@ -331,8 +339,6 @@ btnSalir.setOnClickListener(new View.OnClickListener() {
                                             }
                                         }
                                         Toast.makeText(CrearEditarProducto.this, "Agregado", Toast.LENGTH_SHORT).show();
-                                        //lstvProductos.setAdapter(adptProducto);
-                                        //lstvProductos.deferNotifyDataSetChanged();
                                         etCodigoBarraProducto.setText("");
                                         etDescripcionProducto.setText("");
                                         etNombreProducto.setText("");
@@ -340,10 +346,10 @@ btnSalir.setOnClickListener(new View.OnClickListener() {
                                         //restablecer la imagen
                                         progressDialog.dismiss();
                                     }
-                                }, Functions.FalloInternet(CrearEditarProducto.this,progressDialog,"No pudo cargar"));
+                                }, Functions.FalloInternet(CrearEditarProducto.this, progressDialog, "No pudo cargar"));
                             }
-                        }, Functions.FalloInternet(CrearEditarProducto.this, progressDialog,"Vuelve a Intentar"));
-                    }else{
+                        }, Functions.FalloInternet(CrearEditarProducto.this, progressDialog, "Vuelve a Intentar"));
+                    } else {
                         //aqui va actualizar
 
                     }
@@ -353,17 +359,6 @@ btnSalir.setOnClickListener(new View.OnClickListener() {
         //endregion
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     private void cargarFoto() {
