@@ -52,7 +52,7 @@ import java.util.ArrayList;
 import static com.example.djgra.inacapdeli.R.layout.listviewproductos;
 
 public class ProductoActivity extends AppCompatActivity {
-    ImageButton btnSalir, btnAgregar, btnEditarProducto;
+    ImageButton btnSalir, btnAgregar;
     Spinner spCategorias;
     ListView lstvProductos;
     Producto productoSeleccionado ;
@@ -105,12 +105,12 @@ public class ProductoActivity extends AppCompatActivity {
             View item = inflater.inflate(listviewproductos, null);
             if (!lstProductos.isEmpty()) {
                 TextView nombre = item.findViewById(R.id.tvNombreLstProducto);
-                nombre.setText("NOMBRE: "+lstProductos.get(posicion).getNombre());
+                nombre.setText(""+lstProductos.get(posicion).getNombre());
                 final TextView precio = item.findViewById(R.id.tvPrecioLstProducto);
-                precio.setText("PRECIO: " + lstProductos.get(posicion).getPrecio());
+                precio.setText("$ " + lstProductos.get(posicion).getPrecio());
                 ImageButton btnEdit = item.findViewById(R.id.btnEditProducto);
                 TextView descripcion = item.findViewById(R.id.tvDescripcionListViewProducto);
-                descripcion.setText("DESCRIPCION: "+ lstProductos.get(posicion).getDescripcion());
+                descripcion.setText(""+ lstProductos.get(posicion).getDescripcion());
                 Switch swEstado = item.findViewById(R.id.swEstadoListViewProducto);
                 swEstado.setId(300+posicion);
                 if(lstProductos.get(posicion).getEstado() == 1){
@@ -128,7 +128,6 @@ public class ProductoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         productoSeleccionado = (Producto) lstvProductos.getItemAtPosition(posicion);
-                        productoSeleccionado.setLstCategoriasProducto(lstCategoria);
                         Intent intent = new Intent(ProductoActivity.this,CrearEditarProducto.class);
                         intent.putExtra("producto",productoSeleccionado);
                         startActivity(intent);
