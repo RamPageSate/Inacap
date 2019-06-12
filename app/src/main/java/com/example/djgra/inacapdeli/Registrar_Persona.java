@@ -1,18 +1,15 @@
 package com.example.djgra.inacapdeli;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,7 +21,6 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Clases.Sede;
 import com.example.djgra.inacapdeli.Funciones.BddPersonas;
@@ -59,14 +55,14 @@ public class Registrar_Persona extends AppCompatActivity {
         //Functions.CargarDatos("Sedes",this);
 
         //referencias
-        etNombre = (EditText) findViewById(R.id.etNombreRegistro);
-        etApellido = (EditText) findViewById(R.id.etApellidoRegistro);
-        etCorreo = (EditText) findViewById(R.id.etEmailRegistro);
-        etContraseña = (EditText) findViewById(R.id.etContrasenaRegistro);
-        etConfirmar = (EditText) findViewById(R.id.etRepetirContrasenaRegistro);
-        btnRegistrarse = (Button) findViewById(R.id.btnRegistrarUsuario);
-        btnImagen = (ImageView) findViewById(R.id.btnImagen);
-        spSede = (Spinner) findViewById(R.id.spSede);
+        etNombre = findViewById(R.id.etNombreRegistro);
+        etApellido = findViewById(R.id.etApellidoRegistro);
+        etCorreo = findViewById(R.id.etEmailRegistro);
+        etContraseña = findViewById(R.id.etContrasenaRegistro);
+        etConfirmar = findViewById(R.id.etRepetirContrasenaRegistro);
+        btnRegistrarse = findViewById(R.id.btnRegistrarUsuario);
+        btnImagen = findViewById(R.id.btnImagen);
+        spSede = findViewById(R.id.spSede);
 
         final ArrayList<Sede> lstSedes = new ArrayList<>();
         progressDialog = Functions.CargarDatos("Cargando Sedes",Registrar_Persona.this);
@@ -138,7 +134,7 @@ public class Registrar_Persona extends AppCompatActivity {
                         per.setFoto("1");
                     }
 
-                    per.setCodigoQr(1);
+                    per.setCodigoQr("1");
 
                     progressDialog = Functions.CargarDatos("Agregando Persona", Registrar_Persona.this);
                     progressDialog.show();
@@ -169,7 +165,7 @@ public class Registrar_Persona extends AppCompatActivity {
     private void cargarFoto() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/");
-        startActivityForResult(intent.createChooser(intent, "Seleccione la Aplicacion"), 10);
+        startActivityForResult(Intent.createChooser(intent, "Seleccione la Aplicacion"), 10);
     }
 
     private boolean validarEmail() { //falta hacer la expresion regular antes del inacao

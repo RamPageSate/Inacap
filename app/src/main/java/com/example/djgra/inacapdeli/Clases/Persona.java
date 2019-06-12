@@ -3,8 +3,8 @@ package com.example.djgra.inacapdeli.Clases;
 import java.io.Serializable;
 
 public class Persona implements Serializable{
-    private String nombre, apellido, correo, contrasena, foto; // hay que cambiar la sede
-    private int codigo, saldo, estado, sede, codigoQr, rol;
+    private String nombre, apellido, correo, contrasena, foto, codigoQr; // hay que cambiar la sede
+    private int codigo, saldo, estado, sede, rol;
 
     public Persona() {
     }
@@ -81,11 +81,11 @@ public class Persona implements Serializable{
         this.foto = foto;
     }
 
-    public int getCodigoQr() {
+    public String getCodigoQr() {
         return codigoQr;
     }
 
-    public void setCodigoQr(int codigoQr) {
+    public void setCodigoQr(String codigoQr) {
         this.codigoQr = codigoQr;
     }
 
