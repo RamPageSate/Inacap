@@ -792,10 +792,16 @@ public class PrincipalAdministrador extends AppCompatActivity {
             swEstadoVendedor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    //solo actualizo el estado del vendedor a la bd
-                    Persona per = (Persona) lstPersonas.get(posicion);
-                    lstPersonas.get(posicion).setEstado(0);
-                    BddPersonas.setVendedor(per.getCorreo(), 2, 0, PrincipalAdministrador.this, new Response.Listener<String>() {
+                    //solo actualizo el estado del vendedor a la bd falta preguntar el estado actual para cambiar
+                    Persona per = (Persona) lstPersonas.get(posicion);//*#*#3646633#
+                    if(per.getEstado() == 0){
+                        lstPersonas.get(posicion).setEstado(1);
+                        per.setEstado(1);
+                    }else{
+                        lstPersonas.get(posicion).setEstado(0);
+                        per.setEstado(0);
+                    }
+                    BddPersonas.setVendedor(per.getCorreo(), 2, per.getEstado(), PrincipalAdministrador.this, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             Log.d("TAG_", "Cambio el estado del vendedor a 0 ");
@@ -818,7 +824,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                             lstvVendedores.setAdapter(adapterPesonas);
                             lstvVendedores.deferNotifyDataSetChanged();
                             progressDialog.dismiss();
-                            //falta actualizar el lstvvendedor
+                            //enviar mensaje de confirmacion
                         }
                     });
                 }
