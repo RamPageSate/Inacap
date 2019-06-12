@@ -18,9 +18,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -279,7 +282,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
 
 
 
-        //falta modificar el listview de vendedores agregarle un boton para sacarlo y uno swchit para desactivarlo quitar la opcion de eliminarlo
+        //falta quitar el vendedor y actualizar la lista !!
 //region vendedores
 
         btnLstVendedores.setOnClickListener(new View.OnClickListener() {
@@ -299,11 +302,13 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     String apellido = response.getJSONObject(x).getString("persona_apellido");
                                     String email = response.getJSONObject(x).getString("persona_email");
                                     int estado = response.getJSONObject(x).getInt("persona_estado");
+                                    String foto = response.getJSONObject(x).getString("persona_foto");
                                     int rol = response.getJSONObject(x).getInt("id_rol");
                                     int sede = response.getJSONObject(x).getInt("id_sede");
                                     Persona vendedor = new Persona();
                                     vendedor.setCodigo(codigo);
                                     vendedor.setNombre(nombre);
+                                    vendedor.setFoto(foto);
                                     vendedor.setApellido(apellido);
                                     vendedor.setCorreo(email);
                                     vendedor.setEstado(estado);
@@ -332,56 +337,6 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                 final EditText etEmail = (EditText) formLstVendedores.findViewById(R.id.etLstVendedorEmail);
                                 Button btnGuardar = (Button) formLstVendedores.findViewById(R.id.btnAgregarListaVendedor);
                                 ImageButton btnSalir = (ImageButton) formLstVendedores.findViewById(R.id.btnlstVendedorAtras);
-                                lstvVendedores.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
-                                        String opc = "Inhabilitar";
-                                        if (lstPersonas.get(position).getEstado() == 0) {
-                                            opc = "Habilitar";
-                                        }
-                                        String[] opciones = {"Quitar Vendedor", opc};
-                                        final AlertDialog.Builder alrt = new AlertDialog.Builder(PrincipalAdministrador.this);
-                                        alrt.create();
-                                        alrt.setTitle("Datos: \n " + lstPersonas.get(position).getNombre().toUpperCase() + " " + lstPersonas.get(position).getApellido().toUpperCase());
-                                        alrt.setNegativeButton("Cancelar", null);
-                                        alrt.setSingleChoiceItems(opciones, -1, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(final DialogInterface dialog, int which) {
-                                                if (which == 0) {
-                                                    //quitar vendedor
-                                                    final ProgressDialog progressDialog = Functions.CargarDatos("Quitando Vendedor", PrincipalAdministrador.this);
-                                                    BddPersonas.setVendedor(lstPersonas.get(position).getCorreo(), 1, 1, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                                        @Override
-                                                        public void onResponse(String response) {
-                                                            Log.d("TAG_", "cambie de vendedor a usuario");
-                                                            lstPersonas.remove(position);
-                                                            lstvVendedores.setAdapter(adapterPesonas);
-                                                            lstvVendedores.deferNotifyDataSetChanged();
-                                                            dialog.dismiss();
-                                                            progressDialog.hide();
-                                                        }
-                                                    });
-                                                } else {
-                                                    //solo camiarle el estado
-                                                    final ProgressDialog progressDialog = Functions.CargarDatos("Gestionando Vendedor", PrincipalAdministrador.this);
-                                                    BddPersonas.setVendedor(lstPersonas.get(position).getCorreo(), 2, 0, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                                        @Override
-                                                        public void onResponse(String response) {
-                                                            Log.d("TAG_", "estoy inhabilitando al vendedor");
-                                                            lstPersonas.get(position).setEstado(0);
-                                                            lstvVendedores.setAdapter(adapterPesonas);
-                                                            lstvVendedores.deferNotifyDataSetChanged();
-                                                            dialog.dismiss();
-                                                            progressDialog.hide();
-                                                        }
-                                                    });
-
-                                                }
-                                            }
-                                        });
-                                        alrt.show();
-                                    }
-                                });
                                 btnGuardar.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(final View v) {
@@ -411,15 +366,15 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                                                 persona.setCodigo(jsonRespuesta.getInt("persona_id"));
                                                                 persona.setNombre(jsonRespuesta.getString("persona_nombre"));
                                                                 persona.setApellido(jsonRespuesta.getString("persona_apellido"));
-                                                                //persona.setFoto(jsonRespuesta.getInt("persona_foto"));
+                                                                persona.setFoto(jsonRespuesta.getString("persona_foto"));
                                                                 persona.setCorreo(jsonRespuesta.getString("persona_email"));
-                                                                //persona.setCodigoQr(jsonRespuesta.getInt("persona_codigo_qr"));
                                                                 persona.setEstado(jsonRespuesta.getInt("persona_estado"));
                                                                 persona.setSede(jsonRespuesta.getInt("id_sede"));
                                                                 persona.setRol(jsonRespuesta.getInt("id_rol"));
                                                                 lstPersonas.add(persona);
                                                                 lstvVendedores.setAdapter(adapterPesonas);
                                                                 lstvVendedores.deferNotifyDataSetChanged();
+                                                                etEmail.setText("");
                                                                 Toast.makeText(PrincipalAdministrador.this, "AGREGADO", Toast.LENGTH_SHORT).show();
                                                                 progressDialog.hide();
                                                             } catch (JSONException e) {
@@ -731,6 +686,8 @@ public class PrincipalAdministrador extends AppCompatActivity {
         });
         //endregion
 
+
+        //AQUI HAY TRABAJO
         //region tipo
         btnTipo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -806,7 +763,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
             this.context = context;
         }
 
-        public View getView(int posicion, View view, ViewGroup parent) {
+        public View getView(final int posicion, View view, ViewGroup parent) {
 
             LayoutInflater inflater = context.getLayoutInflater();
             View item = inflater.inflate(R.layout.listviewvendedores, null);
@@ -816,6 +773,46 @@ public class PrincipalAdministrador extends AppCompatActivity {
             email.setText(lstPersonas.get(posicion).getCorreo().toUpperCase());
             TextView sede = (TextView) item.findViewById(R.id.tvSedeLstVendedor);
             sede.setText("SANTIAGO CENTRO");
+            ImageView imgFoto = (ImageView) item.findViewById(R.id.imgLstVendedor);
+            imgFoto.setId(100 + posicion);
+            ImageButton btnQuitarVendedor = (ImageButton) item.findViewById(R.id.btnQuitarVendedor);
+            Switch swEstadoVendedor = (Switch) item.findViewById(R.id.swEstadoVendedor);
+            swEstadoVendedor.setId(300+posicion);
+            if(lstPersonas.get(posicion).getEstado() == 1){
+                swEstadoVendedor.setChecked(true);
+            }else{
+                swEstadoVendedor.setChecked(false);
+            }
+            swEstadoVendedor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    //solo actualizo el estado del vendedor a la bd
+                    Persona per = (Persona) lstPersonas.get(posicion);
+                    lstPersonas.get(posicion).setEstado(0);
+                    BddPersonas.setVendedor(per.getCorreo(), 2, 0, PrincipalAdministrador.this, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("TAG_", "Cambio el estado del vendedor a 0 ");
+                        }
+                    });
+                }
+            });
+            imgFoto.setImageBitmap(Functions.StringToBitMap(lstPersonas.get(posicion).getFoto()));
+            btnQuitarVendedor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //aqui digo que vendedor voy a quitar de vendedor
+                    Persona per = (Persona) lstPersonas.get(posicion);
+                    BddPersonas.setVendedor(per.getCorreo(), 1, 1, PrincipalAdministrador.this, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("TAG_", "ya no es vendedor ");
+                            lstPersonas.remove(posicion);
+                            //falta actualizar el lstvvendedor
+                        }
+                    });
+                }
+            });
             return item;
         }
     }
