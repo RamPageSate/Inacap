@@ -771,7 +771,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                                                 for (int x = 0; x < response.length(); ++x) {
                                                                     try {
                                                                         Tipo tipo = new Tipo();
-                                                                        tipo.setId(response.getJSONObject(x).getInt("tipo_id"));
+                                                                        tipo.setId(response.getJSONObject(x).getInt("tipo _id"));
                                                                         tipo.setNombre(response.getJSONObject(x).getString("tipo"));
                                                                         lstTipo.add(tipo);
                                                                     } catch (JSONException e) {

@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -308,45 +310,22 @@ public class CrearEditarProducto extends AppCompatActivity {
                     producto.setDescripcion(descripcion);
                     producto.setSku(sku);
                     producto.setPrecio(precio);
-                    producto.setFoto(foto);
                     producto.setLstCategoriasProducto(categoriasSeleccionadas);
                     if (!isActualizar) {
                         final ProgressDialog progressDialog = Functions.CargarDatos("AGREGANDO....", CrearEditarProducto.this);
                         BddProductos.setProducto(producto, CrearEditarProducto.this, new Response.Listener<String>() {
+                            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                             @Override
                             public void onResponse(String response) {
-
-                                BddProductos.getProducto(CrearEditarProducto.this, new Response.Listener<JSONArray>() {
-                                    @Override
-                                    public void onResponse(JSONArray response) {
-                                        for (int x = 0; x < response.length(); x++) {
-                                            try {
-                                                Producto producto = new Producto();
-                                                producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
-                                                producto.setNombre(response.getJSONObject(x).getString("producto_nombre"));
-                                                producto.setFoto(response.getJSONObject(x).getString("producto_foto"));
-                                                producto.setDescripcion(response.getJSONObject(x).getString("producto_descripcion"));
-                                                producto.setSku(response.getJSONObject(x).getString("producto_sku"));
-                                                producto.setPrecio(response.getJSONObject(x).getInt("producto_precio"));
-                                                producto.setStock(response.getJSONObject(x).getInt("producto_stock"));
-                                                producto.setEstado(response.getJSONObject(x).getInt("producto_estado"));
-                                                producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
-                                                producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
-                                                //FALTA ENVIAR LAS CATEGORIAS SELECCIONADAS
-                                                ProductosAgregados.add(producto);
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                        Toast.makeText(CrearEditarProducto.this, "Agregado", Toast.LENGTH_SHORT).show();
-                                        etCodigoBarraProducto.setText("");
-                                        etDescripcionProducto.setText("");
-                                        etNombreProducto.setText("");
-                                        etPrecioProducto.setText("");
-                                        //restablecer la imagen
-                                        progressDialog.dismiss();
-                                    }
-                                }, Functions.FalloInternet(CrearEditarProducto.this, progressDialog, "No pudo cargar"));
+                                etCodigoBarraProducto.setText("");
+                                etDescripcionProducto.setText("");
+                                etNombreProducto.setText("");
+                                etPrecioProducto.setText("");
+                                categoriasSeleccionadas.removeAll(categoriasSeleccionadas);
+                                //restablecer la imagen
+                                imgAgregarFoto.setImageDrawable(getDrawable(R.drawable.fotoproducto));
+                                progressDialog.dismiss();
+                                Toast.makeText(CrearEditarProducto.this, "Agregado", Toast.LENGTH_SHORT).show();
                             }
                         }, Functions.FalloInternet(CrearEditarProducto.this, progressDialog, "Vuelve a Intentar"));
                     } else {
