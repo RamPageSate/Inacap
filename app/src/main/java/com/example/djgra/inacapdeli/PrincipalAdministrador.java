@@ -250,7 +250,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     producto.setEstado(response.getJSONObject(x).getInt("producto_estado"));
                                     producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
                                     producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
-                                    BddProductos.getCategoriaByProducto(producto.getCodigo(), PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
+                                    BddCategoria.getCategoriaByProducto(producto.getCodigo(), PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                                         @Override
                                         public void onResponse(JSONArray response) {
                                             if (!response.toString().equals("[]")) {
