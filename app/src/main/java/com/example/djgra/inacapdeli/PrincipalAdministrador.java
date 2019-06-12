@@ -238,7 +238,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                             for (int x = 0; x < response.length(); x++) {
                                 try {
                                     Log.d("TAG_", "cargara los productos");
-                                    Producto producto = new Producto();
+                                    final Producto producto = new Producto();
                                     producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
                                     producto.setNombre(response.getJSONObject(x).getString("producto_nombre"));
                                     producto.setFoto(response.getJSONObject(x).getString("producto_foto"));
@@ -249,6 +249,23 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     producto.setEstado(response.getJSONObject(x).getInt("producto_estado"));
                                     producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
                                     producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
+                                    BddProductos.getCategoriaByProducto(producto.getCodigo(), PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
+                                        @Override
+                                        public void onResponse(JSONArray response) {
+                                            if (!response.toString().equals("[]")) {
+                                                ArrayList<Categoria> categoriasProducto = new ArrayList<>();
+                                                for (int x=0; x < response.length();x++){
+                                                    try {//falta agrgar las categorias asignadas al producto
+                                                        Categoria categoria = new Categoria(response.getJSONObject(x).getInt("categoria_id"), response.getJSONObject(x).getInt("categoria_estado"), response.getJSONObject(x).getString("categoria_nombre"));
+                                                        categoriasProducto.add(categoria);
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                                producto.setLstCategoriasProducto(categoriasProducto);
+                                            }
+                                        }
+                                    }, Functions.FalloInternet(PrincipalAdministrador.this,progressDialog,"No pudo Cargar"));
                                     ProductoActivity.lstProductos.add(producto);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -283,7 +300,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
 
 
 
-        //falta quitar el vendedor y actualizar la lista !!
+
 //region vendedores
 
         btnLstVendedores.setOnClickListener(new View.OnClickListener() {
@@ -296,9 +313,8 @@ public class PrincipalAdministrador extends AppCompatActivity {
                         if (!response.toString().equals("[]")) {
                             for (int x = 0; x < response.length(); ++x) {
                                 Log.d("TAG_", "encotnó vendedor" + x);
-                                int codigo = 0;
                                 try {
-                                    codigo = response.getJSONObject(x).getInt("persona_id");
+                                    int codigo = response.getJSONObject(x).getInt("persona_id");
                                     String nombre = response.getJSONObject(x).getString("persona_nombre");
                                     String apellido = response.getJSONObject(x).getString("persona_apellido");
                                     String email = response.getJSONObject(x).getString("persona_email");
@@ -753,12 +769,6 @@ public class PrincipalAdministrador extends AppCompatActivity {
                 lstView.deferNotifyDataSetChanged();
             }
         }
-    }
-
-    public static void actualizarListViewVendedor(AdapterPesonas adapterPesonas, ListView listView){
-        listView.removeAllViews();
-        listView.setAdapter(adapterPesonas);
-        listView.deferNotifyDataSetChanged();
     }
 
     class AdapterPesonas extends ArrayAdapter<Persona> {
