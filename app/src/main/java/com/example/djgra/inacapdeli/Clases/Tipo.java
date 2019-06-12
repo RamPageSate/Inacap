@@ -26,6 +26,6 @@ public class Tipo {
 
     @Override
     public String toString() {
-        return nombre.toUpperCase();
+        return nombre.toString().toUpperCase();
     }
 }
