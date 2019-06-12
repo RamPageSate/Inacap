@@ -38,8 +38,10 @@
             android:id="@+id/spCategoriaLstProducto"
             android:layout_width="204dp"
             android:layout_height="28dp"
+            android:textColor="@color/BlancoInacap"
             android:layout_marginLeft="98dp"
             android:layout_marginTop="-40dp"
+            android:backgroundTint="@color/BlancoInacap"
             android:background="@drawable/stylo_editextwhite"
             android:gravity="center|center_horizontal" />
     </LinearLayout>
@@ -63,7 +65,7 @@
     <ListView
         android:id="@+id/lstvProductos"
         android:layout_width="395dp"
-        android:layout_height="602dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"

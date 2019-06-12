@@ -55,17 +55,7 @@ public class ProductoActivity extends AppCompatActivity {
     ImageButton btnSalir, btnAgregar, btnEditarProducto;
     Spinner spCategorias;
     ListView lstvProductos;
-    Bitmap bitmap;
-    ImageView imgAgregarFoto;
-    ArrayList<Fabricante> lstFabricantes  = new ArrayList<>();
     Producto productoSeleccionado ;
-    
-   // AdapterProductos adptProducto = new AdapterProductos(this);
-    //
-   boolean [] marcados;
-    Boolean isActualizar = false;
-    public static ArrayList<Categoria> listCateSeleccionadas = new ArrayList<>();
-    ArrayList<Tipo> lstTipo  = new ArrayList<>();
     public static ArrayList<Producto> lstProductos = new ArrayList<>();
     public static ArrayList<Categoria> lstCategoria = new ArrayList<>();
     @Override
@@ -95,6 +85,10 @@ public class ProductoActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //faltan hacer los filtros
+
+
     }
 
     class AdapterProductos extends ArrayAdapter<Producto> {
@@ -111,12 +105,12 @@ public class ProductoActivity extends AppCompatActivity {
             View item = inflater.inflate(listviewproductos, null);
             if (!lstProductos.isEmpty()) {
                 TextView nombre = item.findViewById(R.id.tvNombreLstProducto);
-                nombre.setText(lstProductos.get(posicion).getNombre());
+                nombre.setText("NOMBRE: "+lstProductos.get(posicion).getNombre());
                 TextView precio = item.findViewById(R.id.tvPrecioLstProducto);
-                precio.setText("" + lstProductos.get(posicion).getPrecio());
+                precio.setText("PRECIO: " + lstProductos.get(posicion).getPrecio());
                 ImageButton btnEdit = item.findViewById(R.id.btnEditProducto);
                 TextView descripcion = item.findViewById(R.id.tvDescripcionListViewProducto);
-                descripcion.setText(""+ lstProductos.get(posicion).getDescripcion());
+                descripcion.setText("DESCRIPCION: "+ lstProductos.get(posicion).getDescripcion());
                 Switch swEstado = item.findViewById(R.id.swEstadoListViewProducto);
                 swEstado.setId(300+posicion);
                 if(lstProductos.get(posicion).getEstado() == 1){
@@ -146,13 +140,4 @@ public class ProductoActivity extends AppCompatActivity {
             return item;
         }
     }
-
-
-    public void enviarProducto(Producto producto){
-        Intent intent = new Intent(ProductoActivity.this,CrearEditarProducto.class);
-        intent.putExtra("producto",producto);
-        startActivity(intent);
-    }
-
-
 }
