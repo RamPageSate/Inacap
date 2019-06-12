@@ -233,6 +233,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                         if(!response.toString().equals("[]")){
                             for (int x= 0; x < response.length(); x++){
                                 try {
+                                    Log.d("TAG_","cargara los productos");
                                     Producto producto = new Producto();
                                     producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
                                     producto.setNombre(response.getJSONObject(x).getString("producto_nombre"));

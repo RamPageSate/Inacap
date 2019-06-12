@@ -14,12 +14,15 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -69,18 +72,6 @@ public class ProductoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_producto);
-        Producto producto = new Producto();
-        producto.setNombre("VISIO");
-        producto.setPrecio(50000);
-        producto.setDescripcion("chocolate de leche");
-        producto.setId_fabricante(1);
-        producto.setId_tipo(4);
-        producto.setEstado(0);
-        producto.setCodigo(500);
-        producto.setFoto("1");
-        producto.setStock(1);
-        producto.setLstCategoriasProducto(lstCategoria);
-        lstProductos.add(producto);
         btnAgregar = findViewById(R.id.btnAddLstProductos);
         btnSalir = findViewById(R.id.btnSalirLstProducto);
         spCategorias = findViewById(R.id.spCategoriaLstProducto);
@@ -89,14 +80,11 @@ public class ProductoActivity extends AppCompatActivity {
         ArrayAdapter<Categoria> adapterCategoria = new ArrayAdapter<Categoria>(this,android.R.layout.simple_list_item_1,lstCategoria);
         lstvProductos.setAdapter(adapterProductos);
         spCategorias.setAdapter(adapterCategoria);
-        //if(!lstProductos.isEmpty()){
-          //  lstvProductos.setAdapter(adptProducto);
-        //}
-        //No esta funcionando
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(ProductoActivity.this,CrearEditarProducto.class);
+                startActivity(intent);
             }
         });
         btnSalir.setOnClickListener(new View.OnClickListener() {
@@ -130,14 +118,18 @@ public class ProductoActivity extends AppCompatActivity {
                 TextView descripcion = item.findViewById(R.id.tvDescripcionListViewProducto);
                 descripcion.setText(""+ lstProductos.get(posicion).getDescripcion());
                 Switch swEstado = item.findViewById(R.id.swEstadoListViewProducto);
-                //me deja todos encendidos
-                for (int x = 0; x < lstProductos.size(); x++) {
-                    if (lstProductos.get(x).getEstado() == 0) {
-                        swEstado.setChecked(true);
-                    } else {
-                        swEstado.setChecked(false);
-                    }
+                swEstado.setId(300+posicion);
+                if(lstProductos.get(posicion).getEstado() == 1){
+                    swEstado.setChecked(true);
+                }else{
+                    swEstado.setChecked(false);
                 }
+                swEstado.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        Toast.makeText(context, "Cambio estado " , Toast.LENGTH_SHORT).show();
+                    }
+                });
                 btnEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

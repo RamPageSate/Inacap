@@ -122,6 +122,9 @@ public class Login extends AppCompatActivity {
                         }
                     });
                 }
+                //QUITAR ESTO
+                Intent i = new Intent(Login.this, PrincipalAdministrador.class);
+                startActivity(i);
 
             }
         });

@@ -193,6 +193,8 @@ public class CrearEditarProducto extends AppCompatActivity {
                             marcados[x] = true;
                         }
                     }
+
+                    //no marca las categorias de los productos a actualizaar y tampoco guarda el dato despues de seleccionar
                     builder.setMultiChoiceItems(nombreCategoria, marcados, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -301,7 +303,7 @@ public class CrearEditarProducto extends AppCompatActivity {
                                                 producto.setEstado(response.getJSONObject(x).getInt("producto_estado"));
                                                 producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
                                                 producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
-                                                producto.setId_categoria(response.getJSONObject(x).getInt("categoria_id"));
+                                                //FALTA ENVIAR LAS CATEGORIAS SELECCIONADAS
                                                 ProductosAgregados.add(producto);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
