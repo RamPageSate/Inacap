@@ -96,6 +96,7 @@ public class Login extends AppCompatActivity {
                                         if (cbRecordarme.isChecked()) {
                                             editor.putString("email", persona.getCorreo());
                                             editor.putString("pass", persona.getContrasena());
+                                            editor.commit();
                                         }
 
                                         switch (persona.getRol()) {
