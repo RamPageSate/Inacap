@@ -1,7 +1,6 @@
 package com.example.djgra.inacapdeli.Funciones;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -75,6 +74,20 @@ public class BddCategoria {
         );
         requestQueue.add(request);
 
+    }
+
+    public static void getCategoriaByProducto(final int codigoProducto, Context context, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlBase + "getCategoriaByProducto?producto_id=" + codigoProducto, null, listener, errorListener) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                map.clear();
+                map = new HashMap<String, String>();
+                map.put("producto_id", String.valueOf(codigoProducto));
+                return map;
+            }
+        };
+        requestQueue.add(request);
     }
 }
 

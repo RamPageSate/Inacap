@@ -76,19 +76,5 @@ public class BddProductos {
         requestQueue.add(stringRequest);
     }
 
-    public static void getCategoriaByProducto(final int codigoProducto, Context context, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlBase + "getCategoriaByProducto", null, listener, errorListener){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                map.clear();
-                map = new HashMap<String, String>();
-                map.put("producto_id", String.valueOf(codigoProducto));
-                return map;
-            }
-        };
-        requestQueue.add(request);
-    }
-
 
 }
