@@ -244,9 +244,6 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     producto.setEstado(response.getJSONObject(x).getInt("producto_estado"));
                                     producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
                                     producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
-                                    producto.setId_categoria(Integer.parseInt(response.getJSONObject(x).getString("id_categoria")));
-
-
                                     ProductoActivity.lstProductos.add(producto);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
