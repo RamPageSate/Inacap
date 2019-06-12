@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Producto implements Serializable {
 
     private String nombre, foto, descripcion, sku;
-    private int precio, stock, estado, id_fabricante, id_tipo, codigo, id_categoria;
+    private int precio, stock, estado, id_fabricante, id_tipo, codigo;
     private ArrayList<Categoria> lstCategoriasProducto = new ArrayList<>();
 
     public String getNombre() {
@@ -20,14 +20,6 @@ public class Producto implements Serializable {
 
     public void setLstCategoriasProducto(ArrayList<Categoria> lstCategoriaProducto) {
         this.lstCategoriasProducto = lstCategoriaProducto;
-    }
-
-    public int getId_categoria() {
-        return id_categoria;
-    }
-
-    public void setId_categoria(int id_categoria) {
-        this.id_categoria = id_categoria;
     }
 
     public void setNombre(String nombre) {

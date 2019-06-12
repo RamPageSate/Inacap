@@ -44,6 +44,8 @@ import static com.example.djgra.inacapdeli.ProductoActivity.lstCategoria;
 public class CrearEditarProducto extends AppCompatActivity {
     ImageView imgAgregarFoto;
     Bitmap bitmap;
+    boolean [] marcados;
+    TextView tvTitulo;
     public static ArrayList<Tipo> listaTipo = new ArrayList<>();
     public static ArrayList<Fabricante> listaFabricante = new ArrayList<>();
     public static ArrayList<Categoria> listaCategoria = new ArrayList<>();
@@ -62,7 +64,6 @@ public class CrearEditarProducto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_editar_producto);
         final ProgressDialog progressDialogF = Functions.CargarDatos("Espere..", CrearEditarProducto.this);
-        //no carga bien estos datos
         BddFabricante.getFabricantes(this, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -124,6 +125,8 @@ public class CrearEditarProducto extends AppCompatActivity {
         btnAgregarCategrias = (Button) findViewById(R.id.btnCategoriasAgregarProducto);
         btnAgregarProducto = (ImageButton) findViewById(R.id.imgAgregarProducto);
         btnSalir = (ImageButton) findViewById(R.id.btnSalirProducto);
+        tvTitulo = (TextView) findViewById(R.id.tvTituloAgregarProducto);
+        tvTitulo.setText("Registro Producto");
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             productoSeleccionado = (Producto) bundle.getSerializable("producto");
@@ -132,6 +135,7 @@ public class CrearEditarProducto extends AppCompatActivity {
             etNombreProducto.setText(productoSeleccionado.getNombre());
             etPrecioProducto.setText(String.valueOf(productoSeleccionado.getPrecio()));
             categoriasSeleccionadas.addAll(productoSeleccionado.getLstCategoriasProducto());
+            tvTitulo.setText("Actualizar Producto");
             isActualizar = true;
             for(int x=0; x < listaFabricante.size(); x++ ){
                 if(listaFabricante.get(x).getCodigo() == productoSeleccionado.getId_fabricante()){
@@ -165,6 +169,7 @@ public class CrearEditarProducto extends AppCompatActivity {
 
             }
         });
+
         imgAgregarFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,25 +177,39 @@ public class CrearEditarProducto extends AppCompatActivity {
             }
         });
 
+btnSalir.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
 
+    }
+});
 
-
+//region btnAgregarCategorias
         btnAgregarCategrias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final ArrayList<Categoria> cargarOpciones = listaCategoria;
+                for (int x = 0 ; x < listaCategoria.size();x++){
+                    Log.d("TAG_", ""+ listaCategoria.get(x).getCodigo());
+                }
+                for (int x = 0 ; x < categoriasSeleccionadas.size();x++){
+                    Log.d("TAG_", "cSele "+ categoriasSeleccionadas.get(x).getCodigo());
+                }
                 final int cantidadCategorias = listaCategoria.size();
-                final boolean [] marcados = new boolean[cantidadCategorias];
+                marcados = new boolean[cantidadCategorias];
                 AlertDialog.Builder builder = new AlertDialog.Builder(CrearEditarProducto.this);
                 builder.setTitle("CATEGORIAS DEL PRODUCTO");
                 String [] nombreCategoria = new String[cantidadCategorias];
                 for (int x = 0; x < cantidadCategorias;x ++){
-                    String nombre = listaCategoria.get(x).getNombre();
+                    String nombre = cargarOpciones.get(x).getNombre();
                     nombreCategoria[x] = (nombre);
                 }
                 if(!categoriasSeleccionadas.isEmpty()){
-                    for(int x = 0 ; x < listaCategoria.size(); x++){
-                        if(listaCategoria.get(x).getCodigo() == categoriasSeleccionadas.get(x).getCodigo()){//SECAE
-                            marcados[x] = true;
+                    for(int x = 0 ; x < cargarOpciones.size(); x++){
+                        for (int c =0 ; c < categoriasSeleccionadas.size();c++){
+                            if(cargarOpciones.get(x).getCodigo() == categoriasSeleccionadas.get(c).getCodigo()){//SECAE ya que no tienen la misma cantidad
+                                marcados[x] = true;
+                            }
                         }
                     }
 
@@ -199,6 +218,7 @@ public class CrearEditarProducto extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                             Log.d("TAG_" ,"Marco con la lista seleccionada  "+which);
+                            marcados[which] = isChecked;
                         }
                     });
                 }else{
@@ -213,6 +233,7 @@ public class CrearEditarProducto extends AppCompatActivity {
                 builder.setPositiveButton("Listo", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        categoriasSeleccionadas.removeAll(categoriasSeleccionadas);
                         for (int x=0; x < cantidadCategorias;x++){
                             if(marcados[x] == true){
                                 Categoria cate = new Categoria(lstCategoria.get(x).getCodigo(),lstCategoria.get(x).getEstado(),""+lstCategoria.get(x).getNombre());
@@ -227,9 +248,9 @@ public class CrearEditarProducto extends AppCompatActivity {
                 builder.create().show();
             }
         });
+//endregion
 
-
-
+//region btnAgregarProducto
         btnAgregarProducto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -329,6 +350,7 @@ public class CrearEditarProducto extends AppCompatActivity {
                 }
             }
         });
+        //endregion
 
     }
 
@@ -348,8 +370,6 @@ public class CrearEditarProducto extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/");
         startActivityForResult(Intent.createChooser(intent, "Seleccione la Aplicacion"), 10);
-        imgAgregarFoto.setMaxHeight(100);
-        imgAgregarFoto.setMaxHeight(100);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.example.djgra.inacapdeli.Clases;
 
-public class Categoria {
+import java.io.Serializable;
+
+public class Categoria implements Serializable {
     private int codigo, estado;
     private String nombre;
 

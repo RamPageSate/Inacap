@@ -250,6 +250,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             }
+                            // falta traer las categorias asociadas a los productos
                         }
                         //traer categorias
                         BddCategoria.getCategoria(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {

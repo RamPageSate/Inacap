@@ -86,7 +86,7 @@ public class ProductoActivity extends AppCompatActivity {
             }
         });
 
-        //faltan hacer los filtros
+        //faltan hacer los filtros------------------------------------------------------------------------------------------------ y transformar las fotos
 
 
     }
@@ -106,7 +106,7 @@ public class ProductoActivity extends AppCompatActivity {
             if (!lstProductos.isEmpty()) {
                 TextView nombre = item.findViewById(R.id.tvNombreLstProducto);
                 nombre.setText("NOMBRE: "+lstProductos.get(posicion).getNombre());
-                TextView precio = item.findViewById(R.id.tvPrecioLstProducto);
+                final TextView precio = item.findViewById(R.id.tvPrecioLstProducto);
                 precio.setText("PRECIO: " + lstProductos.get(posicion).getPrecio());
                 ImageButton btnEdit = item.findViewById(R.id.btnEditProducto);
                 TextView descripcion = item.findViewById(R.id.tvDescripcionListViewProducto);
@@ -128,6 +128,7 @@ public class ProductoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         productoSeleccionado = (Producto) lstvProductos.getItemAtPosition(posicion);
+                        productoSeleccionado.setLstCategoriasProducto(lstCategoria);
                         Intent intent = new Intent(ProductoActivity.this,CrearEditarProducto.class);
                         intent.putExtra("producto",productoSeleccionado);
                         startActivity(intent);

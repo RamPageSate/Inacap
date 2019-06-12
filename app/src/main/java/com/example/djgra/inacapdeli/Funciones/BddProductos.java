@@ -51,7 +51,6 @@ public class BddProductos {
                 //map.put("producto_estado",String.valueOf(producto.getEstado()));
                 map.put("id_fabricante",String.valueOf(producto.getId_fabricante()));
                 map.put("id_tipo",String.valueOf(producto.getId_tipo()));
-                map.put("categoria_id",String.valueOf(producto.getId_categoria()));
                 return map;
             }
         };
@@ -74,12 +73,21 @@ public class BddProductos {
                 //map.put("producto_estado",String.valueOf(producto.getEstado()));
                 map.put("id_fabricante",String.valueOf(producto.getId_fabricante()));
                 map.put("id_tipo",String.valueOf(producto.getId_tipo()));
-                map.put("categoria_id",String.valueOf(producto.getId_categoria()));
 
                 return map;
             }
         };
         requestQueue.add(stringRequest);
+    }
+
+    public static void getCategoriaByIdProducto(final Producto producto, Context context, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener){
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest request = new JsonArrayRequest(
+                Request.Method.POST, //GET or POST
+                urlBase+"getCategoriaByIdProducto", //URL
+                null, listener, errorListener//Parameters
+        );
+        requestQueue.add(request);
     }
 
 
