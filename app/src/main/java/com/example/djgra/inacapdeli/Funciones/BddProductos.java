@@ -38,25 +38,27 @@ public class BddProductos {
 
     public static void updateProducto(final Producto producto, Context context, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlBase + "updateCategoria", listener, errorListener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlBase + "setProducto", listener, errorListener) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 map.clear();
                 map = new HashMap<String, String>();
+                map.put("producto_id", String.valueOf(producto.getCodigo()));
                 map.put("producto_nombre", producto.getNombre());
-                map.put("producto_descripcion", producto.getDescripcion());
-                map.put("producto_foto", producto.getFoto());
-                //map.put("producto_stock", String.valueOf(producto.getStock()));
                 map.put("producto_precio", String.valueOf(producto.getPrecio()));
+                map.put("producto_foto", producto.getFoto());
+                map.put("producto_descripcion", producto.getDescripcion());
                 map.put("producto_sku", producto.getSku());
-                //map.put("producto_estado",String.valueOf(producto.getEstado()));
                 map.put("id_fabricante", String.valueOf(producto.getId_fabricante()));
                 map.put("id_tipo", String.valueOf(producto.getId_tipo()));
+                map.put("categoria_id", new JSONObject(arrayToMap(producto.getLstCategoriasProducto())).toString());
                 return map;
             }
         };
         requestQueue.add(stringRequest);
+
     }
+
 
     public static void setProducto(final Producto producto, Context context, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -78,6 +80,7 @@ public class BddProductos {
         };
         requestQueue.add(stringRequest);
     }
+
 
     private static Map<String, Integer> arrayToMap(ArrayList<Categoria> arrayList) {
         Map<String, Integer> retorno = new HashMap<>();
