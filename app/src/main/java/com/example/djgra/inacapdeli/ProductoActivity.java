@@ -49,7 +49,7 @@ import java.util.ArrayList;
 import static com.example.djgra.inacapdeli.R.layout.listviewproductos;
 
 public class ProductoActivity extends AppCompatActivity {
-    ImageButton btnSalir, btnAgregar;
+    ImageButton btnSalir, btnAgregar, btnEditarProducto;
     Spinner spCategorias;
     ListView lstvProductos;
     Bitmap bitmap;
@@ -96,9 +96,7 @@ public class ProductoActivity extends AppCompatActivity {
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProductoActivity.this,CrearEditarProducto.class);
 
-                startActivity(intent);
             }
         });
         btnSalir.setOnClickListener(new View.OnClickListener() {
@@ -143,9 +141,10 @@ public class ProductoActivity extends AppCompatActivity {
                 btnEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        productoSeleccionado = (Producto) lstProductos.get(posicion);
-                        enviarProducto(productoSeleccionado);
-
+                        productoSeleccionado = (Producto) lstvProductos.getItemAtPosition(posicion);
+                        Intent intent = new Intent(ProductoActivity.this,CrearEditarProducto.class);
+                        intent.putExtra("producto",productoSeleccionado);
+                        startActivity(intent);
                         //abria que sobreescrbir para recibir respuesta
                     }
                 });

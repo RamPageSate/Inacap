@@ -28,6 +28,7 @@ import com.example.djgra.inacapdeli.Clases.Fabricante;
 import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.Clases.Tipo;
 import com.example.djgra.inacapdeli.Funciones.BddCategoria;
+import com.example.djgra.inacapdeli.Funciones.BddFabricante;
 import com.example.djgra.inacapdeli.Funciones.BddProductos;
 import com.example.djgra.inacapdeli.Funciones.BddTipo;
 import com.example.djgra.inacapdeli.Funciones.Functions;
@@ -60,8 +61,9 @@ public class CrearEditarProducto extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_editar_producto);
-        final ProgressDialog progressDialog = Functions.CargarDatos("Espere..", CrearEditarProducto.this);
-        BddTipo.getTipo(this, new Response.Listener<JSONArray>() {
+        final ProgressDialog progressDialogF = Functions.CargarDatos("Espere..", CrearEditarProducto.this);
+        //no carga bien estos datos
+        BddFabricante.getFabricantes(this, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 if (!response.toString().equals("[]")){
@@ -70,11 +72,12 @@ public class CrearEditarProducto extends AppCompatActivity {
                             Fabricante fabricante = new Fabricante();
                             fabricante.setCodigo(response.getJSONObject(x).getInt("fabricante_id"));
                             fabricante.setNombre(response.getJSONObject(x).getString("fabricante_nombre"));
-                            listaFabricante.add(fabricante);
+                            CrearEditarProducto.listaFabricante.add(fabricante);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
+                    spFabricante.setAdapter(new ArrayAdapter<Fabricante>(CrearEditarProducto.this,android.R.layout.simple_list_item_1,listaFabricante));
                 }
                 BddTipo.getTipo(CrearEditarProducto.this, new Response.Listener<JSONArray>() {
                     @Override
@@ -85,30 +88,32 @@ public class CrearEditarProducto extends AppCompatActivity {
                                     Tipo tipo = new Tipo();
                                     tipo.setId(response.getJSONObject(x).getInt("tipo_id"));
                                     tipo.setNombre(response.getJSONObject(x).getString("tipo"));
-                                    listaTipo.add(tipo);
+                                    CrearEditarProducto.listaTipo.add(tipo);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
+                            spTipo.setAdapter(new ArrayAdapter<Tipo>(CrearEditarProducto.this,android.R.layout.simple_list_item_1,listaTipo));
                         }
                         BddCategoria.getCategoria(CrearEditarProducto.this, new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {
                                 for (int i = 0; i < response.length(); i++) {
                                     try {
-                                        listaCategoria.add(new Categoria(response.getJSONObject(i).getInt("categoria_id"),
+                                        CrearEditarProducto.listaCategoria.add(new Categoria(response.getJSONObject(i).getInt("categoria_id"),
                                                 response.getJSONObject(i).getInt("categoria_estado"),
                                                 response.getJSONObject(i).getString("categoria_nombre")));
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
                                 }
+                                progressDialogF.hide();
                             }
-                        }, Functions.FalloInternet(CrearEditarProducto.this,progressDialog,"No pudo Cargar"));
+                        }, Functions.FalloInternet(CrearEditarProducto.this,progressDialogF,"No pudo Cargar"));
                     }
-                }, Functions.FalloInternet(CrearEditarProducto.this,progressDialog,"No pudo Cargar"));
+                }, Functions.FalloInternet(CrearEditarProducto.this,progressDialogF,"No pudo Cargar"));
             }
-        }, Functions.FalloInternet(CrearEditarProducto.this,progressDialog,"No pudo Cargar"));
+        }, Functions.FalloInternet(CrearEditarProducto.this,progressDialogF,"No pudo Cargar"));
         etNombreProducto =(EditText) findViewById(R.id.etNombreProducto);
         etDescripcionProducto = (EditText) findViewById(R.id.etDescripcionProducto);
         etCodigoBarraProducto = (EditText) findViewById(R.id.etSkuProducto);
@@ -119,15 +124,13 @@ public class CrearEditarProducto extends AppCompatActivity {
         btnAgregarCategrias = (Button) findViewById(R.id.btnCategoriasAgregarProducto);
         btnAgregarProducto = (ImageButton) findViewById(R.id.imgAgregarProducto);
         btnSalir = (ImageButton) findViewById(R.id.btnSalirProducto);
-        spFabricante.setAdapter(new ArrayAdapter<Fabricante>(CrearEditarProducto.this,android.R.layout.simple_list_item_1,listaFabricante));
-        spTipo.setAdapter(new ArrayAdapter<Tipo>(CrearEditarProducto.this,android.R.layout.simple_list_item_1,listaTipo));
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             productoSeleccionado = (Producto) bundle.getSerializable("producto");
             etCodigoBarraProducto.setText(productoSeleccionado.getSku());
             etDescripcionProducto.setText(productoSeleccionado.getDescripcion());
             etNombreProducto.setText(productoSeleccionado.getNombre());
-            etPrecioProducto.setText(productoSeleccionado.getPrecio());
+            etPrecioProducto.setText(String.valueOf(productoSeleccionado.getPrecio()));
             categoriasSeleccionadas.addAll(productoSeleccionado.getLstCategoriasProducto());
             isActualizar = true;
             for(int x=0; x < listaFabricante.size(); x++ ){
@@ -186,7 +189,7 @@ public class CrearEditarProducto extends AppCompatActivity {
                 }
                 if(!categoriasSeleccionadas.isEmpty()){
                     for(int x = 0 ; x < listaCategoria.size(); x++){
-                        if(listaCategoria.get(x).getCodigo() == categoriasSeleccionadas.get(x).getCodigo()){
+                        if(listaCategoria.get(x).getCodigo() == categoriasSeleccionadas.get(x).getCodigo()){//SECAE
                             marcados[x] = true;
                         }
                     }
