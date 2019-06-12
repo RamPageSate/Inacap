@@ -1,29 +1,14 @@
 package com.example.djgra.inacapdeli;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,21 +17,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
 import com.example.djgra.inacapdeli.Clases.Categoria;
-import com.example.djgra.inacapdeli.Clases.Fabricante;
 import com.example.djgra.inacapdeli.Clases.Producto;
-import com.example.djgra.inacapdeli.Clases.Tipo;
-import com.example.djgra.inacapdeli.Funciones.BddFabricante;
-import com.example.djgra.inacapdeli.Funciones.BddProductos;
-import com.example.djgra.inacapdeli.Funciones.BddTipo;
-import com.example.djgra.inacapdeli.Funciones.Functions;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import static com.example.djgra.inacapdeli.R.layout.listviewproductos;
@@ -104,6 +77,7 @@ public class ProductoActivity extends AppCompatActivity {
             LayoutInflater inflater = context.getLayoutInflater();
             View item = inflater.inflate(listviewproductos, null);
             if (!lstProductos.isEmpty()) {
+                ImageView imagen = item.findViewById(R.id.imgLstVendedor);
                 TextView nombre = item.findViewById(R.id.tvNombreLstProducto);
                 nombre.setText(""+lstProductos.get(posicion).getNombre());
                 final TextView precio = item.findViewById(R.id.tvPrecioLstProducto);
