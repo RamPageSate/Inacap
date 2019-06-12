@@ -738,10 +738,12 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                 tvTitulo.setText("Tipos");
                                 final EditText etNombre = (EditText) formTipo.findViewById(R.id.etNombreView);
                                 etNombre.setHint("Tipos");
-                                final ArrayAdapter<Tipo> adapter = new ArrayAdapter<Tipo>(PrincipalAdministrador.this, android.R.layout.simple_expandable_list_item_1, BddTipo.lstTipo);
+                                final ArrayAdapter<Tipo> adapterTipo = new ArrayAdapter<Tipo>(PrincipalAdministrador.this, android.R.layout.simple_expandable_list_item_1, lstTipo);
                                 final Button btnGuardar = (Button) formTipo.findViewById(R.id.btnGuardarView);
                                 Button btnSalir = (Button) formTipo.findViewById(R.id.btnSalirView);
-                                lstvTipo.setAdapter(adapter);
+                                if(!lstTipo.isEmpty()){
+                                    lstvTipo.setAdapter(adapterTipo);
+                                }
                                 btnGuardar.setText("GUARDAR");
                                 btnSalir.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -762,22 +764,22 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                                     @Override
                                                     public void onResponse(String response) {
                                                         Log.d("TAG_", "agregue tipo");
-                                                        BddFabricante.getFabricantes(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
+                                                        BddTipo.getTipo(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                                                             @Override
                                                             public void onResponse(JSONArray response) {
                                                                 lstTipo.removeAll(lstTipo);
                                                                 for (int x = 0; x < response.length(); ++x) {
                                                                     try {
                                                                         Tipo tipo = new Tipo();
-                                                                        tipo.setId(response.getJSONObject(x).getInt("fabricante_id"));
-                                                                        tipo.setNombre(response.getJSONObject(x).getString("fabricante_nombre"));
+                                                                        tipo.setId(response.getJSONObject(x).getInt("tipo_id"));
+                                                                        tipo.setNombre(response.getJSONObject(x).getString("tipo"));
                                                                         lstTipo.add(tipo);
                                                                     } catch (JSONException e) {
                                                                         e.printStackTrace();
                                                                     }
                                                                 }
                                                                 lstTipo.add(tipo);
-                                                                lstvTipo.setAdapter(adapter);
+                                                                lstvTipo.setAdapter(adapterTipo);
                                                                 lstvTipo.deferNotifyDataSetChanged();
                                                                 progressDialog.hide();
                                                                 etNombre.setText("");
@@ -797,7 +799,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                             tipo.setId(codigo);
                                             tipo.setNombre(nuevoNombre);
                                             lstTipo.get(posicionUdpdateDelete).setNombre(nuevoNombre);
-                                            lstvTipo.setAdapter(adapter);
+                                            lstvTipo.setAdapter(adapterTipo);
                                             lstvTipo.deferNotifyDataSetChanged();
                                             etNombre.setText("");
                                             final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Actualizando", PrincipalAdministrador.this);
