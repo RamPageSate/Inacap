@@ -87,9 +87,10 @@ public class Login extends AppCompatActivity {
                                     persona.setFoto(objeto.getString("persona_foto"));
                                     persona.setCodigoQr(objeto.getString("persona_codigo_qr"));
                                     persona.setEstado(objeto.getInt("persona_estado"));
-                                    persona.setRol(objeto.getInt("persona_rol"));
+                                    persona.setRol(objeto.getInt("id_rol"));
                                     persona.setCodigo(objeto.getInt("persona_id"));
-
+                                    persona.setSaldo(objeto.getInt("persona_saldo"));
+                                    persona.setSede(objeto.getInt("id_sede"));
                                     if (persona.getCorreo().equals(email) && persona.getContrasena().equals(contraseña)) {
                                         progress.hide();
                                         if (cbRecordarme.isChecked()) {
@@ -99,6 +100,9 @@ public class Login extends AppCompatActivity {
 
                                         switch (persona.getRol()) {
                                             case (1):
+                                                Intent c = new Intent(Login.this, PrincipalCliente.class);
+                                                c.putExtra("usr", persona);
+                                                startActivity(c);
                                                 break;
                                             case (2):
                                                 break;
@@ -122,10 +126,8 @@ public class Login extends AppCompatActivity {
                         }
                     });
                 }
-                //QUITAR ESTO
                 Intent i = new Intent(Login.this, PrincipalAdministrador.class);
                 startActivity(i);
-
             }
         });
 

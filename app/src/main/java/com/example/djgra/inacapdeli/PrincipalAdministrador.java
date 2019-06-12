@@ -214,7 +214,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                         });
                         formAddCategoria.show();
                     }
-                },Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo actualizar"));
+                }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo actualizar"));
 
 
             }
@@ -230,10 +230,10 @@ public class PrincipalAdministrador extends AppCompatActivity {
                 BddProductos.getProducto(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        if(!response.toString().equals("[]")){
-                            for (int x= 0; x < response.length(); x++){
+                        if (!response.toString().equals("[]")) {
+                            for (int x = 0; x < response.length(); x++) {
                                 try {
-                                    Log.d("TAG_","cargara los productos");
+                                    Log.d("TAG_", "cargara los productos");
                                     Producto producto = new Producto();
                                     producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
                                     producto.setNombre(response.getJSONObject(x).getString("producto_nombre"));
@@ -266,18 +266,21 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                         }
                                     }
                                 }
-                                Intent intent = new Intent(PrincipalAdministrador.this,ProductoActivity.class);
+                                Intent intent = new Intent(PrincipalAdministrador.this, ProductoActivity.class);
                                 startActivity(intent);
                             }
-                        }, Functions.FalloInternet(PrincipalAdministrador.this,progressDialog,"No Pudo Cargar"));
+                        }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No Pudo Cargar"));
                     }
-                }, Functions.FalloInternet(PrincipalAdministrador.this,progressDialog,"No pudo Cargar "));
+                }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo Cargar "));
             }
         });
 
         //endregion
 
-//region vendedores falta arreglar la bd vacia
+
+
+        //falta modificar el listview de vendedores agregarle un boton para sacarlo y uno swchit para desactivarlo quitar la opcion de eliminarlo
+//region vendedores
 
         btnLstVendedores.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -286,29 +289,31 @@ public class PrincipalAdministrador extends AppCompatActivity {
                 BddPersonas.getVendedores(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        for (int x = 0; x < response.length(); ++x) {
-                            Log.d("TAG_", "encotnó vendedor" + x);
-                            int codigo = 0;
-                            try {
-                                codigo = response.getJSONObject(x).getInt("persona_id");
-                                String nombre = response.getJSONObject(x).getString("persona_nombre");
-                                String apellido = response.getJSONObject(x).getString("persona_apellido");
-                                String email = response.getJSONObject(x).getString("persona_email");
-                                int estado = response.getJSONObject(x).getInt("persona_estado");
-                                int rol = response.getJSONObject(x).getInt("id_rol");
-                                int sede = response.getJSONObject(x).getInt("id_sede");
-                                Persona vendedor = new Persona();
-                                vendedor.setCodigo(codigo);
-                                vendedor.setNombre(nombre);
-                                vendedor.setApellido(apellido);
-                                vendedor.setCorreo(email);
-                                vendedor.setEstado(estado);
-                                vendedor.setRol(rol);
-                                vendedor.setSede(sede);
-                                lstPersonas.add(vendedor);
-                                Log.d("TAG_", "encotnó vendedor" + vendedor.getNombre() + " " + vendedor.getApellido());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                        if (!response.toString().equals("[]")) {
+                            for (int x = 0; x < response.length(); ++x) {
+                                Log.d("TAG_", "encotnó vendedor" + x);
+                                int codigo = 0;
+                                try {
+                                    codigo = response.getJSONObject(x).getInt("persona_id");
+                                    String nombre = response.getJSONObject(x).getString("persona_nombre");
+                                    String apellido = response.getJSONObject(x).getString("persona_apellido");
+                                    String email = response.getJSONObject(x).getString("persona_email");
+                                    int estado = response.getJSONObject(x).getInt("persona_estado");
+                                    int rol = response.getJSONObject(x).getInt("id_rol");
+                                    int sede = response.getJSONObject(x).getInt("id_sede");
+                                    Persona vendedor = new Persona();
+                                    vendedor.setCodigo(codigo);
+                                    vendedor.setNombre(nombre);
+                                    vendedor.setApellido(apellido);
+                                    vendedor.setCorreo(email);
+                                    vendedor.setEstado(estado);
+                                    vendedor.setRol(rol);
+                                    vendedor.setSede(sede);
+                                    lstPersonas.add(vendedor);
+                                    Log.d("TAG_", "encotnó vendedor" + vendedor.getNombre() + " " + vendedor.getApellido());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                         final AlertDialog formLstVendedores = new AlertDialog.Builder(PrincipalAdministrador.this)
@@ -331,24 +336,24 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     @Override
                                     public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
                                         String opc = "Inhabilitar";
-                                        if(lstPersonas.get(position).getEstado()==0){
+                                        if (lstPersonas.get(position).getEstado() == 0) {
                                             opc = "Habilitar";
                                         }
-                                        String [] opciones = {"Quitar Vendedor",opc};
+                                        String[] opciones = {"Quitar Vendedor", opc};
                                         final AlertDialog.Builder alrt = new AlertDialog.Builder(PrincipalAdministrador.this);
                                         alrt.create();
-                                        alrt.setTitle("Datos: \n " + lstPersonas.get(position).getNombre().toUpperCase()+ " "+ lstPersonas.get(position).getApellido().toUpperCase());
+                                        alrt.setTitle("Datos: \n " + lstPersonas.get(position).getNombre().toUpperCase() + " " + lstPersonas.get(position).getApellido().toUpperCase());
                                         alrt.setNegativeButton("Cancelar", null);
                                         alrt.setSingleChoiceItems(opciones, -1, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(final DialogInterface dialog, int which) {
-                                                if(which==0){
+                                                if (which == 0) {
                                                     //quitar vendedor
                                                     final ProgressDialog progressDialog = Functions.CargarDatos("Quitando Vendedor", PrincipalAdministrador.this);
-                                                    BddPersonas.setVendedor(lstPersonas.get(position).getCorreo(),1,1,PrincipalAdministrador.this, new Response.Listener<String>() {
+                                                    BddPersonas.setVendedor(lstPersonas.get(position).getCorreo(), 1, 1, PrincipalAdministrador.this, new Response.Listener<String>() {
                                                         @Override
                                                         public void onResponse(String response) {
-                                                            Log.d("TAG_","cambie de vendedor a usuario");
+                                                            Log.d("TAG_", "cambie de vendedor a usuario");
                                                             lstPersonas.remove(position);
                                                             lstvVendedores.setAdapter(adapterPesonas);
                                                             lstvVendedores.deferNotifyDataSetChanged();
@@ -356,13 +361,13 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                                             progressDialog.hide();
                                                         }
                                                     });
-                                                }else{
+                                                } else {
                                                     //solo camiarle el estado
-                                                    final ProgressDialog progressDialog = Functions.CargarDatos( "Gestionando Vendedor", PrincipalAdministrador.this);
-                                                    BddPersonas.setVendedor(lstPersonas.get(position).getCorreo(),2,0,PrincipalAdministrador.this, new Response.Listener<String>() {
+                                                    final ProgressDialog progressDialog = Functions.CargarDatos("Gestionando Vendedor", PrincipalAdministrador.this);
+                                                    BddPersonas.setVendedor(lstPersonas.get(position).getCorreo(), 2, 0, PrincipalAdministrador.this, new Response.Listener<String>() {
                                                         @Override
                                                         public void onResponse(String response) {
-                                                            Log.d("TAG_","estoy inhabilitando al vendedor");
+                                                            Log.d("TAG_", "estoy inhabilitando al vendedor");
                                                             lstPersonas.get(position).setEstado(0);
                                                             lstvVendedores.setAdapter(adapterPesonas);
                                                             lstvVendedores.deferNotifyDataSetChanged();
@@ -389,48 +394,48 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                                 progressDialog.hide();
                                             }
                                         }
-                                            if(validarEmail == 0){
-                                                BddPersonas.setVendedor(etEmail.getText().toString(), 2, 1, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                                    @Override
-                                                    public void onResponse(String response) {
-                                                        Log.d("TAG_", "el usuario sera vendedor");
-                                                        //ACTUALIZAR EL LISTVIEW
-                                                        //traer un vendedor
-                                                        BddPersonas.getPersona(etEmail.getText().toString(), PrincipalAdministrador.this, new Response.Listener<String>() {
-                                                            @Override
-                                                            public void onResponse(String response) {
-                                                                try {
-                                                                    Log.d("TAG_", "tengo la persona ingresada completa");
-                                                                    JSONObject jsonRespuesta = new  JSONObject(response);
-                                                                    Persona persona = new Persona();
-                                                                    persona.setCodigo(jsonRespuesta.getInt("persona_id"));
-                                                                    persona.setNombre(jsonRespuesta.getString("persona_nombre"));
-                                                                    persona.setApellido(jsonRespuesta.getString("persona_apellido"));
-                                                                    //persona.setFoto(jsonRespuesta.getInt("persona_foto"));
-                                                                    persona.setCorreo(jsonRespuesta.getString("persona_email"));
-                                                                    //persona.setCodigoQr(jsonRespuesta.getInt("persona_codigo_qr"));
-                                                                    persona.setEstado(jsonRespuesta.getInt("persona_estado"));
-                                                                    persona.setSede(jsonRespuesta.getInt("id_sede"));
-                                                                    persona.setRol(jsonRespuesta.getInt("id_rol"));
-                                                                    lstPersonas.add(persona);
-                                                                    lstvVendedores.setAdapter(adapterPesonas);
-                                                                    lstvVendedores.deferNotifyDataSetChanged();
-                                                                    Toast.makeText(PrincipalAdministrador.this, "AGREGADO", Toast.LENGTH_SHORT).show();
-                                                                    progressDialog.hide();
-                                                                } catch (JSONException e) {
-                                                                    e.printStackTrace();
-                                                                }
+                                        if (validarEmail == 0) {
+                                            BddPersonas.setVendedor(etEmail.getText().toString(), 2, 1, PrincipalAdministrador.this, new Response.Listener<String>() {
+                                                @Override
+                                                public void onResponse(String response) {
+                                                    Log.d("TAG_", "el usuario sera vendedor");
+                                                    //ACTUALIZAR EL LISTVIEW
+                                                    //traer un vendedor
+                                                    BddPersonas.getPersona(etEmail.getText().toString(), PrincipalAdministrador.this, new Response.Listener<String>() {
+                                                        @Override
+                                                        public void onResponse(String response) {
+                                                            try {
+                                                                Log.d("TAG_", "tengo la persona ingresada completa");
+                                                                JSONObject jsonRespuesta = new JSONObject(response);
+                                                                Persona persona = new Persona();
+                                                                persona.setCodigo(jsonRespuesta.getInt("persona_id"));
+                                                                persona.setNombre(jsonRespuesta.getString("persona_nombre"));
+                                                                persona.setApellido(jsonRespuesta.getString("persona_apellido"));
+                                                                //persona.setFoto(jsonRespuesta.getInt("persona_foto"));
+                                                                persona.setCorreo(jsonRespuesta.getString("persona_email"));
+                                                                //persona.setCodigoQr(jsonRespuesta.getInt("persona_codigo_qr"));
+                                                                persona.setEstado(jsonRespuesta.getInt("persona_estado"));
+                                                                persona.setSede(jsonRespuesta.getInt("id_sede"));
+                                                                persona.setRol(jsonRespuesta.getInt("id_rol"));
+                                                                lstPersonas.add(persona);
+                                                                lstvVendedores.setAdapter(adapterPesonas);
+                                                                lstvVendedores.deferNotifyDataSetChanged();
+                                                                Toast.makeText(PrincipalAdministrador.this, "AGREGADO", Toast.LENGTH_SHORT).show();
+                                                                progressDialog.hide();
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
                                                             }
-                                                        });
-                                                    }
-                                                });
-                                            }
+                                                        }
+                                                    });
+                                                }
+                                            });
                                         }
+                                    }
                                 });
                                 btnSalir.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                       lstPersonas.removeAll(lstPersonas);
+                                        lstPersonas.removeAll(lstPersonas);
                                         formLstVendedores.dismiss();
 
                                     }
@@ -438,174 +443,173 @@ public class PrincipalAdministrador extends AppCompatActivity {
                             }
                         });
                         formLstVendedores.show();
-
                     }
-                });
+                }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo Cargar"));
             }
-    });
-    //endregion   falta arreglar
+        });
+        //endregion   falta arreglar
 //region SEDE CRUD
         btnSede.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick (View v){
-        final ProgressDialog progressDialog = Functions.CargarDatos("Cangando Sede", PrincipalAdministrador.this);
-        BddSede.getSede(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONArray response) {
-                if (!response.toString().equals("[]")){
-                    for (int x = 0; x < response.length(); ++x) {
-                        try {
-                            lstSedes.add(new Sede(response.getJSONObject(x).getInt("sede_id"),
-                                    response.getJSONObject(x).getInt("sede_estado"),
-                                    response.getJSONObject(x).getString("sede_direccion")));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                progressDialog.hide();
-                final AlertDialog formSede = new AlertDialog.Builder(PrincipalAdministrador.this)
-                        .setView(R.layout.addcategoria)
-                        .create();
-                formSede.setOnShowListener(new DialogInterface.OnShowListener() {
+            public void onClick(View v) {
+                final ProgressDialog progressDialog = Functions.CargarDatos("Cangando Sede", PrincipalAdministrador.this);
+                BddSede.getSede(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
-                    public void onShow(final DialogInterface dialog) {
-                        TextView tvTitulo = (TextView) formSede.findViewById(R.id.tvTitulo);
-                        tvTitulo.setText("Sede");
-                        final EditText etNombre = (EditText) formSede.findViewById(R.id.etNombreView);
-                        etNombre.setHint("Nombre Sede");
-                        final ArrayAdapter<Sede> adapter = new ArrayAdapter<Sede>(PrincipalAdministrador.this, android.R.layout.simple_list_item_multiple_choice, lstSedes);
-                        final ListView lstvSede = (ListView) formSede.findViewById(R.id.lstView);
-                        if(!lstSedes.isEmpty()){
-                            lstvSede.setAdapter(adapter);
-                            CargarListViewSede(lstvSede, PrincipalAdministrador.this, lstSedes);
+                    public void onResponse(JSONArray response) {
+                        if (!response.toString().equals("[]")) {
+                            for (int x = 0; x < response.length(); ++x) {
+                                try {
+                                    lstSedes.add(new Sede(response.getJSONObject(x).getInt("sede_id"),
+                                            response.getJSONObject(x).getInt("sede_estado"),
+                                            response.getJSONObject(x).getString("sede_direccion")));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
-                        final Button btnGuardar = (Button) formSede.findViewById(R.id.btnGuardarView);
-                        btnGuardar.setText("GUARDAR");
-                        Button btnSalir = (Button) formSede.findViewById(R.id.btnSalirView);
-                        btnSalir.setOnClickListener(new View.OnClickListener() {
+                        progressDialog.hide();
+                        final AlertDialog formSede = new AlertDialog.Builder(PrincipalAdministrador.this)
+                                .setView(R.layout.addcategoria)
+                                .create();
+                        formSede.setOnShowListener(new DialogInterface.OnShowListener() {
                             @Override
-                            public void onClick(View v) {
-                                lstSedes.removeAll(lstSedes);
-                                btn = 0;
-                                formSede.dismiss();
-                            }
-                        });
-                        lstvSede.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    if (lstSedes.get(position).getEstado() == 1) {
-                                        // lo cambio a 0
-                                        lstSedes.get(position).setEstado(0);
-                                    } else {
-                                        //lo cambio a 1
-                                        lstSedes.get(position).setEstado(1);
+                            public void onShow(final DialogInterface dialog) {
+                                TextView tvTitulo = (TextView) formSede.findViewById(R.id.tvTitulo);
+                                tvTitulo.setText("Sede");
+                                final EditText etNombre = (EditText) formSede.findViewById(R.id.etNombreView);
+                                etNombre.setHint("Nombre Sede");
+                                final ArrayAdapter<Sede> adapter = new ArrayAdapter<Sede>(PrincipalAdministrador.this, android.R.layout.simple_list_item_multiple_choice, lstSedes);
+                                final ListView lstvSede = (ListView) formSede.findViewById(R.id.lstView);
+                                if (!lstSedes.isEmpty()) {
+                                    lstvSede.setAdapter(adapter);
+                                    CargarListViewSede(lstvSede, PrincipalAdministrador.this, lstSedes);
+                                }
+                                final Button btnGuardar = (Button) formSede.findViewById(R.id.btnGuardarView);
+                                btnGuardar.setText("GUARDAR");
+                                Button btnSalir = (Button) formSede.findViewById(R.id.btnSalirView);
+                                btnSalir.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        lstSedes.removeAll(lstSedes);
+                                        btn = 0;
+                                        formSede.dismiss();
                                     }
-                                    Sede sede = (Sede) lstSedes.get(position);
-                                    BddSede.updateSede(sede, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            //registro el cambio en la bd
-                                            Log.d("TAG_", "actualizo sede");
+                                });
+                                lstvSede.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        if (lstSedes.get(position).getEstado() == 1) {
+                                            // lo cambio a 0
+                                            lstSedes.get(position).setEstado(0);
+                                        } else {
+                                            //lo cambio a 1
+                                            lstSedes.get(position).setEstado(1);
                                         }
-                                    }, Functions.FalloInternet(PrincipalAdministrador.this,progressDialog,"No pudo Actualizar"));
-                            }
-                        });
-
-                        lstvSede.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                            @Override
-                            public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
-                                
-                                posicionUdpdateDelete = position;
-                                lstvSede.setItemsCanFocus(true);
-                                btnGuardar.setText("ACTUALIZAR");
-                                etNombre.setText(lstSedes.get(position).getDireccion());
-                                return true;
-                            }
-                        });
-
-                        btnGuardar.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (btnGuardar.getText().toString().equals("GUARDAR")) {
-                                    if (!etNombre.getText().toString().isEmpty()) {
-                                        final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Agregando", PrincipalAdministrador.this);
-                                        Sede sede = new Sede();
-                                        sede.setDireccion(etNombre.getText().toString().toUpperCase());
-                                        sede.setEstado(1);
-                                        BddSede.setSede(sede, PrincipalAdministrador.this, new Response.Listener<String>() {
+                                        Sede sede = (Sede) lstSedes.get(position);
+                                        BddSede.updateSede(sede, PrincipalAdministrador.this, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
-                                                //guarde la sede en la bd
-                                                Log.d("TAG_", "Registre sede");
-                                                //lenar el lista
-                                                BddSede.getSede(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
-                                                    @Override
-                                                    public void onResponse(JSONArray response) {
-                                                        lstSedes.removeAll(lstSedes);
-                                                        for (int x = 0; x < response.length(); ++x) {
-                                                            try {
-                                                                lstSedes.add(new Sede(response.getJSONObject(x).getInt("sede_id"),
-                                                                        response.getJSONObject(x).getInt("sede_estado"),
-                                                                        response.getJSONObject(x).getString("sede_direccion")));
-                                                            } catch (JSONException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                        }
-                                                        CargarListViewSede(lstvSede, PrincipalAdministrador.this, lstSedes);
-                                                        lstvSede.deferNotifyDataSetChanged();
-                                                        progressDialog.hide();
-                                                        Toast.makeText(PrincipalAdministrador.this, "Agregado", Toast.LENGTH_SHORT).show();
-                                                        etNombre.setText("");
-                                                    }
-                                                },Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No Cargo"));
+                                                //registro el cambio en la bd
+                                                Log.d("TAG_", "actualizo sede");
                                             }
-                                        }, Functions.FalloInternet(PrincipalAdministrador.this,progressDialog,"No pudo Agregar"));
-                                    } else {
-                                        etNombre.setError("Ingrese Sede");
+                                        }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo Actualizar"));
                                     }
-                                } else {
-                                    //Actualizo ArrayList y el Listview
-                                    final Sede sede = new Sede();
-                                    sede.setDireccion(etNombre.getText().toString().toUpperCase());
-                                    sede.setEstado(lstSedes.get(posicionUdpdateDelete).getEstado());
-                                    sede.setCodigo(lstSedes.get(posicionUdpdateDelete).getCodigo());
-                                    //Actualizo BD
-                                    final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Actualizando", PrincipalAdministrador.this);
-                                    BddSede.updateSede(sede, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            lstSedes.get(posicionUdpdateDelete).setDireccion(sede.getDireccion());
-                                            CargarListViewSede(lstvSede, PrincipalAdministrador.this, lstSedes);
-                                            lstvSede.deferNotifyDataSetChanged();
-                                            progressDialog.dismiss();
-                                            Toast.makeText(PrincipalAdministrador.this, "Actualizado", Toast.LENGTH_SHORT).show();
-                                            etNombre.setText("");
-                                            Log.d("TAG_", "Actualizo con nuevo nombre");
-                                            btnGuardar.setText("GUARDAR");
-                                        }
-                                    }, Functions.FalloInternet(PrincipalAdministrador.this,progressDialog,"No pudo Actualizar"));
-                                }
+                                });
 
+                                lstvSede.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                                    @Override
+                                    public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
+
+                                        posicionUdpdateDelete = position;
+                                        lstvSede.setItemsCanFocus(true);
+                                        btnGuardar.setText("ACTUALIZAR");
+                                        etNombre.setText(lstSedes.get(position).getDireccion());
+                                        return true;
+                                    }
+                                });
+
+                                btnGuardar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (btnGuardar.getText().toString().equals("GUARDAR")) {
+                                            if (!etNombre.getText().toString().isEmpty()) {
+                                                final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Agregando", PrincipalAdministrador.this);
+                                                Sede sede = new Sede();
+                                                sede.setDireccion(etNombre.getText().toString().toUpperCase());
+                                                sede.setEstado(1);
+                                                BddSede.setSede(sede, PrincipalAdministrador.this, new Response.Listener<String>() {
+                                                    @Override
+                                                    public void onResponse(String response) {
+                                                        //guarde la sede en la bd
+                                                        Log.d("TAG_", "Registre sede");
+                                                        //lenar el lista
+                                                        BddSede.getSede(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
+                                                            @Override
+                                                            public void onResponse(JSONArray response) {
+                                                                lstSedes.removeAll(lstSedes);
+                                                                for (int x = 0; x < response.length(); ++x) {
+                                                                    try {
+                                                                        lstSedes.add(new Sede(response.getJSONObject(x).getInt("sede_id"),
+                                                                                response.getJSONObject(x).getInt("sede_estado"),
+                                                                                response.getJSONObject(x).getString("sede_direccion")));
+                                                                    } catch (JSONException e) {
+                                                                        e.printStackTrace();
+                                                                    }
+                                                                }
+                                                                CargarListViewSede(lstvSede, PrincipalAdministrador.this, lstSedes);
+                                                                lstvSede.deferNotifyDataSetChanged();
+                                                                progressDialog.hide();
+                                                                Toast.makeText(PrincipalAdministrador.this, "Agregado", Toast.LENGTH_SHORT).show();
+                                                                etNombre.setText("");
+                                                            }
+                                                        }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No Cargo"));
+                                                    }
+                                                }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo Agregar"));
+                                            } else {
+                                                etNombre.setError("Ingrese Sede");
+                                            }
+                                        } else {
+                                            //Actualizo ArrayList y el Listview
+                                            final Sede sede = new Sede();
+                                            sede.setDireccion(etNombre.getText().toString().toUpperCase());
+                                            sede.setEstado(lstSedes.get(posicionUdpdateDelete).getEstado());
+                                            sede.setCodigo(lstSedes.get(posicionUdpdateDelete).getCodigo());
+                                            //Actualizo BD
+                                            final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Actualizando", PrincipalAdministrador.this);
+                                            BddSede.updateSede(sede, PrincipalAdministrador.this, new Response.Listener<String>() {
+                                                @Override
+                                                public void onResponse(String response) {
+                                                    lstSedes.get(posicionUdpdateDelete).setDireccion(sede.getDireccion());
+                                                    CargarListViewSede(lstvSede, PrincipalAdministrador.this, lstSedes);
+                                                    lstvSede.deferNotifyDataSetChanged();
+                                                    progressDialog.dismiss();
+                                                    Toast.makeText(PrincipalAdministrador.this, "Actualizado", Toast.LENGTH_SHORT).show();
+                                                    etNombre.setText("");
+                                                    Log.d("TAG_", "Actualizo con nuevo nombre");
+                                                    btnGuardar.setText("GUARDAR");
+                                                }
+                                            }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo Actualizar"));
+                                        }
+
+                                    }
+                                });
                             }
                         });
+                        formSede.show();
                     }
-                });
-                formSede.show();
+                }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, ""));
             }
-        }, Functions.FalloInternet(PrincipalAdministrador.this,progressDialog,""));
-    }
-    });
-    //endregion
-    //region fabricante
+        });
+        //endregion
+        //region fabricante
         btnFabricante.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos("Cargando Fabricantes",PrincipalAdministrador.this);
+                final ProgressDialog progressDialog = Functions.CargarDatos("Cargando Fabricantes", PrincipalAdministrador.this);
                 BddFabricante.getFabricantes(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        if (!response.toString().equals("[]")){
+                        if (!response.toString().equals("[]")) {
                             for (int x = 0; x < response.length(); ++x) {
                                 try {
                                     Fabricante fabricante = new Fabricante();
@@ -678,7 +682,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                                                 etNombre.setText("");
                                                                 Toast.makeText(PrincipalAdministrador.this, "Agregado", Toast.LENGTH_SHORT).show();
                                                             }
-                                                        },Functions.FalloInternet(PrincipalAdministrador.this,progressDialog,"no Pudo Cargar"));
+                                                        }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "no Pudo Cargar"));
                                                     }
                                                 });
                                             } else {
@@ -722,93 +726,95 @@ public class PrincipalAdministrador extends AppCompatActivity {
                         });
                         formFabricante.show();
                     }
-                },Functions.FalloInternet(PrincipalAdministrador.this,progressDialog,"No Pudo Cargar"));
+                }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No Pudo Cargar"));
             }
         });
-    //endregion
+        //endregion
 
         //region tipo
         btnTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    final AlertDialog formTipo = new AlertDialog.Builder(PrincipalAdministrador.this)
-                            .setView(R.layout.addcategoria)
-                            .create();
-                    formTipo.setCanceledOnTouchOutside(false);
-                    formTipo.setCancelable(false);
-                    formTipo.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialog) {
-                            final ListView lstvTipo = (ListView) formTipo.findViewById(R.id.lstView);
-                            TextView tvTitulo = (TextView) formTipo.findViewById(R.id.tvTitulo);
-                            tvTitulo.setText("Tipos");
-                            final EditText etNombre = (EditText) formTipo.findViewById(R.id.etNombreView);
-                            etNombre.setHint("Tipos");
-                            final ArrayAdapter<Tipo> adapter = new ArrayAdapter<Tipo>(PrincipalAdministrador.this,android.R.layout.simple_expandable_list_item_1,BddTipo.lstTipo);
-                            Button btnGuardar = (Button) formTipo.findViewById(R.id.btnGuardarView);
-                            Button btnSalir = (Button) formTipo.findViewById(R.id.btnSalirView);
-                            final boolean actualizar = false;
-                            if(BddTipo.lstTipo.size() >= 0){
-                                lstvTipo.setAdapter(adapter);
-                            }
-                            btnGuardar.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if(actualizar == false){
-                                        Tipo tipo = new Tipo();
-                                        tipo.setNombre(etNombre.getText().toString().toUpperCase());
-                                        lstvTipo.setAdapter(adapter);
-                                    }
-                                }
-                            });
+                final AlertDialog formTipo = new AlertDialog.Builder(PrincipalAdministrador.this)
+                        .setView(R.layout.addcategoria)
+                        .create();
+                formTipo.setCanceledOnTouchOutside(false);
+                formTipo.setCancelable(false);
+                formTipo.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        final ListView lstvTipo = (ListView) formTipo.findViewById(R.id.lstView);
+                        TextView tvTitulo = (TextView) formTipo.findViewById(R.id.tvTitulo);
+                        tvTitulo.setText("Tipos");
+                        final EditText etNombre = (EditText) formTipo.findViewById(R.id.etNombreView);
+                        etNombre.setHint("Tipos");
+                        final ArrayAdapter<Tipo> adapter = new ArrayAdapter<Tipo>(PrincipalAdministrador.this, android.R.layout.simple_expandable_list_item_1, BddTipo.lstTipo);
+                        Button btnGuardar = (Button) formTipo.findViewById(R.id.btnGuardarView);
+                        Button btnSalir = (Button) formTipo.findViewById(R.id.btnSalirView);
+                        final boolean actualizar = false;
+                        if (BddTipo.lstTipo.size() >= 0) {
+                            lstvTipo.setAdapter(adapter);
                         }
-                    });
-                    formTipo.show();
-                }
+                        btnGuardar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (actualizar == false) {
+                                    Tipo tipo = new Tipo();
+                                    tipo.setNombre(etNombre.getText().toString().toUpperCase());
+                                    lstvTipo.setAdapter(adapter);
+                                }
+                            }
+                        });
+                    }
+                });
+                formTipo.show();
+            }
         });
         //endregion
     }
 
 
-    public static  void CargarListViewCategoria(final ListView lstView, final Context context, ArrayList<Categoria> list){
+    public static void CargarListViewCategoria(final ListView lstView, final Context context, ArrayList<Categoria> list) {
         lstView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         lstView.setItemsCanFocus(true);
-        for(int x = 0; x<list.size();x++){
-            if(list.get(x).getEstado() == 1){
-                lstView.setItemChecked(x,true);
+        for (int x = 0; x < list.size(); x++) {
+            if (list.get(x).getEstado() == 1) {
+                lstView.setItemChecked(x, true);
                 lstView.deferNotifyDataSetChanged();
             }
         }
     }
-    public static  void CargarListViewSede(final ListView lstView, final Context context, ArrayList<Sede> list){
-        ArrayAdapter<Sede> adapt = new ArrayAdapter<Sede>(context,android.R.layout.simple_list_item_multiple_choice,list);
+
+    public static void CargarListViewSede(final ListView lstView, final Context context, ArrayList<Sede> list) {
+        ArrayAdapter<Sede> adapt = new ArrayAdapter<Sede>(context, android.R.layout.simple_list_item_multiple_choice, list);
         lstView.setAdapter(adapt);
         lstView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         lstView.setItemsCanFocus(true);
-        for(int x = 0; x<list.size();x++){
-            if(list.get(x).getEstado() == 1){
-                lstView.setItemChecked(x,true);
+        for (int x = 0; x < list.size(); x++) {
+            if (list.get(x).getEstado() == 1) {
+                lstView.setItemChecked(x, true);
                 lstView.deferNotifyDataSetChanged();
             }
         }
     }
-    class AdapterPesonas extends ArrayAdapter<Persona>{
+
+    class AdapterPesonas extends ArrayAdapter<Persona> {
         Activity context;
 
-        public AdapterPesonas(Activity context){
-            super(context,R.layout.listviewvendedores,lstPersonas);
+        public AdapterPesonas(Activity context) {
+            super(context, R.layout.listviewvendedores, lstPersonas);
             this.context = context;
         }
 
-        public View getView(int posicion, View view, ViewGroup parent){
+        public View getView(int posicion, View view, ViewGroup parent) {
 
             LayoutInflater inflater = context.getLayoutInflater();
-            View item = inflater.inflate(R.layout.listviewvendedores,null);
-            TextView titulo = (TextView)item.findViewById(R.id.tvNombreLstProducto);
-            titulo.setText(lstPersonas.get(posicion).getNombre().toUpperCase() + " " +lstPersonas.get(posicion).getApellido().toUpperCase() );
-            TextView email = (TextView)item.findViewById(R.id.tvPrecioLstProducto);
+            View item = inflater.inflate(R.layout.listviewvendedores, null);
+            TextView titulo = (TextView) item.findViewById(R.id.tvNombreLstProducto);
+            titulo.setText(lstPersonas.get(posicion).getNombre().toUpperCase() + " " + lstPersonas.get(posicion).getApellido().toUpperCase());
+            TextView email = (TextView) item.findViewById(R.id.tvPrecioLstProducto);
             email.setText(lstPersonas.get(posicion).getCorreo().toUpperCase());
-            TextView sede = (TextView)item.findViewById(R.id.tvSedeLstVendedor);
+            TextView sede = (TextView) item.findViewById(R.id.tvSedeLstVendedor);
             sede.setText("SANTIAGO CENTRO");
             return item;
         }

@@ -27,9 +27,9 @@ public class BddPersonas {
     private static Map<String,String> map = new HashMap<>();
     private static  String urlBase = "https://laxjbz6j-site.gtempurl.com/igniter/funcion/";
 
-    public static void getVendedores(Context context, Response.Listener<JSONArray> listener){
+    public static void getVendedores(Context context, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST,urlBase+"getVendedor",null, listener, null);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST,urlBase+"getVendedor",null, listener, errorListener);
         requestQueue.add(request);
     }
     public static int setPersona(final Persona persona, final Context context, Response.Listener listener, Response.ErrorListener error) {
