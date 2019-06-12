@@ -7,10 +7,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -118,17 +118,17 @@ public class CrearEditarProducto extends AppCompatActivity {
                 }, Functions.FalloInternet(CrearEditarProducto.this, progressDialogF, "No pudo Cargar"));
             }
         }, Functions.FalloInternet(CrearEditarProducto.this, progressDialogF, "No pudo Cargar"));
-        etNombreProducto = (EditText) findViewById(R.id.etNombreProducto);
-        etDescripcionProducto = (EditText) findViewById(R.id.etDescripcionProducto);
-        etCodigoBarraProducto = (EditText) findViewById(R.id.etSkuProducto);
-        etPrecioProducto = (EditText) findViewById(R.id.etPrecioProductos);
-        spFabricante = (Spinner) findViewById(R.id.spFabricantesProductos);
-        spTipo = (Spinner) findViewById(R.id.spTipoProducto);
-        imgAgregarFoto = (ImageView) findViewById(R.id.imgAgregarFotoProducto);
-        btnAgregarCategrias = (Button) findViewById(R.id.btnCategoriasAgregarProducto);
-        btnAgregarProducto = (ImageButton) findViewById(R.id.imgAgregarProducto);
-        btnSalir = (ImageButton) findViewById(R.id.btnSalirProducto);
-        tvTitulo = (TextView) findViewById(R.id.tvTituloAgregarProducto);
+        etNombreProducto = findViewById(R.id.etNombreProducto);
+        etDescripcionProducto = findViewById(R.id.etDescripcionProducto);
+        etCodigoBarraProducto = findViewById(R.id.etSkuProducto);
+        etPrecioProducto = findViewById(R.id.etPrecioProductos);
+        spFabricante = findViewById(R.id.spFabricantesProductos);
+        spTipo = findViewById(R.id.spTipoProducto);
+        imgAgregarFoto = findViewById(R.id.imgAgregarFotoProducto);
+        btnAgregarCategrias = findViewById(R.id.btnCategoriasAgregarProducto);
+        btnAgregarProducto = findViewById(R.id.imgAgregarProducto);
+        btnSalir = findViewById(R.id.btnSalirProducto);
+        tvTitulo = findViewById(R.id.tvTituloAgregarProducto);
         Bitmap bit = ((BitmapDrawable) imgAgregarFoto.getDrawable()).getBitmap();
         fotoDefault = Functions.getStringImage(bit);
         tvTitulo.setText("Registro Producto");
@@ -156,7 +156,7 @@ public class CrearEditarProducto extends AppCompatActivity {
         spFabricante.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                fabricanteSeleccionado = (Fabricante) listaFabricante.get(position);
+                fabricanteSeleccionado = listaFabricante.get(position);
 
             }
 
@@ -168,7 +168,7 @@ public class CrearEditarProducto extends AppCompatActivity {
         spTipo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                tipoSeleccionado = (Tipo) listaTipo.get(position);
+                tipoSeleccionado = listaTipo.get(position);
             }
 
             @Override
@@ -315,7 +315,7 @@ public class CrearEditarProducto extends AppCompatActivity {
                         BddProductos.setProducto(producto, CrearEditarProducto.this, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                //borrare la lista para cargar todos los productos
+
                                 BddProductos.getProducto(CrearEditarProducto.this, new Response.Listener<JSONArray>() {
                                     @Override
                                     public void onResponse(JSONArray response) {
