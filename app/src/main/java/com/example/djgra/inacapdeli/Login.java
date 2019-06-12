@@ -43,94 +43,105 @@ public class Login extends AppCompatActivity {
         tvRecuperarPass = findViewById(R.id.tvRecuperarPass);
         tvPoliticas = findViewById(R.id.tvPolitica);
         preferences = getSharedPreferences("usuarioConectado", Context.MODE_PRIVATE);
-        if (preferences != null) {
+        if (!preferences.getString("email", "").isEmpty() && !preferences.getString("pass", "").isEmpty()) {
             etEmail.setText(preferences.getString("email", ""));
             etPass.setText(preferences.getString("pass", ""));
-            btnIniciar.callOnClick();
+            cbRecordarme.setChecked(true);
+            Logeo();
+
         }
         btnIniciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progress = Functions.CargarDatos("Conectando", Login.this);
-                progress.show();
-                Boolean validador = true;
-                if (etEmail.getText().toString().isEmpty()) {
-                    etEmail.setError("CAMPO OBLIGATORIO");
+                Logeo();
+            }
+
+        });
+
+    }
+
+    public void Logeo() {
+        final ProgressDialog progress = Functions.CargarDatos("Conectando", Login.this);
+        progress.show();
+        progress.setCancelable(false);
+
+        Boolean validador = true;
+        if (etEmail.getText().toString().isEmpty()) {
+            etEmail.setError("CAMPO OBLIGATORIO");
+            progress.hide();
+            validador = false;
+        }
+        if (etPass.getText().toString().isEmpty()) {
+            etPass.setError("CAMPO OBLIGATORIO");
+            validador = false;
+            progress.hide();
+        }
+        if (validador) {
+
+            final SharedPreferences.Editor editor = preferences.edit();
+
+            final String email = etEmail.getText().toString();
+
+            final String contraseña = etPass.getText().toString();
+
+
+            BddPersonas.getPersona(email, Login.this, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
                     progress.hide();
-                    validador = false;
-                }
-                if (etPass.getText().toString().isEmpty()) {
-                    etPass.setError("CAMPO OBLIGATORIO");
-                    validador = false;
-                    progress.hide();
-                }
-                if (validador) {
+                    if (!response.equals("[]")) {
+                        try {
 
-                    final SharedPreferences.Editor editor = preferences.edit();
-
-                    final String email = etEmail.getText().toString();
-
-                    final String contraseña = etPass.getText().toString();
-
-
-                    BddPersonas.getPersona(email, Login.this, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            if (!response.equals("[]")) {
-                                try {
-                                    JSONObject objeto = new JSONObject(response);
-                                    Persona persona = new Persona();
-                                    persona.setCorreo(objeto.getString("persona_email"));
-                                    persona.setContrasena(objeto.getString("persona_contrasena"));
-                                    persona.setNombre(objeto.getString("persona_nombre"));
-                                    persona.setApellido(objeto.getString("persona_apellido"));
-                                    persona.setFoto(objeto.getString("persona_foto"));
-                                    persona.setCodigoQr(objeto.getString("persona_codigo_qr"));
-                                    persona.setEstado(objeto.getInt("persona_estado"));
-                                    persona.setRol(objeto.getInt("id_rol"));
-                                    persona.setCodigo(objeto.getInt("persona_id"));
-                                    persona.setSaldo(objeto.getInt("persona_saldo"));
-                                    persona.setSede(objeto.getInt("id_sede"));
-                                    if (persona.getCorreo().equals(email) && persona.getContrasena().equals(contraseña)) {
-                                        progress.hide();
-                                        if (cbRecordarme.isChecked()) {
-                                            editor.putString("email", persona.getCorreo());
-                                            editor.putString("pass", persona.getContrasena());
-                                            editor.commit();
-                                        }
-
-                                        switch (persona.getRol()) {
-                                            case (1):
-                                                Intent c = new Intent(Login.this, PrincipalCliente.class);
-                                                c.putExtra("usr", persona);
-                                                startActivity(c);
-                                                break;
-                                            case (2):
-                                                break;
-                                            case (3):
-                                                Intent i = new Intent(Login.this, PrincipalAdministrador.class);
-                                                startActivity(i);
-                                                break;
-                                        }
-                                    } else {
-                                        etEmail.setError("Correo y/o contraseña Incorrectas");
-                                        etPass.setError("Correo y/o contraseña Incorrectas");
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                            JSONObject objeto = new JSONObject(response);
+                            Persona persona = new Persona();
+                            persona.setCorreo(objeto.getString("persona_email"));
+                            persona.setContrasena(objeto.getString("persona_contrasena"));
+                            persona.setNombre(objeto.getString("persona_nombre"));
+                            persona.setApellido(objeto.getString("persona_apellido"));
+                            persona.setFoto(objeto.getString("persona_foto"));
+                            persona.setCodigoQr(objeto.getString("persona_codigo_qr"));
+                            persona.setEstado(objeto.getInt("persona_estado"));
+                            persona.setRol(objeto.getInt("id_rol"));
+                            persona.setCodigo(objeto.getInt("persona_id"));
+                            persona.setSaldo(objeto.getInt("persona_saldo"));
+                            persona.setSede(objeto.getInt("id_sede"));
+                            if (persona.getCorreo().equals(email) && persona.getContrasena().equals(contraseña)) {
+                                progress.hide();
+                                if (cbRecordarme.isChecked()) {
+                                    editor.putString("email", persona.getCorreo());
+                                    editor.putString("pass", persona.getContrasena());
+                                    editor.commit();
                                 }
 
+                                switch (persona.getRol()) {
+                                    case (1):
+                                        Intent c = new Intent(Login.this, PrincipalCliente.class);
+                                        c.putExtra("usr", persona);
+                                        startActivity(c);
+                                        break;
+                                    case (2):
+                                        break;
+                                    case (3):
+                                        Intent i = new Intent(Login.this, PrincipalAdministrador.class);
+                                        i.putExtra("admin", persona);
+                                        startActivity(i);
+                                        break;
+                                }
                             } else {
                                 etEmail.setError("Correo y/o contraseña Incorrectas");
                                 etPass.setError("Correo y/o contraseña Incorrectas");
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    });
+
+                    } else {
+                        etEmail.setError("Correo y/o contraseña Incorrectas");
+                        etPass.setError("Correo y/o contraseña Incorrectas");
+                    }
                 }
-                Intent i = new Intent(Login.this, PrincipalAdministrador.class);
-                startActivity(i);
-            }
-        });
+            });
+        }
 
     }
 
