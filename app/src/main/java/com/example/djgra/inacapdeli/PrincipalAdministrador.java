@@ -6,11 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Fabricante;
 import com.example.djgra.inacapdeli.Clases.Persona;
@@ -65,12 +62,12 @@ public class PrincipalAdministrador extends AppCompatActivity {
         setContentView(R.layout.activity_principal_administrador);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        btnCategoria = (ImageButton) findViewById(R.id.btnAdCategoria);
-        btnTipo = (ImageButton) findViewById(R.id.btnTipo);
-        btnProductos = (ImageButton) findViewById(R.id.btnProductos);
-        btnFabricante = (ImageButton) findViewById(R.id.btnFabricante);
-        btnLstVendedores = (ImageButton) findViewById(R.id.btnLstVendedores);
-        btnSede = (ImageButton) findViewById(R.id.btnSede);
+        btnCategoria = findViewById(R.id.btnAdCategoria);
+        btnTipo = findViewById(R.id.btnTipo);
+        btnProductos = findViewById(R.id.btnProductos);
+        btnFabricante = findViewById(R.id.btnFabricante);
+        btnLstVendedores = findViewById(R.id.btnLstVendedores);
+        btnSede = findViewById(R.id.btnSede);
 
 
 // region categorias CRUD
@@ -101,21 +98,21 @@ public class PrincipalAdministrador extends AppCompatActivity {
                         formAddCategoria.setOnShowListener(new DialogInterface.OnShowListener() {
                             @Override
                             public void onShow(final DialogInterface dialog) {
-                                final EditText etNombre = (EditText) formAddCategoria.findViewById(R.id.etNombreView);
+                                final EditText etNombre = formAddCategoria.findViewById(R.id.etNombreView);
                                 progressDialog.hide();
-                                final ListView lstCategoria = (ListView) formAddCategoria.findViewById(R.id.lstView);
+                                final ListView lstCategoria = formAddCategoria.findViewById(R.id.lstView);
                                 final ArrayAdapter<Categoria> adapter = new ArrayAdapter(PrincipalAdministrador.this, android.R.layout.simple_list_item_multiple_choice, lstCategorias);
                                 if (!lstCategorias.isEmpty()) {
                                     lstCategoria.setAdapter(adapter);
                                     CargarListViewCategoria(lstCategoria, PrincipalAdministrador.this, lstCategorias);
                                 }
-                                final Button btnGuardar = (Button) formAddCategoria.findViewById(R.id.btnGuardarView);
+                                final Button btnGuardar = formAddCategoria.findViewById(R.id.btnGuardarView);
                                 btnGuardar.setText("GUARDAR");
-                                Button btnSalir = (Button) formAddCategoria.findViewById(R.id.btnSalirView);
+                                Button btnSalir = formAddCategoria.findViewById(R.id.btnSalirView);
                                 lstCategoria.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        Categoria categoria = (Categoria) lstCategorias.get(position);
+                                        Categoria categoria = lstCategorias.get(position);
                                         if (categoria.getEstado() == 1) {
                                             // lo cambio a 0
                                             categoria.setEstado(0);
@@ -155,7 +152,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     public void onClick(View v) {
                                         if (btnGuardar.getText().toString().equals("GUARDAR")) {
                                             if (!etNombre.getText().toString().isEmpty()) {
-                                                final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Agregando Categoria", PrincipalAdministrador.this);
+                                                final ProgressDialog progressDialog = Functions.CargarDatos("Agregando Categoria", PrincipalAdministrador.this);
                                                 BddCategoria.setCategoria(new Categoria(1, etNombre.getText().toString().toUpperCase()), PrincipalAdministrador.this, new Response.Listener<String>() {
                                                     @Override
                                                     public void onResponse(String response) {
@@ -190,9 +187,9 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                             //Actualizo ArrayList y el Listview
                                             final String nuevoNombre = etNombre.getText().toString().toUpperCase();
                                             //le cambio el nombre en la listaCategorias al elemento actulizado
-                                            Categoria categoria = (Categoria) lstCategorias.get(posicionUdpdateDelete);
+                                            Categoria categoria = lstCategorias.get(posicionUdpdateDelete);
                                             categoria.setNombre(nuevoNombre);
-                                            final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Actualizando", PrincipalAdministrador.this);
+                                            final ProgressDialog progressDialog = Functions.CargarDatos("Actualizando", PrincipalAdministrador.this);
                                             //Actualizo BD
                                             BddCategoria.updateCategoria(categoria, PrincipalAdministrador.this, new Response.Listener<String>() {
                                                 @Override
@@ -249,7 +246,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     producto.setEstado(response.getJSONObject(x).getInt("producto_estado"));
                                     producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
                                     producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
-                                    BddProductos.getCategoriaByProducto(producto.getCodigo(), PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
+                                    BddCategoria.getCategoriaByProducto(producto.getCodigo(), PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                                         @Override
                                         public void onResponse(JSONArray response) {
                                             if (!response.toString().equals("[]")) {
@@ -263,10 +260,11 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                                     }
                                                 }
                                                 producto.setLstCategoriasProducto(categoriasProducto);
+                                                ProductoActivity.lstProductos.add(producto);
                                             }
                                         }
                                     }, Functions.FalloInternet(PrincipalAdministrador.this,progressDialog,"No pudo Cargar"));
-                                    ProductoActivity.lstProductos.add(producto);
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -346,13 +344,13 @@ public class PrincipalAdministrador extends AppCompatActivity {
                         formLstVendedores.setOnShowListener(new DialogInterface.OnShowListener() {
                             @Override
                             public void onShow(DialogInterface dialog) {
-                                lstvVendedores = (ListView) formLstVendedores.findViewById(R.id.lstVendedores);
+                                lstvVendedores = formLstVendedores.findViewById(R.id.lstVendedores);
                                 adapterPesonas = new AdapterPesonas(PrincipalAdministrador.this);
                                 progressDialog.hide();
                                 lstvVendedores.setAdapter(adapterPesonas);
-                                final EditText etEmail = (EditText) formLstVendedores.findViewById(R.id.etLstVendedorEmail);
-                                Button btnGuardar = (Button) formLstVendedores.findViewById(R.id.btnAgregarListaVendedor);
-                                ImageButton btnSalir = (ImageButton) formLstVendedores.findViewById(R.id.btnlstVendedorAtras);
+                                final EditText etEmail = formLstVendedores.findViewById(R.id.etLstVendedorEmail);
+                                Button btnGuardar = formLstVendedores.findViewById(R.id.btnAgregarListaVendedor);
+                                ImageButton btnSalir = formLstVendedores.findViewById(R.id.btnlstVendedorAtras);
                                 btnGuardar.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(final View v) {
@@ -445,19 +443,19 @@ public class PrincipalAdministrador extends AppCompatActivity {
                         formSede.setOnShowListener(new DialogInterface.OnShowListener() {
                             @Override
                             public void onShow(final DialogInterface dialog) {
-                                TextView tvTitulo = (TextView) formSede.findViewById(R.id.tvTitulo);
+                                TextView tvTitulo = formSede.findViewById(R.id.tvTitulo);
                                 tvTitulo.setText("Sede");
-                                final EditText etNombre = (EditText) formSede.findViewById(R.id.etNombreView);
+                                final EditText etNombre = formSede.findViewById(R.id.etNombreView);
                                 etNombre.setHint("Nombre Sede");
                                 final ArrayAdapter<Sede> adapter = new ArrayAdapter<Sede>(PrincipalAdministrador.this, android.R.layout.simple_list_item_multiple_choice, lstSedes);
-                                final ListView lstvSede = (ListView) formSede.findViewById(R.id.lstView);
+                                final ListView lstvSede = formSede.findViewById(R.id.lstView);
                                 if (!lstSedes.isEmpty()) {
                                     lstvSede.setAdapter(adapter);
                                     CargarListViewSede(lstvSede, PrincipalAdministrador.this, lstSedes);
                                 }
-                                final Button btnGuardar = (Button) formSede.findViewById(R.id.btnGuardarView);
+                                final Button btnGuardar = formSede.findViewById(R.id.btnGuardarView);
                                 btnGuardar.setText("GUARDAR");
-                                Button btnSalir = (Button) formSede.findViewById(R.id.btnSalirView);
+                                Button btnSalir = formSede.findViewById(R.id.btnSalirView);
                                 btnSalir.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -476,7 +474,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                             //lo cambio a 1
                                             lstSedes.get(position).setEstado(1);
                                         }
-                                        Sede sede = (Sede) lstSedes.get(position);
+                                        Sede sede = lstSedes.get(position);
                                         BddSede.updateSede(sede, PrincipalAdministrador.this, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
@@ -504,7 +502,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     public void onClick(View v) {
                                         if (btnGuardar.getText().toString().equals("GUARDAR")) {
                                             if (!etNombre.getText().toString().isEmpty()) {
-                                                final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Agregando", PrincipalAdministrador.this);
+                                                final ProgressDialog progressDialog = Functions.CargarDatos("Agregando", PrincipalAdministrador.this);
                                                 Sede sede = new Sede();
                                                 sede.setDireccion(etNombre.getText().toString().toUpperCase());
                                                 sede.setEstado(1);
@@ -546,7 +544,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                             sede.setEstado(lstSedes.get(posicionUdpdateDelete).getEstado());
                                             sede.setCodigo(lstSedes.get(posicionUdpdateDelete).getCodigo());
                                             //Actualizo BD
-                                            final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Actualizando", PrincipalAdministrador.this);
+                                            final ProgressDialog progressDialog = Functions.CargarDatos("Actualizando", PrincipalAdministrador.this);
                                             BddSede.updateSede(sede, PrincipalAdministrador.this, new Response.Listener<String>() {
                                                 @Override
                                                 public void onResponse(String response) {
@@ -601,23 +599,23 @@ public class PrincipalAdministrador extends AppCompatActivity {
                         formFabricante.setOnShowListener(new DialogInterface.OnShowListener() {
                             @Override
                             public void onShow(DialogInterface dialog) {
-                                final ListView lstvFabricante = (ListView) formFabricante.findViewById(R.id.lstView);
-                                TextView tvTitulo = (TextView) formFabricante.findViewById(R.id.tvTitulo);
+                                final ListView lstvFabricante = formFabricante.findViewById(R.id.lstView);
+                                TextView tvTitulo = formFabricante.findViewById(R.id.tvTitulo);
                                 tvTitulo.setText("Fabricantes");
-                                final EditText etNombre = (EditText) formFabricante.findViewById(R.id.etNombreView);
+                                final EditText etNombre = formFabricante.findViewById(R.id.etNombreView);
                                 etNombre.setHint("Fabrincate");
                                 final ArrayAdapter<Fabricante> adapter = new ArrayAdapter<Fabricante>(PrincipalAdministrador.this, android.R.layout.simple_expandable_list_item_1, lstFabricantes);
                                 if (!lstFabricantes.isEmpty()) {
                                     lstvFabricante.setAdapter(adapter);
                                 }
-                                final Button btnGuardar = (Button) formFabricante.findViewById(R.id.btnGuardarView);
+                                final Button btnGuardar = formFabricante.findViewById(R.id.btnGuardarView);
                                 btnGuardar.setText("GUARDAR");
-                                Button btnSalir = (Button) formFabricante.findViewById(R.id.btnSalirView);
+                                Button btnSalir = formFabricante.findViewById(R.id.btnSalirView);
                                 lstvFabricante.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
                                         posicionUdpdateDelete = position;
-                                        etNombre.setText(lstFabricantes.get(posicionUdpdateDelete).getNombre().toString());
+                                        etNombre.setText(lstFabricantes.get(posicionUdpdateDelete).getNombre());
                                         btnGuardar.setText("ACTUALIZAR");
                                     }
                                 });
@@ -626,7 +624,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     public void onClick(View v) {
                                         if (btnGuardar.getText().toString().equals("GUARDAR")) {
                                             if (!etNombre.getText().toString().isEmpty()) {
-                                                final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Agregando Fabricante", PrincipalAdministrador.this);
+                                                final ProgressDialog progressDialog = Functions.CargarDatos("Agregando Fabricante", PrincipalAdministrador.this);
                                                 final Fabricante fabricante = new Fabricante();
                                                 fabricante.setNombre(etNombre.getText().toString().toUpperCase());
                                                 BddFabricante.setFabricante(fabricante, PrincipalAdministrador.this, new Response.Listener<String>() {
@@ -670,7 +668,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                             lstvFabricante.setAdapter(adapter);
                                             lstvFabricante.deferNotifyDataSetChanged();
                                             etNombre.setText("");
-                                            final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Actualizando", PrincipalAdministrador.this);
+                                            final ProgressDialog progressDialog = Functions.CargarDatos("Actualizando", PrincipalAdministrador.this);
                                             Toast.makeText(PrincipalAdministrador.this, "Actualizado", Toast.LENGTH_SHORT).show();
                                             //Actualizo BD
                                             BddFabricante.updateFabricante(fabricante, PrincipalAdministrador.this, new Response.Listener<String>() {
@@ -716,14 +714,14 @@ public class PrincipalAdministrador extends AppCompatActivity {
                 formTipo.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
-                        final ListView lstvTipo = (ListView) formTipo.findViewById(R.id.lstView);
-                        TextView tvTitulo = (TextView) formTipo.findViewById(R.id.tvTitulo);
+                        final ListView lstvTipo = formTipo.findViewById(R.id.lstView);
+                        TextView tvTitulo = formTipo.findViewById(R.id.tvTitulo);
                         tvTitulo.setText("Tipos");
-                        final EditText etNombre = (EditText) formTipo.findViewById(R.id.etNombreView);
+                        final EditText etNombre = formTipo.findViewById(R.id.etNombreView);
                         etNombre.setHint("Tipos");
                         final ArrayAdapter<Tipo> adapter = new ArrayAdapter<Tipo>(PrincipalAdministrador.this, android.R.layout.simple_expandable_list_item_1, BddTipo.lstTipo);
-                        Button btnGuardar = (Button) formTipo.findViewById(R.id.btnGuardarView);
-                        Button btnSalir = (Button) formTipo.findViewById(R.id.btnSalirView);
+                        Button btnGuardar = formTipo.findViewById(R.id.btnGuardarView);
+                        Button btnSalir = formTipo.findViewById(R.id.btnSalirView);
                         final boolean actualizar = false;
                         if (BddTipo.lstTipo.size() >= 0) {
                             lstvTipo.setAdapter(adapter);
@@ -783,16 +781,16 @@ public class PrincipalAdministrador extends AppCompatActivity {
 
             LayoutInflater inflater = context.getLayoutInflater();
             View item = inflater.inflate(R.layout.listviewvendedores, null);
-            TextView titulo = (TextView) item.findViewById(R.id.tvNombreLstProducto);
+            TextView titulo = item.findViewById(R.id.tvNombreLstProducto);
             titulo.setText(lstPersonas.get(posicion).getNombre().toUpperCase() + " " + lstPersonas.get(posicion).getApellido().toUpperCase());
-            TextView email = (TextView) item.findViewById(R.id.tvPrecioLstProducto);
+            TextView email = item.findViewById(R.id.tvPrecioLstProducto);
             email.setText(lstPersonas.get(posicion).getCorreo().toUpperCase());
-            TextView sede = (TextView) item.findViewById(R.id.tvSedeLstVendedor);
+            TextView sede = item.findViewById(R.id.tvSedeLstVendedor);
             sede.setText("SANTIAGO CENTRO");
-            ImageView imgFoto = (ImageView) item.findViewById(R.id.imgLstVendedor);
+            ImageView imgFoto = item.findViewById(R.id.imgLstVendedor);
             imgFoto.setId(100 + posicion);
-            ImageButton btnQuitarVendedor = (ImageButton) item.findViewById(R.id.btnQuitarVendedor);
-            Switch swEstadoVendedor = (Switch) item.findViewById(R.id.swEstadoVendedor);
+            ImageButton btnQuitarVendedor = item.findViewById(R.id.btnQuitarVendedor);
+            Switch swEstadoVendedor = item.findViewById(R.id.swEstadoVendedor);
             swEstadoVendedor.setId(300+posicion);
             if(lstPersonas.get(posicion).getEstado() == 1){
                 swEstadoVendedor.setChecked(true);
@@ -803,7 +801,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     //solo actualizo el estado del vendedor a la bd falta preguntar el estado actual para cambiar
-                    Persona per = (Persona) lstPersonas.get(posicion);//*#*#3646633#
+                    Persona per = lstPersonas.get(posicion);//*#*#3646633#
                     if(per.getEstado() == 0){
                         lstPersonas.get(posicion).setEstado(1);
                         per.setEstado(1);
@@ -824,8 +822,8 @@ public class PrincipalAdministrador extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     //aqui digo que vendedor voy a quitar de vendedor
-                    Persona per = (Persona) lstPersonas.get(posicion);
-                    final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Quitando Vendedor", PrincipalAdministrador.this);
+                    Persona per = lstPersonas.get(posicion);
+                    final ProgressDialog progressDialog = Functions.CargarDatos("Quitando Vendedor", PrincipalAdministrador.this);
                     BddPersonas.setVendedor(per.getCorreo(), 1, 1, PrincipalAdministrador.this, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
