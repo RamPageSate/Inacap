@@ -105,6 +105,7 @@ public class Login extends AppCompatActivity {
                                             case (3):
                                                 Intent i = new Intent(Login.this, PrincipalAdministrador.class);
                                                 startActivity(i);
+                                                break;
                                         }
                                     } else {
                                         etEmail.setError("Correo y/o contraseña Incorrectas");

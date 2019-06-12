@@ -346,6 +346,8 @@ public class CrearEditarProducto extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/");
         startActivityForResult(Intent.createChooser(intent, "Seleccione la Aplicacion"), 10);
+        imgAgregarFoto.setMaxHeight(100);
+        imgAgregarFoto.setMaxHeight(100);
     }
 
     @Override
