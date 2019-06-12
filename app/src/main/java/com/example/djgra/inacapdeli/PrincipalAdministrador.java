@@ -54,6 +54,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
     private int btn = 0, posicionUdpdateDelete = 0;
     private static ArrayList<Categoria> lstCategorias = new ArrayList<>();
     private static ArrayList<Sede> lstSedes = new ArrayList<>();
+    private static ArrayList<Tipo> lstTipo  = new ArrayList<>();
     private static ArrayList<Persona> lstPersonas = new ArrayList<>();
     private static ArrayList<Fabricante> lstFabricantes = new ArrayList<>();
     private  AdapterPesonas adapterPesonas;
@@ -708,39 +709,115 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog formTipo = new AlertDialog.Builder(PrincipalAdministrador.this)
-                        .setView(R.layout.addcategoria)
-                        .create();
-                formTipo.setCanceledOnTouchOutside(false);
-                formTipo.setCancelable(false);
-                formTipo.setOnShowListener(new DialogInterface.OnShowListener() {
+                final ProgressDialog progressDialogF = Functions.CargarDatos("Espere..", PrincipalAdministrador.this);
+                BddTipo.getTipo(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
-                    public void onShow(DialogInterface dialog) {
-                        final ListView lstvTipo = (ListView) formTipo.findViewById(R.id.lstView);
-                        TextView tvTitulo = (TextView) formTipo.findViewById(R.id.tvTitulo);
-                        tvTitulo.setText("Tipos");
-                        final EditText etNombre = (EditText) formTipo.findViewById(R.id.etNombreView);
-                        etNombre.setHint("Tipos");
-                        final ArrayAdapter<Tipo> adapter = new ArrayAdapter<Tipo>(PrincipalAdministrador.this, android.R.layout.simple_expandable_list_item_1, BddTipo.lstTipo);
-                        Button btnGuardar = (Button) formTipo.findViewById(R.id.btnGuardarView);
-                        Button btnSalir = (Button) formTipo.findViewById(R.id.btnSalirView);
-                        final boolean actualizar = false;
-                        if (BddTipo.lstTipo.size() >= 0) {
-                            lstvTipo.setAdapter(adapter);
-                        }
-                        btnGuardar.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (actualizar == false) {
+                    public void onResponse(JSONArray response) {
+                        if (!response.toString().equals("[]")) {
+                            for (int x = 0; x < response.length(); ++x) {
+                                try {
                                     Tipo tipo = new Tipo();
-                                    tipo.setNombre(etNombre.getText().toString().toUpperCase());
-                                    lstvTipo.setAdapter(adapter);
+                                    tipo.setId(response.getJSONObject(x).getInt("tipo_id"));
+                                    tipo.setNombre(response.getJSONObject(x).getString("tipo"));
+                                    lstTipo.add(tipo);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
                             }
+                        }
+                        final AlertDialog formTipo = new AlertDialog.Builder(PrincipalAdministrador.this)
+                                .setView(R.layout.addcategoria)
+                                .create();
+                        formTipo.setCanceledOnTouchOutside(false);
+                        formTipo.setCancelable(false);
+                        formTipo.setOnShowListener(new DialogInterface.OnShowListener() {
+                            @Override
+                            public void onShow(final DialogInterface dialog) {
+                                final ListView lstvTipo = (ListView) formTipo.findViewById(R.id.lstView);
+                                TextView tvTitulo = (TextView) formTipo.findViewById(R.id.tvTitulo);
+                                tvTitulo.setText("Tipos");
+                                final EditText etNombre = (EditText) formTipo.findViewById(R.id.etNombreView);
+                                etNombre.setHint("Tipos");
+                                final ArrayAdapter<Tipo> adapter = new ArrayAdapter<Tipo>(PrincipalAdministrador.this, android.R.layout.simple_expandable_list_item_1, BddTipo.lstTipo);
+                                final Button btnGuardar = (Button) formTipo.findViewById(R.id.btnGuardarView);
+                                Button btnSalir = (Button) formTipo.findViewById(R.id.btnSalirView);
+                                lstvTipo.setAdapter(adapter);
+                                btnGuardar.setText("GUARDAR");
+                                btnSalir.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        lstTipo.removeAll(lstTipo);
+                                        dialog.dismiss();
+                                    }
+                                });
+                                btnGuardar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (btnGuardar.getText().toString().equals("GUARDAR")) {
+                                            if (!etNombre.getText().toString().isEmpty()) {
+                                                final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Agregando Tipo", PrincipalAdministrador.this);
+                                                final Tipo tipo = new Tipo();
+                                                tipo.setNombre(etNombre.getText().toString().toUpperCase());
+                                                BddTipo.setTipo(tipo, PrincipalAdministrador.this, new Response.Listener<String>() {
+                                                    @Override
+                                                    public void onResponse(String response) {
+                                                        Log.d("TAG_", "agregue tipo");
+                                                        BddFabricante.getFabricantes(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
+                                                            @Override
+                                                            public void onResponse(JSONArray response) {
+                                                                lstTipo.removeAll(lstTipo);
+                                                                for (int x = 0; x < response.length(); ++x) {
+                                                                    try {
+                                                                        Tipo tipo = new Tipo();
+                                                                        tipo.setId(response.getJSONObject(x).getInt("fabricante_id"));
+                                                                        tipo.setNombre(response.getJSONObject(x).getString("fabricante_nombre"));
+                                                                        lstTipo.add(tipo);
+                                                                    } catch (JSONException e) {
+                                                                        e.printStackTrace();
+                                                                    }
+                                                                }
+                                                                lstTipo.add(tipo);
+                                                                lstvTipo.setAdapter(adapter);
+                                                                lstvTipo.deferNotifyDataSetChanged();
+                                                                progressDialog.hide();
+                                                                etNombre.setText("");
+                                                                Toast.makeText(PrincipalAdministrador.this, "Agregado", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "no Pudo Cargar"));
+                                                    }
+                                                }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "no Pudo Cargar"));
+                                            } else {
+                                                etNombre.setError("Ingrese Fabricante");
+                                            }
+                                        } else {
+                                            //Actualizo ArrayList y el Listview
+                                            int codigo = lstTipo.get(posicionUdpdateDelete).getId();
+                                            String nuevoNombre = etNombre.getText().toString().toUpperCase();
+                                            Tipo tipo = new Tipo();
+                                            tipo.setId(codigo);
+                                            tipo.setNombre(nuevoNombre);
+                                            lstTipo.get(posicionUdpdateDelete).setNombre(nuevoNombre);
+                                            lstvTipo.setAdapter(adapter);
+                                            lstvTipo.deferNotifyDataSetChanged();
+                                            etNombre.setText("");
+                                            final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Actualizando", PrincipalAdministrador.this);
+                                            Toast.makeText(PrincipalAdministrador.this, "Actualizado", Toast.LENGTH_SHORT).show();
+                                            //Actualizo BD
+                                            //BddTipo.updateTipo(tipo, PrincipalAdministrador.this, new Response.Listener<String>() {
+                                              //  @Override
+                                               // public void onResponse(String response) {
+                                                 //   progressDialog.hide();
+                                                   // Log.d("TAG_", "actualizo fabricante");
+                                                //}
+                                            //}, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, ""));
+                                        }
+                                    }
+                                });
+                            }
                         });
+                        formTipo.show();
                     }
-                });
-                formTipo.show();
+                }, Functions.FalloInternet(PrincipalAdministrador.this,progressDialogF,"No pudo Cargar"));
             }
         });
         //endregion
