@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Producto;
+import com.example.djgra.inacapdeli.Funciones.Functions;
 
 import java.util.ArrayList;
 
@@ -78,6 +79,7 @@ public class ProductoActivity extends AppCompatActivity {
             View item = inflater.inflate(listviewproductos, null);
             if (!lstProductos.isEmpty()) {
                 ImageView imagen = item.findViewById(R.id.imgLstVendedor);
+                imagen.setId(300+posicion);
                 TextView nombre = item.findViewById(R.id.tvNombreLstProducto);
                 nombre.setText(""+lstProductos.get(posicion).getNombre());
                 final TextView precio = item.findViewById(R.id.tvPrecioLstProducto);
@@ -98,6 +100,7 @@ public class ProductoActivity extends AppCompatActivity {
                         Toast.makeText(context, "Cambio estado " , Toast.LENGTH_SHORT).show();
                     }
                 });
+                imagen.setImageBitmap(Functions.StringToBitMap(lstProductos.get(posicion).getFoto()));
                 btnEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
