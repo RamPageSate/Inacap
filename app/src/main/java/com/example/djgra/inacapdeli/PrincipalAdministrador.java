@@ -56,7 +56,8 @@ public class PrincipalAdministrador extends AppCompatActivity {
     private static ArrayList<Sede> lstSedes = new ArrayList<>();
     private static ArrayList<Persona> lstPersonas = new ArrayList<>();
     private static ArrayList<Fabricante> lstFabricantes = new ArrayList<>();
-
+    private  AdapterPesonas adapterPesonas;
+    ListView lstvVendedores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -329,8 +330,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                         formLstVendedores.setOnShowListener(new DialogInterface.OnShowListener() {
                             @Override
                             public void onShow(DialogInterface dialog) {
-                                final ListView lstvVendedores = (ListView) formLstVendedores.findViewById(R.id.lstVendedores);
-                                final AdapterPesonas adapterPesonas;
+                                lstvVendedores = (ListView) formLstVendedores.findViewById(R.id.lstVendedores);
                                 adapterPesonas = new AdapterPesonas(PrincipalAdministrador.this);
                                 progressDialog.hide();
                                 lstvVendedores.setAdapter(adapterPesonas);
@@ -755,6 +755,12 @@ public class PrincipalAdministrador extends AppCompatActivity {
         }
     }
 
+    public static void actualizarListViewVendedor(AdapterPesonas adapterPesonas, ListView listView){
+        listView.removeAllViews();
+        listView.setAdapter(adapterPesonas);
+        listView.deferNotifyDataSetChanged();
+    }
+
     class AdapterPesonas extends ArrayAdapter<Persona> {
         Activity context;
 
@@ -803,11 +809,15 @@ public class PrincipalAdministrador extends AppCompatActivity {
                 public void onClick(View v) {
                     //aqui digo que vendedor voy a quitar de vendedor
                     Persona per = (Persona) lstPersonas.get(posicion);
+                    final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Quitando Vendedor", PrincipalAdministrador.this);
                     BddPersonas.setVendedor(per.getCorreo(), 1, 1, PrincipalAdministrador.this, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             Log.d("TAG_", "ya no es vendedor ");
                             lstPersonas.remove(posicion);
+                            lstvVendedores.setAdapter(adapterPesonas);
+                            lstvVendedores.deferNotifyDataSetChanged();
+                            progressDialog.dismiss();
                             //falta actualizar el lstvvendedor
                         }
                     });
