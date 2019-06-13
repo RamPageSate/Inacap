@@ -57,6 +57,7 @@ public class CrearEditarProducto extends AppCompatActivity {
     private Producto productoSeleccionado = new Producto();
     private String fotoDefault = "";
     private Tipo tipoSeleccionado = new Tipo();
+    private int code;
     private Fabricante fabricanteSeleccionado = new Fabricante();
     boolean isActualizar = false;
     EditText etPrecioProducto, etCodigoBarraProducto, etNombreProducto, etDescripcionProducto;
@@ -136,22 +137,25 @@ public class CrearEditarProducto extends AppCompatActivity {
         tvTitulo.setText("Registro Producto");
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            productoSeleccionado = (Producto) bundle.getSerializable("producto");
-            etCodigoBarraProducto.setText(productoSeleccionado.getSku());
-            etDescripcionProducto.setText(productoSeleccionado.getDescripcion());
-            etNombreProducto.setText(productoSeleccionado.getNombre());
-            etPrecioProducto.setText(String.valueOf(productoSeleccionado.getPrecio()));
-            categoriasSeleccionadas.addAll(productoSeleccionado.getLstCategoriasProducto());
-            tvTitulo.setText("Actualizar Producto");
-            isActualizar = true;
-            for (int x = 0; x < listaFabricante.size(); x++) {
-                if (listaFabricante.get(x).getCodigo() == productoSeleccionado.getId_fabricante()) {
-                    spFabricante.setSelection(x);
+            code = bundle.getInt("tipo");
+            if(code == 7){
+                productoSeleccionado = (Producto) bundle.getSerializable("producto");
+                etCodigoBarraProducto.setText(productoSeleccionado.getSku());
+                etDescripcionProducto.setText(productoSeleccionado.getDescripcion());
+                etNombreProducto.setText(productoSeleccionado.getNombre());
+                etPrecioProducto.setText(String.valueOf(productoSeleccionado.getPrecio()));
+                categoriasSeleccionadas.addAll(productoSeleccionado.getLstCategoriasProducto());
+                tvTitulo.setText("Actualizar Producto");
+                isActualizar = true;
+                for (int x = 0; x < listaFabricante.size(); x++) {
+                    if (listaFabricante.get(x).getCodigo() == productoSeleccionado.getId_fabricante()) {
+                        spFabricante.setSelection(x);
+                    }
                 }
-            }
-            for (int x = 0; x < listaTipo.size(); x++) {
-                if (listaTipo.get(x).getId() == productoSeleccionado.getId_tipo()) {
-                    spTipo.setSelection(x);
+                for (int x = 0; x < listaTipo.size(); x++) {
+                    if (listaTipo.get(x).getId() == productoSeleccionado.getId_tipo()) {
+                        spTipo.setSelection(x);
+                    }
                 }
             }
         }
@@ -367,4 +371,6 @@ public class CrearEditarProducto extends AppCompatActivity {
 
         }
     }
+
+
 }
