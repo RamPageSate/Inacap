@@ -97,6 +97,7 @@ public class ProductoActivity extends AppCompatActivity {
                     }
 
                 }
+                //a
                 lstvProductos.setAdapter(adapterProductos);
                 lstvProductos.deferNotifyDataSetChanged();
             }
