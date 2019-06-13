@@ -85,11 +85,19 @@ public class ProductoActivity extends AppCompatActivity {
         spCategorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                lstProductos = new ArrayList<>();
                 Categoria cat = (Categoria) spCategorias.getAdapter().getItem(position);
                 for (int i = 0; i < lstProductos.size(); i++) {
-                    lstProductos.get(i).getLstCategoriasProducto();
+                    for (int x = 0; i < lstProductos.get(i).getLstCategoriasProducto().size(); i++) {
+                        if (cat.getCodigo() == lstProductos.get(i).getLstCategoriasProducto().get(x).getCodigo()) {
+                            lstProductos.add(lstProductos.get(i));
+                            continue;
+                        }
+                    }
+
                 }
+                lstvProductos.setAdapter(adapterProductos);
+                lstvProductos.deferNotifyDataSetChanged();
             }
         });
     }
