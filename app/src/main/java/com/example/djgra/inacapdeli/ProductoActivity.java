@@ -50,7 +50,8 @@ public class ProductoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+            //codigo de respues
+        actualizarListView();
     }
 
 
@@ -90,48 +91,11 @@ public class ProductoActivity extends AppCompatActivity {
             }
         });
 
-        spCategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //
-                lstProductos = new ArrayList<>();
-                Categoria cat = (Categoria) spCategorias.getAdapter().getItem(position);
-                for (int i = 0; i < lstProductos.size(); i++) {
-                    for (int x = 0; i < lstProductos.get(i).getLstCategoriasProducto().size(); i++) {
-                        if (cat.getCodigo() == lstProductos.get(i).getLstCategoriasProducto().get(x).getCodigo()) {
-                            lstProductos.add(lstProductos.get(i));
-                            continue;
-                        }
-                    }
-
-                }
-                //a
-                lstvProductos.setAdapter(adapterProductos);
-                lstvProductos.deferNotifyDataSetChanged();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        fecha = new Date();
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Date devuelta = new Date();
-        if (fecha.getTime() - devuelta.getTime() < 5) {
-            Toast.makeText(this, "HOLA", Toast.LENGTH_SHORT).show();
-        }
-    }
+
+
 
     class AdapterProductos extends ArrayAdapter<Producto> {
         Activity context;

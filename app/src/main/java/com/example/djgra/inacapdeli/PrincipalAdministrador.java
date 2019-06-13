@@ -573,6 +573,9 @@ public class PrincipalAdministrador extends AppCompatActivity {
             }
         });
         //endregion
+
+
+        //se agrega mas
         //region fabricante
         btnFabricante.setOnClickListener(new View.OnClickListener() {
             @Override
