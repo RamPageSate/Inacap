@@ -90,9 +90,10 @@ public class ProductoActivity extends AppCompatActivity {
             }
         });
 
-        spCategorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        spCategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ArrayList<Producto> prod = lstProductos;
                 lstProductos = new ArrayList<>();
                 Categoria cat = (Categoria) spCategorias.getAdapter().getItem(position);
                 for (int i = 0; i < lstProductos.size(); i++) {
@@ -106,6 +107,11 @@ public class ProductoActivity extends AppCompatActivity {
                 }
                 lstvProductos.setAdapter(adapterProductos);
                 lstvProductos.deferNotifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }
