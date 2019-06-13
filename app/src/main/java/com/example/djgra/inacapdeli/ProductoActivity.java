@@ -3,6 +3,7 @@ package com.example.djgra.inacapdeli;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,18 @@ public class ProductoActivity extends AppCompatActivity {
     Producto productoSeleccionado ;
     public static ArrayList<Producto> lstProductos = new ArrayList<>();
     public static ArrayList<Categoria> lstCategoria = new ArrayList<>();
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,11 +57,16 @@ public class ProductoActivity extends AppCompatActivity {
         ArrayAdapter<Categoria> adapterCategoria = new ArrayAdapter<Categoria>(this,android.R.layout.simple_list_item_1,lstCategoria);
         lstvProductos.setAdapter(adapterProductos);
         spCategorias.setAdapter(adapterCategoria);
+
+
+
+
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProductoActivity.this,CrearEditarProducto.class);
-                startActivity(intent);
+                intent.putExtra("tipo",23);
+                startActivityForResult(intent,1);
             }
         });
         btnSalir.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +126,8 @@ public class ProductoActivity extends AppCompatActivity {
                         productoSeleccionado = (Producto) lstvProductos.getItemAtPosition(posicion);
                         Intent intent = new Intent(ProductoActivity.this,CrearEditarProducto.class);
                         intent.putExtra("producto",productoSeleccionado);
-                        startActivity(intent);
+                        intent.putExtra("tipo",7);
+                        startActivityForResult(intent,1);
                         //abria que sobreescrbir para recibir respuesta
                     }
                 });
