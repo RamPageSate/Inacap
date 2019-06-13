@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -22,6 +23,7 @@ import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.Funciones.Functions;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.example.djgra.inacapdeli.R.layout.listviewproductos;
 
@@ -30,6 +32,7 @@ public class ProductoActivity extends AppCompatActivity {
     Spinner spCategorias;
     ListView lstvProductos;
     Producto productoSeleccionado ;
+    private Date fecha;
     public static ArrayList<Producto> lstProductos = new ArrayList<>();
     public static ArrayList<Categoria> lstCategoria = new ArrayList<>();
     @Override
@@ -60,9 +63,32 @@ public class ProductoActivity extends AppCompatActivity {
             }
         });
 
-        //faltan hacer los filtros------------------------------------------------------------------------------------------------ y transformar las fotos
+        spCategorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                Categoria cat = (Categoria) spCategorias.getAdapter().getItem(position);
+                for (int i = 0; i < lstProductos.size(); i++) {
+                    lstProductos.get(i).getLstCategoriasProducto();
+                }
+            }
+        });
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        fecha = new Date();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Date devuelta = new Date();
+        if (fecha.getTime() - devuelta.getTime() < 5) {
+            Toast.makeText(this, "HOLA", Toast.LENGTH_SHORT).show();
+        }
     }
 
     class AdapterProductos extends ArrayAdapter<Producto> {
@@ -117,4 +143,6 @@ public class ProductoActivity extends AppCompatActivity {
             return item;
         }
     }
+
 }
+

@@ -329,8 +329,13 @@ public class CrearEditarProducto extends AppCompatActivity {
                             }
                         }, Functions.FalloInternet(CrearEditarProducto.this, progressDialog, "Vuelve a Intentar"));
                     } else {
-                        //aqui va actualizar
-
+                        ProgressDialog progressDialog = Functions.CargarDatos("Actualizando", CrearEditarProducto.this);
+                        BddProductos.updateProducto(producto, CrearEditarProducto.this, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                //falta forResult
+                            }
+                        }, Functions.FalloInternet(CrearEditarProducto.this, progressDialog, "Fallo al internet"));
                     }
                 }
             }
