@@ -64,7 +64,7 @@ public class ProductoActivity extends AppCompatActivity {
         btnSalir = findViewById(R.id.btnSalirLstProducto);
         spCategorias = findViewById(R.id.spCategoriaLstProducto);
         lstvProductos = findViewById(R.id.lstvProductos);
-        adapterProductos = new AdapterProductos(this,lstProductos);
+        adapterProductos = new AdapterProductos(this);
         ArrayAdapter<Categoria> adapterCategoria = new ArrayAdapter<Categoria>(this,android.R.layout.simple_list_item_1,lstCategoria);
         lstvProductos.setAdapter(adapterProductos);
         spCategorias.setAdapter(adapterCategoria);
@@ -90,10 +90,10 @@ public class ProductoActivity extends AppCompatActivity {
             }
         });
 
-        spCategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spCategorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ArrayList<Producto> prod = lstProductos;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //
                 lstProductos = new ArrayList<>();
                 Categoria cat = (Categoria) spCategorias.getAdapter().getItem(position);
                 for (int i = 0; i < lstProductos.size(); i++) {
@@ -107,11 +107,6 @@ public class ProductoActivity extends AppCompatActivity {
                 }
                 lstvProductos.setAdapter(adapterProductos);
                 lstvProductos.deferNotifyDataSetChanged();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -135,28 +130,28 @@ public class ProductoActivity extends AppCompatActivity {
     class AdapterProductos extends ArrayAdapter<Producto> {
         Activity context;
 
-        public AdapterProductos(Activity context,final ArrayList<Producto> lst) {
-            super(context, R.layout.listviewproductos, lst);
+        public AdapterProductos(Activity context) {
+            super(context, R.layout.listviewproductos, lstProductos);
             this.context = context;
         }
 
-        public View getView(final int posicion, View view, ViewGroup parent, ArrayList<Producto> lst) {
+        public View getView(final int posicion, View view, ViewGroup parent) {
 
             LayoutInflater inflater = context.getLayoutInflater();
             View item = inflater.inflate(listviewproductos, null);
-            if (!lst.isEmpty()) {
+            if (!lstProductos.isEmpty()) {
                 ImageView imagen = item.findViewById(R.id.imgLstVendedor);
                 imagen.setId(300+posicion);
                 TextView nombre = item.findViewById(R.id.tvNombreLstProducto);
-                nombre.setText(""+lst.get(posicion).getNombre());
+                nombre.setText(""+lstProductos.get(posicion).getNombre());
                 final TextView precio = item.findViewById(R.id.tvPrecioLstProducto);
-                precio.setText("$ " + lst.get(posicion).getPrecio());
+                precio.setText("$ " + lstProductos.get(posicion).getPrecio());
                 ImageButton btnEdit = item.findViewById(R.id.btnEditProducto);
                 TextView descripcion = item.findViewById(R.id.tvDescripcionListViewProducto);
-                descripcion.setText(""+ lst.get(posicion).getDescripcion());
+                descripcion.setText(""+ lstProductos.get(posicion).getDescripcion());
                 Switch swEstado = item.findViewById(R.id.swEstadoListViewProducto);
                 swEstado.setId(300+posicion);
-                if(lst.get(posicion).getEstado() == 1){
+                if(lstProductos.get(posicion).getEstado() == 1){
                     swEstado.setChecked(true);
                 }else{
                     swEstado.setChecked(false);
@@ -227,6 +222,7 @@ public class ProductoActivity extends AppCompatActivity {
                             }, Functions.FalloInternet(ProductoActivity.this, progressDialog, "No pudo Cargar"));
                             lstProductos.add(producto);
                             lstvProductos.setAdapter(adapterProductos);
+                            progressDialog.dismiss();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
