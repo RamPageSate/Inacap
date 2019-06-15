@@ -107,9 +107,11 @@ public class CrearEditarProducto extends AppCompatActivity {
                             public void onResponse(JSONArray response) {
                                 for (int i = 0; i < response.length(); i++) {
                                     try {
-                                        CrearEditarProducto.listaCategoria.add(new Categoria(response.getJSONObject(i).getInt("categoria_id"),
-                                                response.getJSONObject(i).getInt("categoria_estado"),
-                                                response.getJSONObject(i).getString("categoria_nombre")));
+                                        if (response.getJSONObject(i).getInt("categoria_estado") == 1) {
+                                            CrearEditarProducto.listaCategoria.add(new Categoria(response.getJSONObject(i).getInt("categoria_id"),
+                                                    response.getJSONObject(i).getInt("categoria_estado"),
+                                                    response.getJSONObject(i).getString("categoria_nombre")));
+                                        }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }

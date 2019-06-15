@@ -87,12 +87,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="9dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="Estado"
+        android:text="Activo"
         android:textColor="@color/NegroInacap"
         android:textSize="9sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnQuitarVendedor" />
+        app:layout_constraintTop_toBottomOf="@+id/btnQuitarVendedor"
+        tools:layout_editor_absoluteX="367dp" />
 
 </android.support.constraint.ConstraintLayout>
