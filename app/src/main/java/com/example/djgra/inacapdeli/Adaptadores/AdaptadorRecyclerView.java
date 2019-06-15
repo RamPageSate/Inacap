@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.djgra.inacapdeli.Clases.Producto;
+import com.example.djgra.inacapdeli.Funciones.Functions;
 import com.example.djgra.inacapdeli.PrincipalCliente;
 import com.example.djgra.inacapdeli.R;
 
@@ -20,12 +21,12 @@ public class AdaptadorRecyclerView  extends RecyclerView.Adapter<AdaptadorRecycl
     public AdaptadorRecyclerView(ArrayList<Producto> lstProductos) {
         this.lstProductos = lstProductos;
     }
-        //verificar el rcv que sea horizontal y ademas achicar el listwievproducto y arreglar la barra verde
+
     //muestro la vista
     @NonNull
     @Override
     public ViewHolderProducto onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listviewproductos,null,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewproductocliente,null,false);
         return new ViewHolderProducto(view);
     }
 
@@ -35,7 +36,7 @@ public class AdaptadorRecyclerView  extends RecyclerView.Adapter<AdaptadorRecycl
            holder.nombreProducto.setText(lstProductos.get(position).getNombre());
            holder.descripcionProducto.setText(lstProductos.get(position).getDescripcion());
            holder.precioProducto.setText("$ "+lstProductos.get(position).getPrecio());
-           //holder.imgProducto.setImageBitmap(Producto.StringToBitMap(lstProductos.get(position).getFoto()));
+           holder.imgProducto.setImageBitmap(Functions.StringToBitMap(lstProductos.get(position).getFoto()));
            holder.cantidadProducto.setText("0");
 
         holder.btnDescontar.setOnClickListener(new View.OnClickListener() {

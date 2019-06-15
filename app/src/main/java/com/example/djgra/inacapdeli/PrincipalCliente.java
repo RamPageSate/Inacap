@@ -72,9 +72,9 @@ public class PrincipalCliente extends AppCompatActivity {
                                 @Override
                                 public void onResponse(JSONArray response) {
                                     if (!response.toString().equals("[]")) {
-                                        ArrayList<Categoria> categoriasProducto = new ArrayList<>();
+                                        final ArrayList<Categoria> categoriasProducto = new ArrayList<>();
                                         for (int x = 0; x < response.length(); x++) {
-                                            try {//falta agrgar las categorias asignadas al producto
+                                            try {
                                                 Categoria categoria = new Categoria(response.getJSONObject(x).getInt("categoria_id"), response.getJSONObject(x).getInt("categoria_estado"), response.getJSONObject(x).getString("categoria_nombre"));
                                                 categoriasProducto.add(categoria);
                                             } catch (JSONException e) {
@@ -85,8 +85,9 @@ public class PrincipalCliente extends AppCompatActivity {
                                     }
                                 }
                             }, Functions.FalloInternet(PrincipalCliente.this, progressDialog, "No pudo Cargar"));
-                            if(producto.getEstado() != 0 || producto.getStock() != 0){
+                            if(producto.getEstado() != 0){
                                 lstProductos.add(producto);
+                                Log.d("TAG_",""+ producto.getNombre());
                             }
                             progressDialog.dismiss();
                         } catch (JSONException e) {
@@ -94,7 +95,8 @@ public class PrincipalCliente extends AppCompatActivity {
                         }
                     }
                     //56 categoria mas valoradas
-                    AdaptadorRecyclerView adapter = new AdaptadorRecyclerView(FiltrarListaPorCategoria(new Categoria(56,1,"")));
+                    Categoria cate = new Categoria(56,1,"");
+                    AdaptadorRecyclerView adapter = new AdaptadorRecyclerView(FiltrarListaPorCategoria(cate));
                     rc.setHasFixedSize(false);
                     rc.setNestedScrollingEnabled(true);
                     rc.setAdapter(adapter);
@@ -165,7 +167,7 @@ public class PrincipalCliente extends AppCompatActivity {
     public static ArrayList<Producto> FiltrarListaPorCategoria(Categoria categoria){
         ArrayList<Producto> lista = new ArrayList<>();
         for (int x = 0; x < lstProductos.size(); x++){
-            for (int c = 0; x < lstProductos.get(x).getLstCategoriasProducto().size(); c++){
+            for (int c = 0; c < lstProductos.get(x).getLstCategoriasProducto().size(); c++){
                 if(lstProductos.get(x).getLstCategoriasProducto().get(c).getCodigo() == categoria.getCodigo()){
                     lista.add(lstProductos.get(x));
                 }
