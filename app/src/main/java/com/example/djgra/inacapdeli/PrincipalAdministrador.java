@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.example.djgra.inacapdeli.AlertDialog.AlertDialogFabricantes;
 import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Fabricante;
 import com.example.djgra.inacapdeli.Clases.Persona;
@@ -594,109 +595,8 @@ public class PrincipalAdministrador extends AppCompatActivity {
                             }
                         }
                         progressDialog.hide();
-                        final AlertDialog formFabricante = new AlertDialog.Builder(PrincipalAdministrador.this)
-                                .setView(R.layout.addcategoria)
-                                .create();
-                        formFabricante.setCanceledOnTouchOutside(false);
-                        formFabricante.setCancelable(false);
-                        formFabricante.setOnShowListener(new DialogInterface.OnShowListener() {
-                            @Override
-                            public void onShow(DialogInterface dialog) {
-                                final ListView lstvFabricante = formFabricante.findViewById(R.id.lstView);
-                                TextView tvTitulo = formFabricante.findViewById(R.id.tvTitulo);
-                                tvTitulo.setText("Fabricantes");
-                                final EditText etNombre = formFabricante.findViewById(R.id.etNombreView);
-                                etNombre.setHint("Fabrincate");
-                                final ArrayAdapter<Fabricante> adapter = new ArrayAdapter<Fabricante>(PrincipalAdministrador.this, android.R.layout.simple_expandable_list_item_1, lstFabricantes);
-                                if (!lstFabricantes.isEmpty()) {
-                                    lstvFabricante.setAdapter(adapter);
-                                }
-                                final ImageButton btnGuardar = formFabricante.findViewById(R.id.btnGuardarView);
-
-                                ImageButton btnSalir = formFabricante.findViewById(R.id.btnSalirView);
-                                lstvFabricante.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
-                                        posicionUdpdateDelete = position;
-                                        etNombre.setText(lstFabricantes.get(posicionUdpdateDelete).getNombre());
-
-                                    }
-                                });
-                                btnGuardar.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (1 == 1) {
-                                            if (!etNombre.getText().toString().isEmpty()) {
-                                                final ProgressDialog progressDialog = Functions.CargarDatos("Agregando Fabricante", PrincipalAdministrador.this);
-                                                final Fabricante fabricante = new Fabricante();
-                                                fabricante.setNombre(etNombre.getText().toString().toUpperCase());
-                                                BddFabricante.setFabricante(fabricante, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                                    @Override
-                                                    public void onResponse(String response) {
-                                                        BddFabricante.getFabricantes(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
-                                                            @Override
-                                                            public void onResponse(JSONArray response) {
-                                                                lstFabricantes.removeAll(lstFabricantes);
-                                                                for (int x = 0; x < response.length(); ++x) {
-                                                                    try {
-                                                                        Fabricante fabricante = new Fabricante();
-                                                                        fabricante.setCodigo(response.getJSONObject(x).getInt("fabricante_id"));
-                                                                        fabricante.setNombre(response.getJSONObject(x).getString("fabricante_nombre"));
-                                                                        lstFabricantes.add(fabricante);
-                                                                    } catch (JSONException e) {
-                                                                        e.printStackTrace();
-                                                                    }
-                                                                }
-                                                                lstFabricantes.add(fabricante);
-                                                                lstvFabricante.setAdapter(adapter);
-                                                                lstvFabricante.deferNotifyDataSetChanged();
-                                                                progressDialog.hide();
-                                                                etNombre.setText("");
-                                                                Toast.makeText(PrincipalAdministrador.this, "Agregado", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "no Pudo Cargar"));
-                                                    }
-                                                });
-                                            } else {
-                                                etNombre.setError("Ingrese Fabricante");
-                                            }
-                                        } else {
-                                            //Actualizo ArrayList y el Listview
-                                            int codigo = lstFabricantes.get(posicionUdpdateDelete).getCodigo();
-                                            String nuevoNombre = etNombre.getText().toString().toUpperCase();
-                                            Fabricante fabricante = new Fabricante();
-                                            fabricante.setCodigo(codigo);
-                                            fabricante.setNombre(nuevoNombre);
-                                            lstFabricantes.get(posicionUdpdateDelete).setNombre(nuevoNombre);
-                                            lstvFabricante.setAdapter(adapter);
-                                            lstvFabricante.deferNotifyDataSetChanged();
-                                            etNombre.setText("");
-                                            final ProgressDialog progressDialog = Functions.CargarDatos("Actualizando", PrincipalAdministrador.this);
-                                            Toast.makeText(PrincipalAdministrador.this, "Actualizado", Toast.LENGTH_SHORT).show();
-                                            //Actualizo BD
-                                            BddFabricante.updateFabricante(fabricante, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                                @Override
-                                                public void onResponse(String response) {
-                                                    progressDialog.hide();
-                                                    Log.d("TAG_", "actualizo fabricante");
-                                                }
-                                            }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, ""));
-                                            btn = 0;
-                                        }
-                                    }
-                                });
-                                btnSalir.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        lstFabricantes.removeAll(lstFabricantes);
-                                        formFabricante.dismiss();
-                                    }
-                                });
-
-
-                            }
-                        });
-                        formFabricante.show();
+                        AlertDialogFabricantes fabricantes = new AlertDialogFabricantes(PrincipalAdministrador.this, lstFabricantes);
+                        fabricantes.show();
                     }
                 }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No Pudo Cargar"));
             }
