@@ -16,9 +16,9 @@ import com.example.djgra.inacapdeli.R;
 
 import java.util.ArrayList;
 
-public class AdaptadorRecyclerView  extends RecyclerView.Adapter<AdaptadorRecyclerView.ViewHolderProducto>{
-    ArrayList<Producto> lstProductos;
-    public AdaptadorRecyclerView(ArrayList<Producto> lstProductos) {
+public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<AdaptadorRecyclerViewProductoCliente.ViewHolderProducto>{
+    ArrayList<Producto> lstProductos = new ArrayList<>();
+    public AdaptadorRecyclerViewProductoCliente(ArrayList<Producto> lstProductos) {
         this.lstProductos = lstProductos;
     }
 

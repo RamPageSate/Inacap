@@ -3,6 +3,7 @@ package com.example.djgra.inacapdeli.Funciones;
 import android.content.Context;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -33,7 +34,6 @@ public class BddProductos {
                 null, listener, errorListener//Parameters
         );
         requestQueue.add(request);
-
     }
 
     public static void updateProducto(final Producto producto, Context context, Response.Listener<String> listener, Response.ErrorListener errorListener) {
