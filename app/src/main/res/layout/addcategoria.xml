@@ -67,7 +67,7 @@
         android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/return" />
+        app:srcCompat="@drawable/atraskeppel" />
 
     <ImageButton
         android:id="@+id/btnGuardarView"
