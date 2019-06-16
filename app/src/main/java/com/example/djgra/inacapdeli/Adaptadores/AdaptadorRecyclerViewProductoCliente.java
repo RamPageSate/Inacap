@@ -9,7 +9,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.Funciones.Functions;
 import com.example.djgra.inacapdeli.PrincipalCliente;
@@ -19,12 +18,9 @@ import java.util.ArrayList;
 
 public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<AdaptadorRecyclerViewProductoCliente.ViewHolderProducto> {
     ArrayList<Producto> lstProductos = new ArrayList<>();
-    int categoria_id;
-    ArrayList<Producto> lista;
 
-    public AdaptadorRecyclerViewProductoCliente(ArrayList<Producto> lstProductos, int categoria_id) {
+    public AdaptadorRecyclerViewProductoCliente(ArrayList<Producto> lstProductos) {
         this.lstProductos = lstProductos;
-        this.categoria_id = categoria_id;
     }
 
     //muestro la vista
@@ -38,24 +34,16 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
     //leno los datos
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderProducto holder, final int position) {
-        lista = new ArrayList<>();
-        for (int x = 0; x < lstProductos.size(); x++) {
-            for (int j = 0; j < lstProductos.get(x).getLstCategoriasProducto().size(); j++) {
-                if (lstProductos.get(x).getLstCategoriasProducto().get(j).getCodigo() == categoria_id) {
-                    lista.add(lstProductos.get(x));
-                }
-            }
-        }
-        holder.nombreProducto.setText(lista.get(position).getNombre());
-        holder.descripcionProducto.setText(lista.get(position).getDescripcion());
-        holder.precioProducto.setText("$ " + lista.get(position).getPrecio());
-        holder.imgProducto.setImageBitmap(Functions.StringToBitMap(lista.get(position).getFoto()));
+        holder.nombreProducto.setText(lstProductos.get(position).getNombre());
+        holder.descripcionProducto.setText(lstProductos.get(position).getDescripcion());
+        holder.precioProducto.setText("$ " + lstProductos.get(position).getPrecio());
+        holder.imgProducto.setImageBitmap(Functions.StringToBitMap(lstProductos.get(position).getFoto()));
         holder.cantidadProducto.setText("0");
 
         holder.btnDescontar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int total = PrincipalCliente.descontarTotalCompra(lista.get(position).getPrecio());
+                int total = PrincipalCliente.descontarTotalCompra(lstProductos.get(position).getPrecio());
                 int cant = Integer.parseInt(holder.cantidadProducto.getText().toString()) - 1;
                 holder.cantidadProducto.setText("" + cant);
                 PrincipalCliente.descontarCantidadArticulos();
@@ -68,7 +56,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
         holder.btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PrincipalCliente.pagoTotal(lista.get(position).getPrecio());
+                PrincipalCliente.pagoTotal(lstProductos.get(position).getPrecio());
                 PrincipalCliente.agregarCantidadArticulos();
                 holder.btnDescontar.setVisibility(View.VISIBLE);
                 holder.cantidadProducto.setVisibility(View.VISIBLE);
@@ -82,7 +70,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
     //le digo la cantidad de items
     @Override
     public int getItemCount() {
-        return lista.size();
+        return lstProductos.size();
     }
 
     //creo los view

@@ -58,7 +58,7 @@ public class PrincipalCliente extends AppCompatActivity {
                 if (!response.toString().equals("[]")) {
                     for (int x = 0; x < response.length(); x++) {
                         try {
-                            Log.d("TAG_", "cargara los productos");
+                            Log.d("TAG_", "cargara los productos" + x);
                             producto = new Producto();
                             producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
                             producto.setNombre(response.getJSONObject(x).getString("producto_nombre"));
@@ -70,6 +70,28 @@ public class PrincipalCliente extends AppCompatActivity {
                             producto.setEstado(response.getJSONObject(x).getInt("producto_estado"));
                             producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
                             producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
+                            BddCategoria.getCategoriaByProducto(producto.getCodigo(), PrincipalCliente.this, new Response.Listener<JSONArray>() {
+                                @Override
+                                public void onResponse(JSONArray response) {
+                                    if (!response.toString().equals("[]")) {
+                                        final ArrayList<Categoria> categoriasProducto = new ArrayList<>();
+                                        for (int x = 0; x < response.length(); x++) {
+                                            try {
+                                                Categoria categoria = new Categoria(response.getJSONObject(x).getInt("categoria_id"), response.getJSONObject(x).getInt("categoria_estado"), response.getJSONObject(x).getString("categoria_nombre"));
+                                                Log.d("TAG_", "agrego  cate producto" + producto.getNombre() + " " + categoria.getNombre());
+                                                categoriasProducto.add(categoria);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        //el producto esta listo para agregar a la lista
+                                        if (producto.getEstado() != 0) {
+                                            lstProducto.add(producto);
+                                            Log.d("TAG_", "Producto Completo agregado" + producto.getNombre());
+                                        }
+                                    }
+                                }
+                            }, Functions.FalloInternet(PrincipalCliente.this, progressDialog, "No Cargo"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -78,39 +100,14 @@ public class PrincipalCliente extends AppCompatActivity {
                             Log.d("TAG_", "" + producto.getNombre());
                         }
                     }
-                    for (int c = 0; c < lstProducto.size(); c++) {
-                        BddCategoria.getCategoriaByProducto(lstProducto.get(c).getCodigo(), PrincipalCliente.this, new Response.Listener<JSONArray>() {
-                            @Override
-                            public void onResponse(JSONArray response) {
-                                if (!response.toString().equals("[]")) {
-                                    final ArrayList<Categoria> categoriasProducto = new ArrayList<>();
-                                    for (int x = 0; x < response.length(); x++) {
-                                        try {
-                                            Categoria categoria = new Categoria(response.getJSONObject(x).getInt("categoria_id"), response.getJSONObject(x).getInt("categoria_estado"), response.getJSONObject(x).getString("categoria_nombre"));
-                                            categoriasProducto.add(categoria);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        lstProducto.get(prueba).setLstCategoriasProducto(categoriasProducto);
-                                        Log.d("TAG_", "cago catergoria" + lstProducto.get(prueba).getCodigo());
-                                    }
-                                    prueba++;
-                                }
-
-                                if(lstProducto.size() == prueba){
-                                    Categoria cate = new Categoria(56, 1, "asd");
-                                    AdaptadorRecyclerViewProductoCliente adapter = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(cate));
-                                    rc.setAdapter(adapter);
-                                    Log.d("TAG_", "Cargp Vista");
-                                    progressDialog.dismiss();
-                                }
-                            }
-                        }, Functions.FalloInternet(PrincipalCliente.this, progressDialog, "No pudo Cargar"));
-                    }
+                    Categoria cate = new Categoria(56, 1, "asd");
+                    AdaptadorRecyclerViewProductoCliente adapter = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(cate));
+                    rc.setAdapter(adapter);
+                    Log.d("TAG_", "Cargp Vista");
+                    progressDialog.dismiss();
                 }
-
-
             }
+
         }, Functions.FalloInternet(PrincipalCliente.this, progressDialog, "sin Conexion"));
 
         Bundle bundle = getIntent().getExtras();
@@ -175,10 +172,10 @@ public class PrincipalCliente extends AppCompatActivity {
     public static ArrayList<Producto> FiltrarListaPorCategoria(Categoria categoria) {
         ArrayList<Producto> lista = new ArrayList<>();
         for (int x = 0; x < lstProducto.size(); x++) {
-            Log.d("TAG_", "Producto -> "+lstProducto.get(x).getNombre());
+            Log.d("TAG_", "Producto -> " + lstProducto.get(x).getNombre());
             for (int c = 0; c < lstProducto.get(x).getLstCategoriasProducto().size(); c++) {
                 if (lstProducto.get(x).getLstCategoriasProducto().get(c).getCodigo() == categoria.getCodigo()) {
-                    Log.d("TAG_", ""+lstProducto.get(x).getNombre()+ " " + lstProducto.get(x).getLstCategoriasProducto().get(c).getNombre());
+                    Log.d("TAG_", "PC ->" + lstProducto.get(x).getNombre() + " " + lstProducto.get(x).getLstCategoriasProducto().get(c).getNombre());
                     lista.add(lstProducto.get(x));
                 }
             }
