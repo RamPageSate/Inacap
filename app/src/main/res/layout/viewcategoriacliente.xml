@@ -7,6 +7,7 @@
     android:background="#FFFFFF">
 
     <LinearLayout
+        android:id="@+id/imgcateclienteview"
         android:layout_width="230dp"
         android:layout_height="103dp"
         android:layout_marginStart="8dp"

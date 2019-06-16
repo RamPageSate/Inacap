@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,12 +15,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Persona;
+import com.example.djgra.inacapdeli.Clases.Producto;
+import com.example.djgra.inacapdeli.Funciones.BddCategoria;
 import com.example.djgra.inacapdeli.Funciones.BddPersonas;
+import com.example.djgra.inacapdeli.Funciones.BddProductos;
 import com.example.djgra.inacapdeli.Funciones.Functions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class Login extends AppCompatActivity {
 
@@ -88,7 +96,6 @@ public class Login extends AppCompatActivity {
             BddPersonas.getPersona(email, Login.this, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    progress.hide();
                     if (!response.equals("[]")) {
                         try {
 
@@ -106,7 +113,6 @@ public class Login extends AppCompatActivity {
                             persona.setSaldo(objeto.getInt("persona_saldo"));
                             persona.setSede(objeto.getInt("id_sede"));
                             if (persona.getCorreo().equals(email) && persona.getContrasena().equals(contraseña)) {
-                                progress.hide();
                                 if (cbRecordarme.isChecked()) {
                                     editor.putString("email", persona.getCorreo());
                                     editor.putString("pass", persona.getContrasena());
@@ -115,7 +121,7 @@ public class Login extends AppCompatActivity {
 
                                 switch (persona.getRol()) {
                                     case (1):
-                                        Intent c = new Intent(Login.this, PrincipalCliente.class);
+                                        final Intent c = new Intent(Login.this, PrincipalCliente.class);
                                         c.putExtra("usr", persona);
                                         startActivity(c);
                                         break;

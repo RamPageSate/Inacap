@@ -13,13 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CrearEditarProducto"></activity>
+        <activity android:name=".ClienteProductosPorCategoria"></activity>
+        <activity android:name=".CrearEditarProducto" />
         <activity android:name=".ProductoActivity" />
         <activity android:name=".Inicio">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".Login" />
