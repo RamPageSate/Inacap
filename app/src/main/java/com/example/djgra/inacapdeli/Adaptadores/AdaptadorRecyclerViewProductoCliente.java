@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.Funciones.Functions;
 import com.example.djgra.inacapdeli.PrincipalCliente;
@@ -16,37 +17,49 @@ import com.example.djgra.inacapdeli.R;
 
 import java.util.ArrayList;
 
-public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<AdaptadorRecyclerViewProductoCliente.ViewHolderProducto>{
+public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<AdaptadorRecyclerViewProductoCliente.ViewHolderProducto> {
     ArrayList<Producto> lstProductos = new ArrayList<>();
-    public AdaptadorRecyclerViewProductoCliente(ArrayList<Producto> lstProductos) {
+    int categoria_id;
+    ArrayList<Producto> lista;
+
+    public AdaptadorRecyclerViewProductoCliente(ArrayList<Producto> lstProductos, int categoria_id) {
         this.lstProductos = lstProductos;
+        this.categoria_id = categoria_id;
     }
 
     //muestro la vista
     @NonNull
     @Override
     public ViewHolderProducto onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewproductocliente,null,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewproductocliente, null, false);
         return new ViewHolderProducto(view);
     }
 
     //leno los datos
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderProducto holder, final int position) {
-           holder.nombreProducto.setText(lstProductos.get(position).getNombre());
-           holder.descripcionProducto.setText(lstProductos.get(position).getDescripcion());
-           holder.precioProducto.setText("$ "+lstProductos.get(position).getPrecio());
-           holder.imgProducto.setImageBitmap(Functions.StringToBitMap(lstProductos.get(position).getFoto()));
-           holder.cantidadProducto.setText("0");
+        lista = new ArrayList<>();
+        for (int x = 0; x < lstProductos.size(); x++) {
+            for (int j = 0; j < lstProductos.get(x).getLstCategoriasProducto().size(); j++) {
+                if (lstProductos.get(x).getLstCategoriasProducto().get(j).getCodigo() == categoria_id) {
+                    lista.add(lstProductos.get(x));
+                }
+            }
+        }
+        holder.nombreProducto.setText(lista.get(position).getNombre());
+        holder.descripcionProducto.setText(lista.get(position).getDescripcion());
+        holder.precioProducto.setText("$ " + lista.get(position).getPrecio());
+        holder.imgProducto.setImageBitmap(Functions.StringToBitMap(lista.get(position).getFoto()));
+        holder.cantidadProducto.setText("0");
 
         holder.btnDescontar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int total = PrincipalCliente.descontarTotalCompra(lstProductos.get(position).getPrecio());
+                int total = PrincipalCliente.descontarTotalCompra(lista.get(position).getPrecio());
                 int cant = Integer.parseInt(holder.cantidadProducto.getText().toString()) - 1;
-                holder.cantidadProducto.setText(""+cant);
+                holder.cantidadProducto.setText("" + cant);
                 PrincipalCliente.descontarCantidadArticulos();
-                if(total == 0 || Integer.parseInt(holder.cantidadProducto.getText().toString()) == 0){
+                if (total == 0 || Integer.parseInt(holder.cantidadProducto.getText().toString()) == 0) {
                     holder.btnDescontar.setVisibility(View.INVISIBLE);
                     holder.cantidadProducto.setVisibility(View.INVISIBLE);
                 }
@@ -55,12 +68,12 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
         holder.btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PrincipalCliente.pagoTotal(lstProductos.get(position).getPrecio());
+                PrincipalCliente.pagoTotal(lista.get(position).getPrecio());
                 PrincipalCliente.agregarCantidadArticulos();
                 holder.btnDescontar.setVisibility(View.VISIBLE);
                 holder.cantidadProducto.setVisibility(View.VISIBLE);
                 int cant = Integer.parseInt(holder.cantidadProducto.getText().toString()) + 1;
-                holder.cantidadProducto.setText(""+cant);
+                holder.cantidadProducto.setText("" + cant);
             }
         });
 
@@ -69,7 +82,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
     //le digo la cantidad de items
     @Override
     public int getItemCount() {
-        return lstProductos.size();
+        return lista.size();
     }
 
     //creo los view
@@ -90,7 +103,6 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
             imgProducto = itemView.findViewById(R.id.imgProductoClente);
             cantidadProducto = itemView.findViewById(R.id.tvCantidadSeleccionadaProductoCliente);
             btnDescontar = itemView.findViewById(R.id.btnMenosProductoSeleccionadoCliente);
-
 
 
         }
