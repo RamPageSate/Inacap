@@ -37,7 +37,7 @@ public class AdaptadorCategoriasCliente extends RecyclerView.Adapter<AdaptadorCa
         holder.tvnombreCategoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PrincipalCliente.FiltrarListaPorCategoria(lstCategorias.get(position));
+
             }
         });
     }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,14 +34,14 @@ import java.util.ArrayList;
 public class PrincipalCliente extends AppCompatActivity {
     ImageView fotoUsr;
     TextView tvSedeActual, tvSaldoActual;
-    RecyclerView rcProductosValorados, rcCategorias;
+    RecyclerView rcProductosValorados, rcCategorias, rcFavoritas;
     private Producto producto;
     public static int pagarActual = 0, prueba = 0;
     public static LinearLayout linearPagar;
     public static TextView tvMontoPagar;
     public static ArrayList<Producto> lstProducto = new ArrayList<>();
     public static ArrayList<Categoria> lstCategorias = new ArrayList<>();
-    public static ArrayList<Producto> lstProductoFiltrados;
+    public static ArrayList<Producto> lstProductoFiltrados = new ArrayList<>();
     private static TextView tvCantidadArticulosCliente;
     public static Persona cliente = new Persona();
 
@@ -48,18 +49,21 @@ public class PrincipalCliente extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal_cliente);
-        tvMontoPagar = findViewById(R.id.tvTotalPagarCliente);
+        tvMontoPagar = findViewById(R.id.tvPagarTotalCliente);
         rcProductosValorados = (RecyclerView) findViewById(R.id.rcViewProducto1Cliente);
+        rcCategorias = (RecyclerView) findViewById(R.id.rcCategoriassProductoCliente);
+        rcFavoritas = (RecyclerView) findViewById(R.id.rcFavoritasCliente);
+        rcFavoritas.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         rcProductosValorados.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false ));
         rcCategorias.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         rcProductosValorados.setHasFixedSize(true);
         rcCategorias.setHasFixedSize(true);
         rcProductosValorados.setItemViewCacheSize(lstProducto.size());
-        linearPagar = findViewById(R.id.linearPagar);
+        linearPagar = findViewById(R.id.linearPagarDetalleCLiente);
         fotoUsr = (ImageView) findViewById(R.id.imgFotoCliente);
         tvSedeActual = (TextView) findViewById(R.id.tvSedeActualCliente);
         tvSaldoActual = (TextView) findViewById(R.id.tvSaldoCliente);
-        tvCantidadArticulosCliente = (TextView) findViewById(R.id.tvCantidadArticulosCliente);
+        tvCantidadArticulosCliente = (TextView) findViewById(R.id.tvCantidadPagarCliente);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             cliente = (Persona) bundle.getSerializable("usr");
@@ -73,7 +77,6 @@ public class PrincipalCliente extends AppCompatActivity {
                 if (!response.toString().equals("[]")) {
                     for (int x = 0; x < response.length(); x++) {
                         try {
-                            Log.d("TAG_", "cargara los productos");
                             final Producto producto = new Producto();
                             producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
                             final ArrayList<Categoria> categoriasProducto = new ArrayList<>();
@@ -81,7 +84,6 @@ public class PrincipalCliente extends AppCompatActivity {
                                 @Override
                                 public void onResponse(JSONArray response) {
                                     if (!response.toString().equals("[]")) {
-                                        Log.d("TAG_", "cargo producto con categrias cn codigo " +producto.getCodigo());
                                         for (int x = 0; x < response.length(); ++x) {
                                             try {//falta agrgar las categorias asignadas al producto
                                                 Categoria categoria = new Categoria(response.getJSONObject(x).getInt("categoria_id"), response.getJSONObject(x).getInt("categoria_estado"), response.getJSONObject(x).getString("categoria_nombre"));
@@ -91,13 +93,12 @@ public class PrincipalCliente extends AppCompatActivity {
                                             }
                                         }
                                         producto.setLstCategoriasProducto(categoriasProducto);
-                                        Log.d("TAG_", "cargo producto con categrias" +producto.getNombre());
                                         lstProducto.add(producto);
-                                        AdaptadorRecyclerViewProductoCliente adaptadorRecyclerViewProductoCliente = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56,1,"")));
-                                        rcProductosValorados.setAdapter(adaptadorRecyclerViewProductoCliente);
-                                        for (int c = 0; c < categoriasProducto.size(); c++){
-                                            Log.d("TAG_", "categorias asignadas"+ categoriasProducto.get(c).getNombre());
-                                        }
+                                        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56,1,"")));
+                                        rcProductosValorados.setAdapter(adaptadorValoradas);
+                                        //hacer Condicion de que si esta vacia cambiar el nombre de Favoritas ademas rellenar la vista con otra categoria
+                                        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54,1,"Favoritas")));
+                                        rcFavoritas.setAdapter(adaptadorFavoritas);
                                     } // ya cargo las categorias del producto
                                 }
                             },null);
@@ -157,7 +158,15 @@ public class PrincipalCliente extends AppCompatActivity {
                 }
             }
         }, Functions.FalloInternet(PrincipalCliente.this,null,""));
-
+        linearPagar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+               Intent intent = new Intent(PrincipalCliente.this, ClienteProductosPorCategoria.class);
+                startActivity(intent);
+                return false;
+            }
+        });
+        
     }
 
 

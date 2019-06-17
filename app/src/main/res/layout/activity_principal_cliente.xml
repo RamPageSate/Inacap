@@ -89,8 +89,10 @@
         android:layout_marginRight="8dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,15 +105,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
-                android:text="Por Categorias  →"
+                android:text="Por Categorias  "
                 android:textColor="#000000"
                 android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="115dp"
+                android:layout_marginTop="-32dp"
+                android:text="→"
+                android:textSize="26sp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rcCategoriassProductoCliente"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:layout_marginLeft="9dp" />
+                android:layout_marginLeft="7dp" />
 
             <TextView
                 android:id="@+id/tv"
@@ -119,34 +130,72 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Los más valorados →"
+                android:text="Los más valorados "
                 android:textColor="#000000"
                 android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="160dp"
+                android:layout_marginTop="-32dp"
+                android:text="→"
+                android:textSize="26sp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rcViewProducto1Cliente"
                 android:layout_width="wrap_content"
-                android:layout_height="120dp"
+                android:layout_height="130dp"
                 android:layout_marginLeft="9dp"
                 android:layout_marginTop="15dp"
-                android:orientation="horizontal" />
+                android:orientation="horizontal">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Tus Favoritas  "
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="113dp"
+                android:layout_marginTop="-40dp"
+                android:text="→"
+                android:textSize="26sp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcFavoritasCliente"
+                android:layout_width="wrap_content"
+                android:layout_height="130dp"
+                android:layout_marginLeft="8dp" />
 
         </LinearLayout>
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/linearPagar"
+        android:id="@+id/linearPagarDetalleCLiente"
         android:layout_width="0dp"
         android:layout_height="43dp"
         android:background="#26CE37"
         android:orientation="vertical"
         android:visibility="invisible"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="@+id/scrollView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/tvCantidadArticulosCliente"
+            android:id="@+id/tvCantidadPagarCliente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -171,7 +220,7 @@
             android:textColor="#FFFFFF" />
 
         <TextView
-            android:id="@+id/tvTotalPagarCliente"
+            android:id="@+id/tvPagarTotalCliente"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="300dp"
