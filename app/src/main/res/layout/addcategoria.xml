@@ -7,8 +7,8 @@
 
     <TextView
         android:id="@+id/tvTitulo"
-        android:layout_width="wrap_content"
-        android:layout_height="26dp"
+        android:layout_width="152dp"
+        android:layout_height="32dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="40dp"
@@ -16,8 +16,9 @@
         android:layout_marginRight="8dp"
         android:text="Categoría"
         android:textColor="@color/RojoInacap"
-        android:textSize="20sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,7 +28,7 @@
         android:layout_height="34dp"
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:background="@drawable/stylo_editext"
@@ -48,37 +49,39 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/stylo_editext"
         android:contextClickable="true"
         android:divider="@android:color/background_dark"
         android:dividerHeight="1dp"
         android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etNombreView" />
 
     <ImageButton
         android:id="@+id/btnSalirView"
-        android:layout_width="76dp"
-        android:layout_height="73dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
         android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/atraskeppel" />
+        app:srcCompat="@drawable/returnblue" />
 
     <ImageButton
         android:id="@+id/btnGuardarView"
-        android:layout_width="76dp"
-        android:layout_height="73dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:background="@android:color/transparent"
+        android:src="@drawable/plusblue"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

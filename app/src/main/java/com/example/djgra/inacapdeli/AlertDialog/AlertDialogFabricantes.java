@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,19 +33,22 @@ public class AlertDialogFabricantes extends AlertDialog {
 
     public AlertDialogFabricantes(final Context context, final ArrayList<Fabricante> lstFabricantes) {
         super(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.addcategoria, null);
+        setView(view);
         setContentView(R.layout.addcategoria);
         final ListView lstvFabricante = findViewById(R.id.lstView);
         TextView tvTitulo = findViewById(R.id.tvTitulo);
         tvTitulo.setText("Fabricantes");
-        final EditText etNombre = content.findViewById(R.id.etNombreView);
+        final EditText etNombre = findViewById(R.id.etNombreView);
         etNombre.setHint("Fabrincate");
         final ArrayAdapter<Fabricante> adapter = new ArrayAdapter<Fabricante>(context, android.R.layout.simple_expandable_list_item_1, lstFabricantes);
         if (!lstFabricantes.isEmpty()) {
             lstvFabricante.setAdapter(adapter);
         }
-        final ImageButton btnGuardar = content.findViewById(R.id.btnGuardarView);
+        final ImageButton btnGuardar = findViewById(R.id.btnGuardarView);
 
-        ImageButton btnSalir = content.findViewById(R.id.btnSalirView);
+        ImageButton btnSalir = findViewById(R.id.btnSalirView);
         lstvFabricante.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
@@ -126,4 +130,6 @@ public class AlertDialogFabricantes extends AlertDialog {
 
 
     }
+
+
 }
