@@ -43,9 +43,7 @@ public class DetallePagarCliente extends AppCompatActivity {
         lrPagar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int x = 0; x < pedido.getLstProductoPedido().size(); x++){
-                    Log.d("TAG_" ,"P->"+ pedido.getLstProductoPedido().get(x).getNombre()+" C-> "+ pedido.getLstProductoPedido().get(x).getCantidad());
-                }
+
             }
         });
         tvClickAqui.setOnClickListener(new View.OnClickListener() {

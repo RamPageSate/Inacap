@@ -118,11 +118,19 @@
                 android:text="→"
                 android:textSize="26sp" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rcCategoriassProductoCliente"
+            <LinearLayout
+                android:id="@+id/linearCategoriaPrincipalCliente"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_marginLeft="7dp" />
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rcCategoriassProductoCliente"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginLeft="7dp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv"

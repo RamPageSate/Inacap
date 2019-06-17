@@ -1,21 +1,21 @@
 package com.example.djgra.inacapdeli;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.example.djgra.inacapdeli.Adaptadores.AdaptadorCategoriasCliente;
 import com.example.djgra.inacapdeli.Adaptadores.AdaptadorRecyclerViewProductoCliente;
 import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Pedido;
@@ -46,10 +46,13 @@ public class PrincipalCliente extends AppCompatActivity {
     private static TextView tvCantidadArticulosCliente;
     private static Persona cliente = new Persona();
     private static Pedido pedidoCliente = new Pedido();
+    private static  AdaptadorCategoriasCliente adaptadorCategorias;
+    LinearLayout linearCategorias;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal_cliente);
+        linearCategorias = findViewById(R.id.linearCategoriaPrincipalCliente);
         tvMontoPagar = findViewById(R.id.tvPagarTotalClienteVerde);
         rcProductosValorados = (RecyclerView) findViewById(R.id.rcViewProducto1Cliente);
         rcCategorias = (RecyclerView) findViewById(R.id.rcCategoriassProductoCliente);
@@ -154,8 +157,8 @@ public class PrincipalCliente extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                    AdaptadorCategoriasCliente adaptador = new AdaptadorCategoriasCliente(lstCategorias);
-                    rcCategorias.setAdapter(adaptador);
+                    adaptadorCategorias = new AdaptadorCategoriasCliente(lstCategorias);
+                    rcCategorias.setAdapter(adaptadorCategorias);
                 }
             }
         }, Functions.FalloInternet(PrincipalCliente.this,null,""));
@@ -168,9 +171,8 @@ public class PrincipalCliente extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
-
-
     public static void pagoTotal(int precio) {
         pagarActual = pagarActual + precio;
         if (pagarActual > 0) {
@@ -218,15 +220,53 @@ public class PrincipalCliente extends AppCompatActivity {
     public static void quitarProductoPedido(Producto producto){
         pedidoCliente.quitarProductoListaPedido(producto);
     }
-    public void CategoriaSeleccionada(Categoria categoria, Context context){
-        lstProductoFiltrados = new ArrayList<>();
-        lstProductoFiltrados = FiltrarListaPorCategoria(categoria);
-        enviarVistarFiltrada();
-    }
-    public void enviarVistarFiltrada(){
-        Intent intent = new Intent(PrincipalCliente.this,ClienteProductosPorCategoria.class);
-        intent.putExtra("lista",lstProductoFiltrados);
-        startActivity(intent);
-    }
 
+    //region AdaptadorCategorias
+    public class AdaptadorCategoriasCliente extends RecyclerView.Adapter<AdaptadorCategoriasCliente.ViewHolderCategoriasCliente> {
+        ArrayList<Categoria> lstCategorias = new ArrayList<>();
+        public AdaptadorCategoriasCliente(ArrayList<Categoria> lstCategorias) {
+            this.lstCategorias = lstCategorias;
+        }
+        //muestro la vista
+        @NonNull
+        @Override
+        public ViewHolderCategoriasCliente onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewcategoriacliente, null, false);
+            return new ViewHolderCategoriasCliente(view);
+        }
+
+
+        //leno los datos
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolderCategoriasCliente holder, final int position) {
+            holder.tvnombreCategoria.setText(lstCategorias.get(position).getNombre());
+            holder.tvnombreCategoria.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("TAG_", "escijo acete-> ");
+                    Intent intent = new Intent(PrincipalCliente.this,ClienteProductosPorCategoria.class);
+                    intent.putExtra("listaProducto",FiltrarListaPorCategoria(lstCategorias.get(position)));
+                    intent.putExtra("categoria", lstCategorias.get(position));
+                    startActivity(intent);
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return lstCategorias.size();
+        }
+        //creo los view
+        public class ViewHolderCategoriasCliente extends RecyclerView.ViewHolder {
+            TextView tvnombreCategoria;
+
+            //referencio los view
+            public ViewHolderCategoriasCliente(@NonNull View itemView) {
+                super(itemView);
+                tvnombreCategoria = itemView.findViewById(R.id.tvCategoriasProductosCliente);
+            }
+        }
+
+    }
+    //endregion
 }
