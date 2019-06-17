@@ -44,6 +44,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
             @Override
             public void onClick(View v) {
                 int total = PrincipalCliente.descontarTotalCompra(lstProductos.get(position).getPrecio());
+                PrincipalCliente.quitarProductoPedido(lstProductos.get(position));
                 int cant = Integer.parseInt(holder.cantidadProducto.getText().toString()) - 1;
                 holder.cantidadProducto.setText("" + cant);
                 PrincipalCliente.descontarCantidadArticulos();
@@ -57,6 +58,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
             @Override
             public void onClick(View v) {
                 PrincipalCliente.pagoTotal(lstProductos.get(position).getPrecio());
+                PrincipalCliente.agregarProductoPepido(lstProductos.get(position));
                 PrincipalCliente.agregarCantidadArticulos();
                 holder.btnDescontar.setVisibility(View.VISIBLE);
                 holder.cantidadProducto.setVisibility(View.VISIBLE);
@@ -84,13 +86,13 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
         public ViewHolderProducto(@NonNull View itemView) {
             super(itemView);
 
-            nombreProducto = itemView.findViewById(R.id.tvNombreProductoCliente);
+            nombreProducto = itemView.findViewById(R.id.tvNombreProductoPDC);
             descripcionProducto = itemView.findViewById(R.id.tvCategoriaProductoCliente);
             precioProducto = itemView.findViewById(R.id.tvPrecioProductoCliente);
-            btnAgregar = itemView.findViewById(R.id.btnAgregarProductoCliente);
+            btnAgregar = itemView.findViewById(R.id.btnRcAgregarDPC);
             imgProducto = itemView.findViewById(R.id.imgProductoClente);
-            cantidadProducto = itemView.findViewById(R.id.tvCantidadSeleccionadaProductoCliente);
-            btnDescontar = itemView.findViewById(R.id.btnMenosProductoSeleccionadoCliente);
+            cantidadProducto = itemView.findViewById(R.id.tvCantidadProductoPDC);
+            btnDescontar = itemView.findViewById(R.id.btnRcQuitarPDC);
 
 
         }

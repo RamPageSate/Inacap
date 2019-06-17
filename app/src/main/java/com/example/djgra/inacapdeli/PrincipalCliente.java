@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.example.djgra.inacapdeli.Adaptadores.AdaptadorCategoriasCliente;
 import com.example.djgra.inacapdeli.Adaptadores.AdaptadorRecyclerViewProductoCliente;
 import com.example.djgra.inacapdeli.Clases.Categoria;
+import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.Clases.Sede;
@@ -36,20 +37,20 @@ public class PrincipalCliente extends AppCompatActivity {
     TextView tvSedeActual, tvSaldoActual;
     RecyclerView rcProductosValorados, rcCategorias, rcFavoritas;
     private Producto producto;
-    public static int pagarActual = 0, prueba = 0;
-    public static LinearLayout linearPagar;
-    public static TextView tvMontoPagar;
-    public static ArrayList<Producto> lstProducto = new ArrayList<>();
-    public static ArrayList<Categoria> lstCategorias = new ArrayList<>();
-    public static ArrayList<Producto> lstProductoFiltrados = new ArrayList<>();
+    private static int pagarActual = 0, prueba = 0;
+    private static LinearLayout linearPagar;
+    private static TextView tvMontoPagar;
+    private static ArrayList<Producto> lstProducto = new ArrayList<>();
+    private static ArrayList<Categoria> lstCategorias = new ArrayList<>();
+    private static ArrayList<Producto> lstProductoFiltrados = new ArrayList<>();
     private static TextView tvCantidadArticulosCliente;
-    public static Persona cliente = new Persona();
-
+    private static Persona cliente = new Persona();
+    private static Pedido pedidoCliente = new Pedido();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal_cliente);
-        tvMontoPagar = findViewById(R.id.tvPagarTotalCliente);
+        tvMontoPagar = findViewById(R.id.tvPagarTotalClienteVerde);
         rcProductosValorados = (RecyclerView) findViewById(R.id.rcViewProducto1Cliente);
         rcCategorias = (RecyclerView) findViewById(R.id.rcCategoriassProductoCliente);
         rcFavoritas = (RecyclerView) findViewById(R.id.rcFavoritasCliente);
@@ -59,11 +60,11 @@ public class PrincipalCliente extends AppCompatActivity {
         rcProductosValorados.setHasFixedSize(true);
         rcCategorias.setHasFixedSize(true);
         rcProductosValorados.setItemViewCacheSize(lstProducto.size());
-        linearPagar = findViewById(R.id.linearPagarDetalleCLiente);
+        linearPagar = findViewById(R.id.linearPDCTotal);
         fotoUsr = (ImageView) findViewById(R.id.imgFotoCliente);
         tvSedeActual = (TextView) findViewById(R.id.tvSedeActualCliente);
         tvSaldoActual = (TextView) findViewById(R.id.tvSaldoCliente);
-        tvCantidadArticulosCliente = (TextView) findViewById(R.id.tvCantidadPagarCliente);
+        tvCantidadArticulosCliente = (TextView) findViewById(R.id.tvCantidadPagarDetalleCliente);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             cliente = (Persona) bundle.getSerializable("usr");
@@ -158,15 +159,15 @@ public class PrincipalCliente extends AppCompatActivity {
                 }
             }
         }, Functions.FalloInternet(PrincipalCliente.this,null,""));
-        linearPagar.setOnTouchListener(new View.OnTouchListener() {
+        linearPagar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-               Intent intent = new Intent(PrincipalCliente.this, ClienteProductosPorCategoria.class);
+            public void onClick(View v) {
+                //me tengo que enviar los productos pedidos el cliente
+                Intent intent = new Intent(PrincipalCliente.this, DetallePagarCliente.class);
+                intent.putExtra("pedido", pedidoCliente);
                 startActivity(intent);
-                return false;
             }
         });
-        
     }
 
 
@@ -211,7 +212,12 @@ public class PrincipalCliente extends AppCompatActivity {
         }
         return lista;
     }
-
+    public static void agregarProductoPepido(Producto producto){
+        pedidoCliente.agregarProductoListaPedido(producto);
+    }
+    public static void quitarProductoPedido(Producto producto){
+        pedidoCliente.quitarProductoListaPedido(producto);
+    }
     public void CategoriaSeleccionada(Categoria categoria, Context context){
         lstProductoFiltrados = new ArrayList<>();
         lstProductoFiltrados = FiltrarListaPorCategoria(categoria);

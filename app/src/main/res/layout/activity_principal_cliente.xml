@@ -183,7 +183,7 @@
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/linearPagarDetalleCLiente"
+        android:id="@+id/linearPDCTotal"
         android:layout_width="0dp"
         android:layout_height="43dp"
         android:background="#26CE37"
@@ -195,7 +195,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/tvCantidadPagarCliente"
+            android:id="@+id/tvCantidadPagarDetalleCliente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -220,7 +220,7 @@
             android:textColor="#FFFFFF" />
 
         <TextView
-            android:id="@+id/tvPagarTotalCliente"
+            android:id="@+id/tvPagarTotalClienteVerde"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="300dp"
