@@ -45,7 +45,7 @@ public class PrincipalCliente extends AppCompatActivity {
     private static ArrayList<Producto> lstProductoFiltrados = new ArrayList<>();
     private static TextView tvCantidadArticulosCliente;
     private static Persona cliente = new Persona();
-    private static Pedido pedidoCliente = new Pedido();
+    public static Pedido pedidoCliente = new Pedido();
     private static  AdaptadorCategoriasCliente adaptadorCategorias;
     LinearLayout linearCategorias;
     @Override
@@ -247,6 +247,7 @@ public class PrincipalCliente extends AppCompatActivity {
                     Intent intent = new Intent(PrincipalCliente.this,ClienteProductosPorCategoria.class);
                     intent.putExtra("listaProducto",FiltrarListaPorCategoria(lstCategorias.get(position)));
                     intent.putExtra("categoria", lstCategorias.get(position));
+                    //enviaPedido
                     startActivity(intent);
                 }
             });

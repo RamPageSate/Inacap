@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class ClienteProductosPorCategoria extends AppCompatActivity {
     TextView tvNombreCategoria;
+    public static TextView tvCantidadProductos, tvTotal;
     RecyclerView rcProductos;
     ImageButton btnSalir;
     ArrayList<Producto> lstProducto = new ArrayList<>();
@@ -25,6 +26,8 @@ public class ClienteProductosPorCategoria extends AppCompatActivity {
         setContentView(R.layout.activity_cliente_productos_por_categoria);
         tvNombreCategoria = (TextView) findViewById(R.id.tvTituloCategoriasFiltrada);
         rcProductos = (RecyclerView) findViewById(R.id.rcProductoCPC);
+        tvCantidadProductos = (TextView) findViewById(R.id.tvCantidadArticulosCPC);
+        tvTotal = (TextView) findViewById(R.id.tvTotalCPC);
         btnSalir = (ImageButton) findViewById(R.id.btnSalirCPC);
         rcProductos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         Bundle bundle = getIntent().getExtras();
@@ -35,13 +38,17 @@ public class ClienteProductosPorCategoria extends AppCompatActivity {
         }
         AdaptadorRecyclerViewProductoCliente adpatador = new AdaptadorRecyclerViewProductoCliente(lstProducto);
         rcProductos.setHasFixedSize(true);
+
         rcProductos.setAdapter(adpatador);
 
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+
             }
         });
+
+
     }
+
 }

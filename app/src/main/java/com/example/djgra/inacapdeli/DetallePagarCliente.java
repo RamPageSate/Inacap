@@ -19,7 +19,7 @@ import com.example.djgra.inacapdeli.Clases.Producto;
 public class DetallePagarCliente extends AppCompatActivity {
     private static Pedido pedido;
     private RecyclerView rcProductos;
-    public static TextView tvSubtotalDetallePagar;
+    public static TextView tvSubtotalDetallePagar, tvTotalDetalle;
     private LinearLayout lrPagar;
     TextView tvClickAqui;
     @Override
@@ -27,6 +27,7 @@ public class DetallePagarCliente extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle_pagar_cliente);
         tvClickAqui = (TextView) findViewById(R.id.tvClickAqui);
+        tvTotalDetalle = (TextView)  findViewById(R.id.tvTotalPagarDetalleCliente);
         rcProductos = (RecyclerView) findViewById(R.id.rcProductoDPC);
         rcProductos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         tvSubtotalDetallePagar = (TextView) findViewById(R.id.tvSubTotalPagarCliente);
@@ -69,9 +70,11 @@ public class DetallePagarCliente extends AppCompatActivity {
     public static void sumarSubTotal(int precio){
         int total = Integer.parseInt(tvSubtotalDetallePagar.getText().toString());
         tvSubtotalDetallePagar.setText(String.valueOf(total + precio));
+        tvTotalDetalle.setText("$ " + tvSubtotalDetallePagar.getText());
     }
     public static void restarSubTotal(int precio){
         int total = Integer.parseInt(tvSubtotalDetallePagar.getText().toString());
         tvSubtotalDetallePagar.setText(String.valueOf(total - precio));
+        tvTotalDetalle.setText("$ " + tvSubtotalDetallePagar.getText());
     }
 }
