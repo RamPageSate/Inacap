@@ -3,7 +3,7 @@ package com.example.djgra.inacapdeli.Clases;
 public class Fabricante {
     private int codigo;
     private String nombre;
-
+    private int estado;
     public Fabricante() {
     }
 
@@ -26,5 +26,13 @@ public class Fabricante {
     @Override
     public String toString() {
         return nombre.toUpperCase();
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
 }

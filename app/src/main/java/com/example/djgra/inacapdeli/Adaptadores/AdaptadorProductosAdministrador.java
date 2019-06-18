@@ -1,7 +1,6 @@
 package com.example.djgra.inacapdeli.Adaptadores;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.djgra.inacapdeli.Clases.Producto;
-import com.example.djgra.inacapdeli.CrearEditarProducto;
 import com.example.djgra.inacapdeli.Funciones.Functions;
 import com.example.djgra.inacapdeli.R;
 
@@ -80,12 +78,14 @@ public class AdaptadorProductosAdministrador extends BaseAdapter {
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    productoSeleccionado = lstProducto.get(posicion);
-                    Intent intent = new Intent(context, CrearEditarProducto.class);
-                    intent.putExtra("producto", productoSeleccionado);
-                    intent.putExtra("tipo", 7);
-                    context.startActivityForResult(intent, 1);
+                    Toast.makeText(context, context.toString(), Toast.LENGTH_SHORT).show();
+                    //productoSeleccionado = lstProducto.get(posicion);
+                    //Intent intent = new Intent(context, CrearEditarProducto.class);
+                    //intent.putExtra("producto", productoSeleccionado);
+                    //intent.putExtra("tipo", 7);
+                    //context.startActivityForResult(intent, 1);
                     //abria que sobreescrbir para recibir respuesta
+
                 }
             });
         }

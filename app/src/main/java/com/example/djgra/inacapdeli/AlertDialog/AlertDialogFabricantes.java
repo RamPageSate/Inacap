@@ -1,5 +1,6 @@
 package com.example.djgra.inacapdeli.AlertDialog;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -7,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.example.djgra.inacapdeli.Adaptadores.AdaptadorFabricante;
 import com.example.djgra.inacapdeli.Clases.Fabricante;
 import com.example.djgra.inacapdeli.Funciones.BddFabricante;
 import com.example.djgra.inacapdeli.Funciones.Functions;
@@ -43,7 +44,8 @@ public class AlertDialogFabricantes extends AlertDialog.Builder {
         tvTitulo.setText("Fabricantes");
         final EditText etNombre = view.findViewById(R.id.etNombreView);
         etNombre.setHint("Fabrincate");
-        final ArrayAdapter<Fabricante> adapter = new ArrayAdapter<Fabricante>(context, android.R.layout.simple_expandable_list_item_1, lstFabricantes);
+        final AdaptadorFabricante adapter = new AdaptadorFabricante(lstFabricantes, (Activity) view.getContext(), etNombre);
+        //SI ESTA VACIA  NO CARGA
         if (!lstFabricantes.isEmpty()) {
             lstvFabricante.setAdapter(adapter);
         }
@@ -62,7 +64,7 @@ public class AlertDialogFabricantes extends AlertDialog.Builder {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "Esta funcionando", Toast.LENGTH_SHORT).show();
-                if (1 != 1) {
+                if (btnGuardar.getDrawable().equals(R.drawable.plusblue)) {
                     if (!etNombre.getText().toString().isEmpty()) {
                         final ProgressDialog progressDialog = Functions.CargarDatos("Agregando Fabricante", context);
                         final Fabricante fabricante = new Fabricante();
