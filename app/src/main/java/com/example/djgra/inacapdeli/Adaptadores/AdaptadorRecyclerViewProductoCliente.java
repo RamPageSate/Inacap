@@ -39,7 +39,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
         holder.precioProducto.setText("$ " + lstProductos.get(position).getPrecio());
         holder.imgProducto.setImageBitmap(Functions.StringToBitMap(lstProductos.get(position).getFoto()));
         holder.cantidadProducto.setText("0");
-
+        //cambiar el valor de la barra verde
         holder.btnDescontar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

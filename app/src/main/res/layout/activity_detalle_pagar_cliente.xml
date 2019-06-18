@@ -67,56 +67,6 @@
             app:srcCompat="@drawable/closewhite" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearPDCTotal"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:background="#26CE37"
-        android:clickable="true"
-        android:orientation="vertical"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/tvCantidadPagarDetalleCliente"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            android:background="#1DA42B"
-            android:paddingLeft="8dp"
-            android:paddingTop="3dp"
-            android:paddingRight="8dp"
-            android:text="0"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/textView22"
-            android:layout_width="106dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="130dp"
-            android:layout_marginTop="-25dp"
-            android:layout_weight="1"
-            android:text="TOTAL A PAGAR"
-            android:textColor="#FFFFFF" />
-
-        <TextView
-            android:id="@+id/tvPagarTotalClienteVerde"
-            android:layout_width="75dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="300dp"
-            android:layout_marginTop="-24dp"
-            android:layout_weight="1"
-            android:text="$ "
-            android:textColor="#FFFFFF"
-            android:visibility="visible" />
-    </LinearLayout>
-
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="147dp"
@@ -328,4 +278,16 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/tvSubTotalPagarCliente"
         app:layout_constraintTop_toBottomOf="@+id/rcProductoDPC" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/linearresumen"
+        android:layout_width="395dp"
+        android:layout_height="251dp"
+        android:layout_marginTop="16dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView34" />
+
 </android.support.constraint.ConstraintLayout>

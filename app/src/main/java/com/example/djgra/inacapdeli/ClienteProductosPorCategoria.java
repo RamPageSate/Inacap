@@ -38,7 +38,7 @@ public class ClienteProductosPorCategoria extends AppCompatActivity {
         }
         AdaptadorRecyclerViewProductoCliente adpatador = new AdaptadorRecyclerViewProductoCliente(lstProducto);
         rcProductos.setHasFixedSize(true);
-
+        rcProductos.setItemViewCacheSize(lstProducto.size());
         rcProductos.setAdapter(adpatador);
 
         btnSalir.setOnClickListener(new View.OnClickListener() {
