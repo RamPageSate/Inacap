@@ -55,6 +55,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
     private static ArrayList<Tipo> lstTipo  = new ArrayList<>();
     private static ArrayList<Persona> lstPersonas = new ArrayList<>();
     private static ArrayList<Fabricante> lstFabricantes = new ArrayList<>();
+    private AlertDialogFabricantes fabricantes;
     private  AdapterPesonas adapterPesonas;
     ListView lstvVendedores;
 
@@ -588,6 +589,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     Fabricante fabricante = new Fabricante();
                                     fabricante.setCodigo(response.getJSONObject(x).getInt("fabricante_id"));
                                     fabricante.setNombre(response.getJSONObject(x).getString("fabricante_nombre"));
+                                    fabricante.setEstado(response.getJSONObject(x).getInt("fabricante_estado"));
                                     lstFabricantes.add(fabricante);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -595,7 +597,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                             }
                         }
                         progressDialog.hide();
-                        AlertDialogFabricantes fabricantes = new AlertDialogFabricantes(PrincipalAdministrador.this, lstFabricantes);
+                        fabricantes = new AlertDialogFabricantes(PrincipalAdministrador.this, lstFabricantes);
                         fabricantes.show();
 
                     }
@@ -822,6 +824,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
             });
             return item;
         }
+
     }
 
 }

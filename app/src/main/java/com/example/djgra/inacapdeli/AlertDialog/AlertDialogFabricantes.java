@@ -3,7 +3,6 @@ package com.example.djgra.inacapdeli.AlertDialog;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,14 +25,15 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-public class AlertDialogFabricantes extends AlertDialog.Builder {
+public class AlertDialogFabricantes extends AlertDialog {
 
     private View content;
     private int posicionUdpdateDelete;
     private int btn = 0;
 
-    public AlertDialogFabricantes(final Context context, final ArrayList<Fabricante> lstFabricantes) {
+    public AlertDialogFabricantes(final Activity context, final ArrayList<Fabricante> lstFabricantes) {
         super(context);
+
         LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.addcategoria, null);
         setView(view);
@@ -44,12 +44,13 @@ public class AlertDialogFabricantes extends AlertDialog.Builder {
         tvTitulo.setText("Fabricantes");
         final EditText etNombre = view.findViewById(R.id.etNombreView);
         etNombre.setHint("Fabrincate");
-        final AdaptadorFabricante adapter = new AdaptadorFabricante(lstFabricantes, (Activity) view.getContext(), etNombre);
+        final ImageButton btnGuardar = view.findViewById(R.id.btnGuardarView);
+        final AdaptadorFabricante adapter = new AdaptadorFabricante(context, lstFabricantes, etNombre, btnGuardar);
         //SI ESTA VACIA  NO CARGA
         if (!lstFabricantes.isEmpty()) {
             lstvFabricante.setAdapter(adapter);
         }
-        final ImageButton btnGuardar = view.findViewById(R.id.btnGuardarView);
+
 
         ImageButton btnSalir = view.findViewById(R.id.btnSalirView);
         lstvFabricante.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -125,17 +126,14 @@ public class AlertDialogFabricantes extends AlertDialog.Builder {
             }
         });
         btnSalir.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
                 lstFabricantes.removeAll(lstFabricantes);
-                try {
-                    finalize();
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
-                }
+
+
+                dismiss();
+
             }
         });
-
 
     }
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/BlancoInacap">
@@ -10,8 +9,8 @@
         android:id="@+id/tvNombreLstProducto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="112dp"
-        android:layout_marginLeft="112dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:layout_marginTop="40dp"
         android:text="Nombre Producto"
         android:textColor="#000000"
@@ -24,23 +23,33 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="52dp"
-        android:layout_marginRight="52dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/pencileditgrey" />
+        app:srcCompat="@drawable/pencil" />
 
     <Switch
         android:id="@+id/swEstadoListViewProducto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnEditProducto"
-        tools:text="Activo ->" />
+        app:layout_constraintTop_toBottomOf="@+id/btnEditProducto" />
+
+    <TextView
+        android:id="@+id/tvActivo"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Activo"
+        app:layout_constraintEnd_toStartOf="@+id/swEstadoListViewProducto"
+        app:layout_constraintTop_toBottomOf="@+id/btnEditProducto" />
 
 </android.support.constraint.ConstraintLayout>

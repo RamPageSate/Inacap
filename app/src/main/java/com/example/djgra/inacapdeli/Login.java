@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,19 +14,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Persona;
-import com.example.djgra.inacapdeli.Clases.Producto;
-import com.example.djgra.inacapdeli.Funciones.BddCategoria;
 import com.example.djgra.inacapdeli.Funciones.BddPersonas;
-import com.example.djgra.inacapdeli.Funciones.BddProductos;
 import com.example.djgra.inacapdeli.Funciones.Functions;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class Login extends AppCompatActivity {
 
@@ -98,7 +90,7 @@ public class Login extends AppCompatActivity {
                 public void onResponse(String response) {
                     if (!response.equals("[]")) {
                         try {
-
+                            progress.dismiss();
                             JSONObject objeto = new JSONObject(response);
                             Persona persona = new Persona();
                             persona.setCorreo(objeto.getString("persona_email"));

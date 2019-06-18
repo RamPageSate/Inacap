@@ -50,6 +50,7 @@ public class BddFabricante {
                 map= new HashMap<String,String>();
                 map.put("fabricante_id",String.valueOf(fabricante.getCodigo()));
                 map.put("fabricante_nombre",fabricante.getNombre());
+                map.put("fabrincante_estado", String.valueOf(fabricante.getEstado()));
                 return map;
             }
         };
