@@ -598,6 +598,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                         }
                         progressDialog.hide();
                         fabricantes = new AlertDialogFabricantes(PrincipalAdministrador.this, lstFabricantes);
+
                         fabricantes.show();
 
                     }

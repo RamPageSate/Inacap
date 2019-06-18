@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/BlancoInacap">
@@ -87,10 +86,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="9dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
         android:text="Activo"
         android:textColor="@color/NegroInacap"
         android:textSize="9sp"
-        app:layout_constraintTop_toBottomOf="@+id/btnQuitarVendedor"
-        tools:layout_editor_absoluteX="367dp" />
+        app:layout_constraintBottom_toTopOf="@+id/swEstadoVendedor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnQuitarVendedor" />
 
 </android.support.constraint.ConstraintLayout>

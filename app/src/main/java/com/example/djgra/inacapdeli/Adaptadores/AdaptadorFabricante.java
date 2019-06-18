@@ -83,6 +83,7 @@ public class AdaptadorFabricante extends BaseAdapter {
 
                     final ProgressDialog dialog = Functions.CargarDatos("Actualizando estado", context);
                     dialog.show();
+                    dialog.setCancelable(false);
                     BddFabricante.updateFabricante(fabricante, context, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

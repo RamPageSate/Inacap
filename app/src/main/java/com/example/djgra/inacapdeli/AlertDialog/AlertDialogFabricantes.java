@@ -33,7 +33,8 @@ public class AlertDialogFabricantes extends AlertDialog {
 
     public AlertDialogFabricantes(final Activity context, final ArrayList<Fabricante> lstFabricantes) {
         super(context);
-
+        setCancelable(false);
+        setCanceledOnTouchOutside(false);
         LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.addcategoria, null);
         setView(view);
@@ -43,7 +44,7 @@ public class AlertDialogFabricantes extends AlertDialog {
         TextView tvTitulo = view.findViewById(R.id.tvTitulo);
         tvTitulo.setText("Fabricantes");
         final EditText etNombre = view.findViewById(R.id.etNombreView);
-        etNombre.setHint("Fabrincate");
+        etNombre.setHint("Fabricate");
         final ImageButton btnGuardar = view.findViewById(R.id.btnGuardarView);
         final AdaptadorFabricante adapter = new AdaptadorFabricante(context, lstFabricantes, etNombre, btnGuardar);
         //SI ESTA VACIA  NO CARGA
@@ -64,7 +65,7 @@ public class AlertDialogFabricantes extends AlertDialog {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Esta funcionando", Toast.LENGTH_SHORT).show();
+
                 if (btnGuardar.getDrawable().equals(R.drawable.plusblue)) {
                     if (!etNombre.getText().toString().isEmpty()) {
                         final ProgressDialog progressDialog = Functions.CargarDatos("Agregando Fabricante", context);
@@ -119,9 +120,9 @@ public class AlertDialogFabricantes extends AlertDialog {
                         public void onResponse(String response) {
                             progressDialog.hide();
                             Log.d("TAG_", "actualizo fabricante");
+                            btnGuardar.setImageResource(R.drawable.plusblue);
                         }
                     }, Functions.FalloInternet(context, progressDialog, ""));
-                    btn = 0;
                 }
             }
         });

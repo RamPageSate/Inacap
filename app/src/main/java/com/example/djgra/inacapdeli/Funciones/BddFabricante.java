@@ -45,12 +45,17 @@ public class BddFabricante {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.POST,urlBase+"updateFabricante",listener,errorListener){
             @Override
-            protected Map<String,String> getParams() throws AuthFailureError{
+            protected Map<String, String> getParams() throws AuthFailureError {
                 map.clear();
                 map= new HashMap<String,String>();
                 map.put("fabricante_id",String.valueOf(fabricante.getCodigo()));
                 map.put("fabricante_nombre",fabricante.getNombre());
-                map.put("fabrincante_estado", String.valueOf(fabricante.getEstado()));
+                if (fabricante.getEstado() == 1) {
+                    map.put("fabricante_estado", String.valueOf(1));
+                } else {
+                    map.put("fabricante_estado", String.valueOf(0));
+
+                }
                 return map;
             }
         };
