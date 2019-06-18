@@ -25,7 +25,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-public class AlertDialogFabricantes extends AlertDialog {
+public class AlertDialogFabricantes extends AlertDialog.Builder {
 
     private View content;
     private int posicionUdpdateDelete;
@@ -34,21 +34,22 @@ public class AlertDialogFabricantes extends AlertDialog {
     public AlertDialogFabricantes(final Context context, final ArrayList<Fabricante> lstFabricantes) {
         super(context);
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.addcategoria, null);
+        final View view = inflater.inflate(R.layout.addcategoria, null);
         setView(view);
-        setContentView(R.layout.addcategoria);
-        final ListView lstvFabricante = findViewById(R.id.lstView);
-        TextView tvTitulo = findViewById(R.id.tvTitulo);
+
+        final ListView lstvFabricante = view.findViewById(R.id.lstView);
+
+        TextView tvTitulo = view.findViewById(R.id.tvTitulo);
         tvTitulo.setText("Fabricantes");
-        final EditText etNombre = findViewById(R.id.etNombreView);
+        final EditText etNombre = view.findViewById(R.id.etNombreView);
         etNombre.setHint("Fabrincate");
         final ArrayAdapter<Fabricante> adapter = new ArrayAdapter<Fabricante>(context, android.R.layout.simple_expandable_list_item_1, lstFabricantes);
         if (!lstFabricantes.isEmpty()) {
             lstvFabricante.setAdapter(adapter);
         }
-        final ImageButton btnGuardar = findViewById(R.id.btnGuardarView);
+        final ImageButton btnGuardar = view.findViewById(R.id.btnGuardarView);
 
-        ImageButton btnSalir = findViewById(R.id.btnSalirView);
+        ImageButton btnSalir = view.findViewById(R.id.btnSalirView);
         lstvFabricante.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
@@ -60,7 +61,8 @@ public class AlertDialogFabricantes extends AlertDialog {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (1 == 1) {
+                Toast.makeText(context, "Esta funcionando", Toast.LENGTH_SHORT).show();
+                if (1 != 1) {
                     if (!etNombre.getText().toString().isEmpty()) {
                         final ProgressDialog progressDialog = Functions.CargarDatos("Agregando Fabricante", context);
                         final Fabricante fabricante = new Fabricante();
@@ -124,7 +126,11 @@ public class AlertDialogFabricantes extends AlertDialog {
             @Override
             public void onClick(View v) {
                 lstFabricantes.removeAll(lstFabricantes);
-                dismiss();
+                try {
+                    finalize();
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
             }
         });
 

@@ -597,6 +597,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                         progressDialog.hide();
                         AlertDialogFabricantes fabricantes = new AlertDialogFabricantes(PrincipalAdministrador.this, lstFabricantes);
                         fabricantes.show();
+
                     }
                 }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No Pudo Cargar"));
             }
