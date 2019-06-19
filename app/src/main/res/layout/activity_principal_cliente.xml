@@ -76,7 +76,7 @@
             android:layout_marginTop="-8dp"
             android:background="@android:color/transparent"
             android:paddingTop="-3dp"
-            app:srcCompat="@drawable/userclienteview" />
+            app:srcCompat="@drawable/btndatosclientes" />
     </LinearLayout>
 
     <ScrollView
@@ -129,7 +129,7 @@
                     android:id="@+id/rcCategoriassProductoCliente"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
-                    android:layout_marginLeft="7dp" />
+                    android:layout_marginLeft="1dp" />
             </LinearLayout>
 
             <TextView
@@ -219,9 +219,9 @@
 
         <TextView
             android:id="@+id/textView22"
-            android:layout_width="106dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="140dp"
+            android:layout_gravity="center"
             android:layout_marginTop="-25dp"
             android:layout_weight="1"
             android:text="PAGAR"
@@ -229,12 +229,12 @@
 
         <TextView
             android:id="@+id/tvPagarTotalClienteVerde"
-            android:layout_width="75dp"
+            android:layout_width="55dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="300dp"
+            android:layout_gravity="right"
             android:layout_marginTop="-24dp"
             android:layout_weight="1"
-            android:text="$ "
+            android:text="0"
             android:textColor="#FFFFFF"
             android:visibility="visible" />
     </LinearLayout>

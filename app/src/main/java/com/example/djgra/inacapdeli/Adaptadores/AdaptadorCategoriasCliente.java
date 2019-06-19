@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.djgra.inacapdeli.Clases.Categoria;
+import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.ClienteProductosPorCategoria;
 import com.example.djgra.inacapdeli.PrincipalCliente;
 import com.example.djgra.inacapdeli.R;
@@ -20,10 +21,12 @@ import java.util.ArrayList;
 public class AdaptadorCategoriasCliente extends RecyclerView.Adapter<AdaptadorCategoriasCliente.ViewHolderCategoriasCliente> {
     ArrayList<Categoria> lstCategorias = new ArrayList<>();
     Activity context;
+    Pedido pedido = new Pedido();
 
-    public AdaptadorCategoriasCliente(ArrayList<Categoria> lstCategorias, Activity context) {
+    public AdaptadorCategoriasCliente(ArrayList<Categoria> lstCategorias, Activity context, Pedido pedido) {
         this.lstCategorias = lstCategorias;
         this.context = context;
+        this.pedido = pedido;
     }
 
     //muestro la vista
@@ -46,8 +49,8 @@ public class AdaptadorCategoriasCliente extends RecyclerView.Adapter<AdaptadorCa
                 Intent intent = new Intent(context, ClienteProductosPorCategoria.class);
                 intent.putExtra("listaProducto",PrincipalCliente.FiltrarListaPorCategoria(lstCategorias.get(position)));
                 intent.putExtra("categoria", lstCategorias.get(position));
-                //enviaPedido
-                context.startActivity(intent);
+                intent.putExtra("pedido", pedido);
+                context.startActivityForResult(intent,23);
             }
         });
     }

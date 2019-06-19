@@ -28,6 +28,22 @@ public class Pedido implements Serializable {
         this.lstProductoPedido = lstProductoPedido;
     }
 
+    public int totalPagarPedido(){
+        int total = 0;
+        for (int x=0; x< lstProductoPedido.size(); x++){
+            total = total + (lstProductoPedido.get(x).getPrecio() * lstProductoPedido.get(x).getCantidad());
+        }
+        return total;
+    }
+
+    public int cantidadArticulos(){
+        int total = 0;
+        for (int x=0; x< lstProductoPedido.size(); x++){
+            total = total + (lstProductoPedido.get(x).getCantidad());
+        }
+        return total;
+    }
+
     public void agregarProductoListaPedido(Producto producto) {
         if (lstProductoPedido.isEmpty()) {
             producto.setCantidad(1);
@@ -49,16 +65,20 @@ public class Pedido implements Serializable {
             }
         }
     }
-    public void quitarProductoListaPedido(Producto producto){
+    public boolean quitarProductoListaPedido(Producto producto){
+        boolean ok = false;
         for (int x=0; x < lstProductoPedido.size();x++){
             if(lstProductoPedido.get(x).getCodigo() == producto.getCodigo()){
-                if(producto.getCantidad() == 1){
+                if(lstProductoPedido.get(x).getCantidad() == 1){
                     lstProductoPedido.remove(x);
+                    ok = true;
                 }else{
                     lstProductoPedido.get(x).setCantidad(lstProductoPedido.get(x).getCantidad() - 1);
+                    ok = false;
                 }
                 break;
             }
         }
+        return ok;
     }
 }
