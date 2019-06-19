@@ -206,6 +206,12 @@ public class Registrar_Persona extends AppCompatActivity {
         if (etContraseña.getText().toString().isEmpty()) {
             etContraseña.setError("Contraseña Necesaria");
             ok++;
+        }else{
+            if(contraseñaSegura(etContraseña.getText().toString()) == false){
+                etContraseña.setText("");
+                etContraseña.setError("Requiere como minimo 1 minuscula, 1 mayuscula, 1 digito y un largo de 6 a 12 caracteres ");
+                ok++;
+            }
         }
         if (etConfirmar.getText().toString().isEmpty()) {
             etConfirmar.setError("Ingrese para Confirmar");
@@ -225,7 +231,7 @@ public class Registrar_Persona extends AppCompatActivity {
         boolean ok = false;
 
         Pattern regex = Pattern.compile("^[a-zA-Z ]*$");
-        Matcher m = regex.matcher(etNombre.getText().toString());
+        Matcher m = regex.matcher(dato);
         boolean as = m.find();
         if (as == true) {
             ok = true;
@@ -234,6 +240,17 @@ public class Registrar_Persona extends AppCompatActivity {
         return ok;
     }
 
+    private boolean contraseñaSegura(String pass){
+        boolean ok = false;
+        Pattern regex = Pattern.compile("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{6,12}$");
+        Matcher m = regex.matcher(pass);
+        boolean as = m.find();
+        if (as == true) {
+            ok = true;
+        }
+
+        return ok;
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
