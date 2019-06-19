@@ -24,6 +24,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class AlertDialogFabricantes extends AlertDialog {
 
@@ -44,7 +46,7 @@ public class AlertDialogFabricantes extends AlertDialog {
         TextView tvTitulo = view.findViewById(R.id.tvTitulo);
         tvTitulo.setText("Fabricantes");
         final EditText etNombre = view.findViewById(R.id.etNombreView);
-        etNombre.setHint("Fabricate");
+        etNombre.setHint("Agregar nuevo fabricante");
         final ImageButton btnGuardar = view.findViewById(R.id.btnGuardarView);
         final AdaptadorFabricante adapter = new AdaptadorFabricante(context, lstFabricantes, etNombre, btnGuardar);
         //SI ESTA VACIA  NO CARGA
@@ -66,7 +68,7 @@ public class AlertDialogFabricantes extends AlertDialog {
             @Override
             public void onClick(View v) {
 
-                if (btnGuardar.getDrawable().equals(R.drawable.plusblue)) {
+                if (btnGuardar.getDrawable().getConstantState().equals(view.getResources().getDrawable(R.drawable.plusblue).getConstantState())) {
                     if (!etNombre.getText().toString().isEmpty()) {
                         final ProgressDialog progressDialog = Functions.CargarDatos("Agregando Fabricante", context);
                         final Fabricante fabricante = new Fabricante();
@@ -89,6 +91,8 @@ public class AlertDialogFabricantes extends AlertDialog {
                                             }
                                         }
                                         lstFabricantes.add(fabricante);
+                                        Comparator<Fabricante> comparador = Collections.reverseOrder();
+                                        Collections.sort(lstFabricantes, comparador);
                                         lstvFabricante.setAdapter(adapter);
                                         lstvFabricante.deferNotifyDataSetChanged();
                                         progressDialog.hide();
@@ -105,9 +109,9 @@ public class AlertDialogFabricantes extends AlertDialog {
                     //Actualizo ArrayList y el Listview
                     int codigo = lstFabricantes.get(posicionUdpdateDelete).getCodigo();
                     String nuevoNombre = etNombre.getText().toString().toUpperCase();
-                    Fabricante fabricante = new Fabricante();
-                    fabricante.setCodigo(codigo);
-                    fabricante.setNombre(nuevoNombre);
+                    final Fabricante[] fabricante = {new Fabricante()};
+                    fabricante[0].setCodigo(codigo);
+                    fabricante[0].setNombre(nuevoNombre);
                     lstFabricantes.get(posicionUdpdateDelete).setNombre(nuevoNombre);
                     lstvFabricante.setAdapter(adapter);
                     lstvFabricante.deferNotifyDataSetChanged();
@@ -115,12 +119,14 @@ public class AlertDialogFabricantes extends AlertDialog {
                     final ProgressDialog progressDialog = Functions.CargarDatos("Actualizando", context);
                     Toast.makeText(context, "Actualizado", Toast.LENGTH_SHORT).show();
                     //Actualizo BD
-                    BddFabricante.updateFabricante(fabricante, context, new Response.Listener<String>() {
+                    BddFabricante.updateFabricante(fabricante[0], context, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             progressDialog.hide();
                             Log.d("TAG_", "actualizo fabricante");
                             btnGuardar.setImageResource(R.drawable.plusblue);
+                            fabricante[0] = new Fabricante();
+                            etNombre.setText("");
                         }
                     }, Functions.FalloInternet(context, progressDialog, ""));
                 }

@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.example.djgra.inacapdeli.AlertDialog.AlertDialogCategoria;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogFabricantes;
 import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Fabricante;
@@ -46,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class PrincipalAdministrador extends AppCompatActivity {
     ImageButton btnCategoria, btnLstVendedores, btnSede, btnFabricante, btnProductos, btnTipo;
@@ -56,6 +58,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
     private static ArrayList<Persona> lstPersonas = new ArrayList<>();
     private static ArrayList<Fabricante> lstFabricantes = new ArrayList<>();
     private AlertDialogFabricantes fabricantes;
+    private AlertDialogCategoria categorias;
     private  AdapterPesonas adapterPesonas;
     ListView lstvVendedores;
 
@@ -77,7 +80,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnCategoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos("Cangando Categorias", PrincipalAdministrador.this);
+                final ProgressDialog progressDialog = Functions.CargarDatos("Cargando Categorias", PrincipalAdministrador.this);
                 BddCategoria.getCategoria(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -93,130 +96,12 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                 }
                             }
                         }
-                        final AlertDialog formAddCategoria = new AlertDialog.Builder(PrincipalAdministrador.this)
-                                .setView(R.layout.addcategoria)
-                                .create();
-                        formAddCategoria.setCanceledOnTouchOutside(false);
-                        formAddCategoria.setCancelable(false);
-                        formAddCategoria.setOnShowListener(new DialogInterface.OnShowListener() {
-                            @Override
-                            public void onShow(final DialogInterface dialog) {
-                                final EditText etNombre = formAddCategoria.findViewById(R.id.etNombreView);
-                                progressDialog.hide();
-                                final ListView lstCategoria = formAddCategoria.findViewById(R.id.lstView);
-                                final ArrayAdapter<Categoria> adapter = new ArrayAdapter(PrincipalAdministrador.this, android.R.layout.simple_list_item_multiple_choice, lstCategorias);
-                                if (!lstCategorias.isEmpty()) {
-                                    lstCategoria.setAdapter(adapter);
-                                    CargarListViewCategoria(lstCategoria, PrincipalAdministrador.this, lstCategorias);
-                                }
-                                final ImageButton btnGuardar = formAddCategoria.findViewById(R.id.btnGuardarView);
+                        progressDialog.hide();
+                        Collections.reverse(lstCategorias);
+                        categorias = new AlertDialogCategoria(PrincipalAdministrador.this, lstCategorias);
 
-                                ImageButton btnSalir = formAddCategoria.findViewById(R.id.btnSalirView);
-                                lstCategoria.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        Categoria categoria = lstCategorias.get(position);
-                                        if (categoria.getEstado() == 1) {
-                                            // lo cambio a 0
-                                            categoria.setEstado(0);
-                                        } else {
-                                            //lo cambio a 1
-                                            categoria.setEstado(1);
-                                        }
-                                        BddCategoria.updateCategoria(categoria, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String response) {
-                                                //registro el cambio en la bd
-                                                Log.d("TAG_", "actualizo sede");
-                                            }
-                                        }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo Actualizar"));
-                                    }
-                                });
-                                lstCategoria.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                                    @Override
-                                    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                                        posicionUdpdateDelete = position;
-                                        lstCategoria.setItemsCanFocus(true);
+                        categorias.show();
 
-                                        etNombre.setText(lstCategorias.get(position).getNombre());
-                                        return true;
-
-                                    }
-                                });
-                                btnSalir.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        lstCategorias.removeAll(lstCategorias);
-                                        dialog.dismiss();
-                                    }
-                                });
-                                btnGuardar.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (1 == 1) {
-                                            if (!etNombre.getText().toString().isEmpty()) {
-                                                final ProgressDialog progressDialog = Functions.CargarDatos("Agregando Categoria", PrincipalAdministrador.this);
-                                                BddCategoria.setCategoria(new Categoria(1, etNombre.getText().toString().toUpperCase()), PrincipalAdministrador.this, new Response.Listener<String>() {
-                                                    @Override
-                                                    public void onResponse(String response) {
-                                                        Toast.makeText(PrincipalAdministrador.this, "Agregado", Toast.LENGTH_SHORT).show();
-                                                        BddCategoria.getCategoria(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
-                                                            @Override
-                                                            public void onResponse(JSONArray response) {
-                                                                lstCategorias.removeAll(lstCategorias);
-                                                                for (int i = 0; i < response.length(); i++) {
-                                                                    try {
-                                                                        lstCategorias.add(new Categoria(response.getJSONObject(i).getInt("categoria_id"),
-                                                                                response.getJSONObject(i).getInt("categoria_estado"),
-                                                                                response.getJSONObject(i).getString("categoria_nombre")));
-                                                                    } catch (JSONException e) {
-                                                                        e.printStackTrace();
-                                                                    }
-                                                                }
-                                                                lstCategoria.setAdapter(adapter);
-                                                                CargarListViewCategoria(lstCategoria, PrincipalAdministrador.this, lstCategorias);
-                                                                lstCategoria.deferNotifyDataSetChanged();
-                                                                progressDialog.hide();
-                                                            }
-                                                        }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No puedp Cargar"));
-                                                        etNombre.setText("");
-                                                    }
-                                                }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No puedp Cargar"));
-                                            } else {
-                                                etNombre.setError("Ingrese Categoría");
-                                            }
-
-                                        } else {
-                                            //Actualizo ArrayList y el Listview
-                                            final String nuevoNombre = etNombre.getText().toString().toUpperCase();
-                                            //le cambio el nombre en la listaCategorias al elemento actulizado
-                                            Categoria categoria = lstCategorias.get(posicionUdpdateDelete);
-                                            categoria.setNombre(nuevoNombre);
-                                            final ProgressDialog progressDialog = Functions.CargarDatos("Actualizando", PrincipalAdministrador.this);
-                                            //Actualizo BD
-                                            BddCategoria.updateCategoria(categoria, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                                @Override
-                                                public void onResponse(String response) {
-                                                    Log.d("TAG_", "Actualizo categoria con nuevo nombre");
-                                                    lstCategorias.get(posicionUdpdateDelete).setNombre(nuevoNombre);
-                                                    lstCategoria.setAdapter(adapter);
-                                                    CargarListViewCategoria(lstCategoria, PrincipalAdministrador.this, lstCategorias);
-                                                    lstCategoria.deferNotifyDataSetChanged();
-                                                    etNombre.setText("");
-                                                    progressDialog.dismiss();
-                                                    Toast.makeText(PrincipalAdministrador.this, "Actualizado", Toast.LENGTH_SHORT).show();
-
-                                                }
-                                            }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo actualizar"));
-
-                                        }
-                                    }
-                                });
-
-
-                            }
-                        });
-                        formAddCategoria.show();
                     }
                 }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo actualizar"));
 

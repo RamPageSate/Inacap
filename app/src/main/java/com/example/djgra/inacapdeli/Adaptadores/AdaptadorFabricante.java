@@ -27,6 +27,7 @@ public class AdaptadorFabricante extends BaseAdapter {
     private EditText editText;
     private ImageButton btnGuardar;
 
+
     public AdaptadorFabricante(Activity context, ArrayList<Fabricante> lista, EditText et, ImageButton btnGuardar) {
         this.lista = lista;
         this.context = context;
