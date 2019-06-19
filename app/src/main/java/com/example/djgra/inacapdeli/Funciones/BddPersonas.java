@@ -35,8 +35,6 @@ public class BddPersonas {
     public static int setPersona(final Persona persona, final Context context, Response.Listener listener, Response.ErrorListener error) {
         final int[] retorno = {0};
         final RequestQueue queue = Volley.newRequestQueue(context);
-        final ProgressDialog progressDialog = (ProgressDialog) Functions.CargarDatos("Registrando Usuario", context);
-
         StringRequest jsonRequest = new StringRequest(Request.Method.POST, urlBase+"setPersona",listener,error)
                 {
             @Override
@@ -45,11 +43,11 @@ public class BddPersonas {
                 map = new HashMap<String, String>();
                 map.put("persona_nombre", persona.getNombre());
                 map.put("persona_apellido", persona.getApellido());
-                map.put("persona_pass", persona.getContrasena());
-                map.put("persona_email", persona.getCorreo());
-                map.put("persona_sede", String.valueOf(persona.getSede()));
+                map.put("persona_contrasena", persona.getContrasena());
                 map.put("persona_foto",String.valueOf(persona.getFoto()));
+                map.put("persona_email", persona.getCorreo());
                 map.put("persona_codigo_qr",String.valueOf(persona.getCodigoQr()));
+                map.put("id_sede", String.valueOf(persona.getSede()));
 
                 return map;
             }

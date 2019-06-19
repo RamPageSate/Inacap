@@ -53,7 +53,6 @@ public class Registrar_Persona extends AppCompatActivity {
         setContentView(R.layout.activity_registrar__persona);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //Functions.CargarDatos("Sedes",this);
-
         //referencias
         etNombre = findViewById(R.id.etNombreRegistro);
         etApellido = findViewById(R.id.etApellidoRegistro);
@@ -123,7 +122,6 @@ public class Registrar_Persona extends AppCompatActivity {
                     per.setNombre(etNombre.getText().toString());
                     per.setCorreo(etCorreo.getText().toString());
                     per.setSede(sede.getCodigo());
-
                     per.setContrasena(etContraseña.getText().toString());
                     if (btnImagen.getDrawable() != null) {
                         Bitmap bit = ((BitmapDrawable) btnImagen.getDrawable()).getBitmap();
@@ -151,9 +149,6 @@ public class Registrar_Persona extends AppCompatActivity {
                             Toast.makeText(Registrar_Persona.this, "El correo ya existe", Toast.LENGTH_SHORT).show();
                         }
                     });
-                    Registrar_Persona.this.finish();
-                    Intent i = new Intent(Registrar_Persona.this, Login.class);
-                    startActivity(i);
                 }
 
             }
