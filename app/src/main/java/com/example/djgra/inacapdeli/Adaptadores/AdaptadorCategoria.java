@@ -89,7 +89,7 @@ public class AdaptadorCategoria extends BaseAdapter {
                         lista.get(posicion).setEstado(categoria.getEstado());
                         AdaptadorCategoria.super.notifyDataSetChanged();
                     }
-                }, Functions.FalloInternet(context, dialog, "Fallo la conexion"));
+                }, Functions.FalloInternet(context, dialog, "No se pudo actualizar"));
             }
         });
 

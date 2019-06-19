@@ -99,7 +99,7 @@ public class AlertDialogFabricantes extends AlertDialog {
                                         etNombre.setText("");
                                         Toast.makeText(context, "Agregado", Toast.LENGTH_SHORT).show();
                                     }
-                                }, Functions.FalloInternet(context, progressDialog, "no Pudo Cargar"));
+                                }, Functions.FalloInternet(context, progressDialog, "no Pudo Cargar los fabricantes"));
                             }
                         });
                     } else {

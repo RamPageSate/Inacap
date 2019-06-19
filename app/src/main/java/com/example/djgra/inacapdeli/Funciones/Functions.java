@@ -3,27 +3,18 @@ package com.example.djgra.inacapdeli.Funciones;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.example.djgra.inacapdeli.Clases.Sede;
 import com.example.djgra.inacapdeli.R;
 
-
 import java.io.ByteArrayOutputStream;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.xml.transform.ErrorListener;
-import javax.xml.transform.TransformerException;
 
 public class Functions {
 
@@ -80,5 +71,6 @@ public class Functions {
             return null;
         }
     }
+
 
 }

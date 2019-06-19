@@ -482,6 +482,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                             }
                         }
                         progressDialog.hide();
+                        Collections.reverse(lstFabricantes);
                         fabricantes = new AlertDialogFabricantes(PrincipalAdministrador.this, lstFabricantes);
 
                         fabricantes.show();

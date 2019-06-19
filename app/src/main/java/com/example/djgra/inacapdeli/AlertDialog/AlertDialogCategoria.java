@@ -102,10 +102,11 @@ public class AlertDialogCategoria extends AlertDialog {
                             }
                         }, Functions.FalloInternet(context, progressDialog, "Fallo al agregar una categoria"));
                     } else {
-                        etNombre.setError("Ingrese Fabricante");
+                        etNombre.setError("Ingrese Categoria");
                     }
                 } else {
                     //Actualizo ArrayList y el Listview
+
                     int codigo = lstCategorias.get(posicionUdpdateDelete).getCodigo();
                     String nuevoNombre = etNombre.getText().toString().toUpperCase();
                     final Categoria[] categoria = {new Categoria()};
@@ -128,6 +129,7 @@ public class AlertDialogCategoria extends AlertDialog {
                             etNombre.setText("");
                         }
                     }, Functions.FalloInternet(context, progressDialog, ""));
+
                 }
             }
         });
