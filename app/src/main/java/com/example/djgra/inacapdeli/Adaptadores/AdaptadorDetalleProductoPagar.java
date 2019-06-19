@@ -38,6 +38,9 @@ public class AdaptadorDetalleProductoPagar extends RecyclerView.Adapter<Adaptado
        holder.btnAgregar.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               //prueb
+               AdaptadorPagarCliente.aumentarPago(lstProductos.get(position).getPrecio());
+               //
                DetallePagarCliente.addProductoPedido(lstProductos.get(position));
                holder.tvCantidadProducto.setText(""+ lstProductos.get(position).getCantidad());
                int Total = lstProductos.get(position).getCantidad() * lstProductos.get(position).getPrecio();

@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.example.djgra.inacapdeli.Adaptadores.AdaptadorCategoriasCliente;
 import com.example.djgra.inacapdeli.Adaptadores.AdaptadorRecyclerViewProductoCliente;
 import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Pedido;
@@ -45,8 +46,8 @@ public class PrincipalCliente extends AppCompatActivity {
     private static ArrayList<Producto> lstProductoFiltrados = new ArrayList<>();
     private static TextView tvCantidadArticulosCliente;
     private static Persona cliente = new Persona();
-    private static Pedido pedidoCliente = new Pedido();
-    private static  AdaptadorCategoriasCliente adaptadorCategorias;
+    public static Pedido pedidoCliente = new Pedido();
+    private static AdaptadorCategoriasCliente adaptadorCategorias;
     LinearLayout linearCategorias;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +158,7 @@ public class PrincipalCliente extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                    adaptadorCategorias = new AdaptadorCategoriasCliente(lstCategorias);
+                    adaptadorCategorias = new AdaptadorCategoriasCliente(lstCategorias,PrincipalCliente.this);
                     rcCategorias.setAdapter(adaptadorCategorias);
                 }
             }
@@ -220,53 +221,4 @@ public class PrincipalCliente extends AppCompatActivity {
     public static void quitarProductoPedido(Producto producto){
         pedidoCliente.quitarProductoListaPedido(producto);
     }
-
-    //region AdaptadorCategorias
-    public class AdaptadorCategoriasCliente extends RecyclerView.Adapter<AdaptadorCategoriasCliente.ViewHolderCategoriasCliente> {
-        ArrayList<Categoria> lstCategorias = new ArrayList<>();
-        public AdaptadorCategoriasCliente(ArrayList<Categoria> lstCategorias) {
-            this.lstCategorias = lstCategorias;
-        }
-        //muestro la vista
-        @NonNull
-        @Override
-        public ViewHolderCategoriasCliente onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewcategoriacliente, null, false);
-            return new ViewHolderCategoriasCliente(view);
-        }
-
-
-        //leno los datos
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolderCategoriasCliente holder, final int position) {
-            holder.tvnombreCategoria.setText(lstCategorias.get(position).getNombre());
-            holder.tvnombreCategoria.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("TAG_", "escijo acete-> ");
-                    Intent intent = new Intent(PrincipalCliente.this,ClienteProductosPorCategoria.class);
-                    intent.putExtra("listaProducto",FiltrarListaPorCategoria(lstCategorias.get(position)));
-                    intent.putExtra("categoria", lstCategorias.get(position));
-                    startActivity(intent);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return lstCategorias.size();
-        }
-        //creo los view
-        public class ViewHolderCategoriasCliente extends RecyclerView.ViewHolder {
-            TextView tvnombreCategoria;
-
-            //referencio los view
-            public ViewHolderCategoriasCliente(@NonNull View itemView) {
-                super(itemView);
-                tvnombreCategoria = itemView.findViewById(R.id.tvCategoriasProductosCliente);
-            }
-        }
-
-    }
-    //endregion
 }
