@@ -44,9 +44,9 @@ public class AlertDialogSede extends AlertDialog {
         final ListView lstvSede = view.findViewById(R.id.lstView);
 
         TextView tvTitulo = view.findViewById(R.id.tvTitulo);
-        tvTitulo.setText("Categoria");
+        tvTitulo.setText("Sede");
         final EditText etNombre = view.findViewById(R.id.etNombreView);
-        etNombre.setHint("Agregar nueva categoria");
+        etNombre.setHint("Agregar nueva sede");
         final ImageButton btnGuardar = view.findViewById(R.id.btnGuardarView);
         final AdaptadorSede adapter = new AdaptadorSede(lstSede, context, etNombre, btnGuardar);
         //SI ESTA VACIA  NO CARGA
@@ -115,6 +115,7 @@ public class AlertDialogSede extends AlertDialog {
                     final Sede[] sede = {new Sede()};
                     sede[0].setCodigo(codigo);
                     sede[0].setDireccion(nuevoNombre);
+                    sede[0].setEstado(lstSede.get(posicionUdpdateDelete).getEstado());
                     lstSede.get(posicionUdpdateDelete).setDireccion(nuevoNombre);
                     lstvSede.setAdapter(adapter);
                     lstvSede.deferNotifyDataSetChanged();
