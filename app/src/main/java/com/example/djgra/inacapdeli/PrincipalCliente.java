@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,7 +43,7 @@ public class PrincipalCliente extends AppCompatActivity {
     private Producto producto;
     private static int pagarActual = 0, prueba = 0;
     private static LinearLayout linearPagar;
-
+    ImageButton btnDatosPersonales;
     private static ArrayList<Producto> lstProducto = new ArrayList<>();
     public static ArrayList<Categoria> lstCategorias = new ArrayList<>();
     private static ArrayList<Producto> lstProductoFiltrados = new ArrayList<>();
@@ -67,6 +68,7 @@ public class PrincipalCliente extends AppCompatActivity {
         linearPagar = findViewById(R.id.linearPDCTotal);
         fotoUsr = (ImageView) findViewById(R.id.imgFotoCliente);
         tvSedeActual = (TextView) findViewById(R.id.tvSedeActualCliente);
+        btnDatosPersonales = findViewById(R.id.btnDatosPersonales);
         tvSaldoActual = (TextView) findViewById(R.id.tvSaldoCliente);
         tvCantidadArticulosCliente = (TextView) findViewById(R.id.tvCantidadPagarDetalleCliente);
         Bundle bundle = getIntent().getExtras();
@@ -177,6 +179,13 @@ public class PrincipalCliente extends AppCompatActivity {
             }
         });
 
+        btnDatosPersonales.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PrincipalCliente.this,DatosCliente.class);
+                startActivity(i);
+            }
+        });
 
 
 
