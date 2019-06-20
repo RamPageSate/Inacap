@@ -3,6 +3,7 @@ package com.example.djgra.inacapdeli;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.example.djgra.inacapdeli.Adaptadores.AdaptadorCategoriasCliente;
@@ -40,11 +42,11 @@ public class PrincipalCliente extends AppCompatActivity {
     private Producto producto;
     private static int pagarActual = 0, prueba = 0;
     private static LinearLayout linearPagar;
-    private static TextView tvMontoPagar;
+
     private static ArrayList<Producto> lstProducto = new ArrayList<>();
-    private static ArrayList<Categoria> lstCategorias = new ArrayList<>();
+    public static ArrayList<Categoria> lstCategorias = new ArrayList<>();
     private static ArrayList<Producto> lstProductoFiltrados = new ArrayList<>();
-    private static TextView tvCantidadArticulosCliente;
+    public static TextView tvCantidadArticulosCliente ,tvMontoPagar;
     private static Persona cliente = new Persona();
     public static Pedido pedidoCliente = new Pedido();
     private static AdaptadorCategoriasCliente adaptadorCategorias;
@@ -61,9 +63,7 @@ public class PrincipalCliente extends AppCompatActivity {
         rcFavoritas.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         rcProductosValorados.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false ));
         rcCategorias.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        rcProductosValorados.setHasFixedSize(true);
         rcCategorias.setHasFixedSize(true);
-        rcProductosValorados.setItemViewCacheSize(lstProducto.size());
         linearPagar = findViewById(R.id.linearPDCTotal);
         fotoUsr = (ImageView) findViewById(R.id.imgFotoCliente);
         tvSedeActual = (TextView) findViewById(R.id.tvSedeActualCliente);
@@ -99,10 +99,14 @@ public class PrincipalCliente extends AppCompatActivity {
                                         }
                                         producto.setLstCategoriasProducto(categoriasProducto);
                                         lstProducto.add(producto);
-                                        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56,1,"")));
+                                        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56,1,"")),tvCantidadArticulosCliente,tvMontoPagar,pedidoCliente,PrincipalCliente.this,linearPagar);
+                                        rcProductosValorados.setHasFixedSize(true);
+                                        rcProductosValorados.setItemViewCacheSize(FiltrarListaPorCategoria(new Categoria(56,1,"")).size());
                                         rcProductosValorados.setAdapter(adaptadorValoradas);
                                         //hacer Condicion de que si esta vacia cambiar el nombre de Favoritas ademas rellenar la vista con otra categoria
-                                        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54,1,"Favoritas")));
+                                        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54,1,"Favoritas")),tvCantidadArticulosCliente,tvMontoPagar,pedidoCliente,PrincipalCliente.this,linearPagar);
+                                        rcFavoritas.setHasFixedSize(true);
+                                        rcFavoritas.setItemViewCacheSize(FiltrarListaPorCategoria(new Categoria(54,1,"Favoritas")).size());
                                         rcFavoritas.setAdapter(adaptadorFavoritas);
                                     } // ya cargo las categorias del producto
                                 }
@@ -119,7 +123,6 @@ public class PrincipalCliente extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Log.d("TAG_", "cargovista");
                         progressDialog.dismiss();
                     }
                 }//terminare el proceso de cargar todos los productos
@@ -158,7 +161,7 @@ public class PrincipalCliente extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                    adaptadorCategorias = new AdaptadorCategoriasCliente(lstCategorias,PrincipalCliente.this);
+                    adaptadorCategorias = new AdaptadorCategoriasCliente(lstCategorias,PrincipalCliente.this,pedidoCliente);
                     rcCategorias.setAdapter(adaptadorCategorias);
                 }
             }
@@ -169,56 +172,56 @@ public class PrincipalCliente extends AppCompatActivity {
                 //me tengo que enviar los productos pedidos el cliente
                 Intent intent = new Intent(PrincipalCliente.this, DetallePagarCliente.class);
                 intent.putExtra("pedido", pedidoCliente);
-                startActivity(intent);
+                intent.putExtra("code", 1);
+                startActivityForResult(intent,7);
             }
         });
 
+
+
+
     }
-    public static void pagoTotal(int precio) {
-        pagarActual = pagarActual + precio;
-        if (pagarActual > 0) {
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 23){
+            pedidoCliente = ClienteProductosPorCategoria.pedido;
+        }
+        if(resultCode == 7){
+            pedidoCliente = DetallePagarCliente.pedido;
+        }
+        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56,1,"")),tvCantidadArticulosCliente,tvMontoPagar,pedidoCliente,PrincipalCliente.this,linearPagar);
+        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54,1,"Favoritas")),tvCantidadArticulosCliente,tvMontoPagar,pedidoCliente,PrincipalCliente.this,linearPagar);
+        rcProductosValorados.setHasFixedSize(true);
+        rcProductosValorados.setItemViewCacheSize(FiltrarListaPorCategoria(new Categoria(56,1,"")).size());
+        rcFavoritas.setHasFixedSize(true);
+        rcFavoritas.setItemViewCacheSize(FiltrarListaPorCategoria(new Categoria(54,1,"Favoritas")).size());
+        rcFavoritas.setAdapter(adaptadorFavoritas);
+        rcProductosValorados.setAdapter(adaptadorValoradas);
+        adaptadorCategorias = new AdaptadorCategoriasCliente(lstCategorias,PrincipalCliente.this,pedidoCliente);
+        rcCategorias.setAdapter(adaptadorCategorias);
+        if(!pedidoCliente.getLstProductoPedido().isEmpty()){
             linearPagar.setVisibility(View.VISIBLE);
-            tvMontoPagar.setText(String.valueOf(pagarActual));
-        }
-    }
-
-    public static int descontarTotalCompra(int precio) {
-        pagarActual = pagarActual - precio;
-        tvMontoPagar.setText(String.valueOf(pagarActual));
-        if (pagarActual == 0) {
+        }else{
             linearPagar.setVisibility(View.INVISIBLE);
-            tvMontoPagar.setText("");
         }
-        return pagarActual;
+
     }
 
-    public static void agregarCantidadArticulos() {
-        int cantidadArticulos = 1 + Integer.parseInt(tvCantidadArticulosCliente.getText().toString());
-        tvCantidadArticulosCliente.setText("" + cantidadArticulos);
-    }
-
-    public static void descontarCantidadArticulos() {
-        int cantidadArticulos = Integer.parseInt(tvCantidadArticulosCliente.getText().toString()) - 1;
-        tvCantidadArticulosCliente.setText("" + cantidadArticulos);
-    }
 
     public static ArrayList<Producto> FiltrarListaPorCategoria(Categoria categoria) {
         ArrayList<Producto> lista = new ArrayList<>();
         for (int x = 0; x < lstProducto.size(); x++) {
-            Log.d("TAG_", "Producto -> "+lstProducto.get(x).getNombre());
             for (int c = 0; c < lstProducto.get(x).getLstCategoriasProducto().size(); c++) {
                 if (lstProducto.get(x).getLstCategoriasProducto().get(c).getCodigo() == categoria.getCodigo()) {
-                    Log.d("TAG_", "PC ->"+lstProducto.get(x).getNombre()+ " " + lstProducto.get(x).getLstCategoriasProducto().get(c).getNombre());
                     lista.add(lstProducto.get(x));
                 }
             }
         }
         return lista;
     }
-    public static void agregarProductoPepido(Producto producto){
-        pedidoCliente.agregarProductoListaPedido(producto);
-    }
-    public static void quitarProductoPedido(Producto producto){
-        pedidoCliente.quitarProductoListaPedido(producto);
-    }
+
+
+
 }

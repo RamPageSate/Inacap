@@ -8,6 +8,16 @@
     tools:context=".DetallePagarCliente">
 
 
+    <TextView
+        android:id="@+id/tre2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$ "
+        android:textColor="#3C3F41"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/tvTotalPagarDetalleCliente"
+        app:layout_constraintTop_toBottomOf="@+id/divider5" />
+
     <View
         android:id="@+id/divider7"
         android:layout_width="395dp"
@@ -209,7 +219,7 @@
         android:layout_marginTop="2dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="$0"
+        android:text="$ 0"
         android:textColor="#3C3F41"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -235,7 +245,7 @@
         android:layout_marginTop="2dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="$3000"
+        android:text="0"
         android:textColor="#3C3F41"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -269,7 +279,7 @@
         app:layout_constraintTop_toBottomOf="@+id/divider6" />
 
     <TextView
-        android:id="@+id/textView36"
+        android:id="@+id/tre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -279,15 +289,52 @@
         app:layout_constraintEnd_toStartOf="@+id/tvSubTotalPagarCliente"
         app:layout_constraintTop_toBottomOf="@+id/rcProductoDPC" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/linearresumen"
-        android:layout_width="395dp"
-        android:layout_height="251dp"
-        android:layout_marginTop="16dp"
-        android:visibility="visible"
+    <LinearLayout
+        android:id="@+id/linearPagarDetalle"
+        android:layout_width="0dp"
+        android:layout_height="53dp"
+        android:background="#26CE37"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView34" />
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/cantdetalle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:background="#1DA42B"
+            android:paddingLeft="8dp"
+            android:paddingTop="3dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="3dp"
+            android:text="0"
+            android:textColor="@color/BlancoInacap"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textView35"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-25dp"
+            android:text="PAGAR"
+            android:textColor="@color/BlancoInacap"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/totaldetalle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="-23dp"
+            android:layout_marginRight="16dp"
+            android:text="0"
+            android:textColor="@color/BlancoInacap"
+            android:textSize="18sp" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

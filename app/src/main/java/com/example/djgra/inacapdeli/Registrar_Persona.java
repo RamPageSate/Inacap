@@ -53,7 +53,6 @@ public class Registrar_Persona extends AppCompatActivity {
         setContentView(R.layout.activity_registrar__persona);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //Functions.CargarDatos("Sedes",this);
-
         //referencias
         etNombre = findViewById(R.id.etNombreRegistro);
         etApellido = findViewById(R.id.etApellidoRegistro);
@@ -123,7 +122,6 @@ public class Registrar_Persona extends AppCompatActivity {
                     per.setNombre(etNombre.getText().toString());
                     per.setCorreo(etCorreo.getText().toString());
                     per.setSede(sede.getCodigo());
-
                     per.setContrasena(etContraseña.getText().toString());
                     if (btnImagen.getDrawable() != null) {
                         Bitmap bit = ((BitmapDrawable) btnImagen.getDrawable()).getBitmap();
@@ -151,9 +149,6 @@ public class Registrar_Persona extends AppCompatActivity {
                             Toast.makeText(Registrar_Persona.this, "El correo ya existe", Toast.LENGTH_SHORT).show();
                         }
                     });
-                    Registrar_Persona.this.finish();
-                    Intent i = new Intent(Registrar_Persona.this, Login.class);
-                    startActivity(i);
                 }
 
             }
@@ -170,16 +165,26 @@ public class Registrar_Persona extends AppCompatActivity {
 
     private boolean validarEmail() { //falta hacer la expresion regular antes del inacao
         boolean ok = false;
-        String correo = etCorreo.getText().toString().trim();//^[a-zA-Z ]*$
+        String correo = etCorreo.getText().toString().trim();//^[a-zA-Z ]*$  ^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$
+        Pattern regex = Pattern.compile("^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$");
+        Matcher m = regex.matcher(etCorreo.getText().toString());
+        boolean as = m.find();
+        if (as == true) {
+            ok = true;
+        }
         if (correo.isEmpty()) {
             etCorreo.setError("Ingrese Correo");
             ok = false;
         } else {
-            if (correo.contains("@inacapmail.cl")) {
-                ok = true;
-            } else {
-                etCorreo.setError("Ingrese Correo de Inacap");
-                ok = false;
+            if(ok == true){
+                if (correo.contains("@inacapmail.cl")) {
+                    ok = true;
+                } else {
+                    etCorreo.setError("Ingrese Correo de Inacap");
+                    ok = false;
+                }
+            }else{
+                etCorreo.setError("Correo mal Ingresado");
             }
         }
         return ok;
@@ -211,6 +216,13 @@ public class Registrar_Persona extends AppCompatActivity {
         if (etContraseña.getText().toString().isEmpty()) {
             etContraseña.setError("Contraseña Necesaria");
             ok++;
+        }else{
+            if(contraseñaSegura(etContraseña.getText().toString()) == false){
+                etContraseña.setText("");
+                etConfirmar.setText("");
+                etContraseña.setError("Requiere como minimo 1 minuscula, 1 mayuscula, 1 digito y un largo de 6 a 12 caracteres ");
+                ok++;
+            }
         }
         if (etConfirmar.getText().toString().isEmpty()) {
             etConfirmar.setError("Ingrese para Confirmar");
@@ -230,7 +242,7 @@ public class Registrar_Persona extends AppCompatActivity {
         boolean ok = false;
 
         Pattern regex = Pattern.compile("^[a-zA-Z ]*$");
-        Matcher m = regex.matcher(etNombre.getText().toString());
+        Matcher m = regex.matcher(dato);
         boolean as = m.find();
         if (as == true) {
             ok = true;
@@ -239,6 +251,17 @@ public class Registrar_Persona extends AppCompatActivity {
         return ok;
     }
 
+    private boolean contraseñaSegura(String pass){
+        boolean ok = false;
+        Pattern regex = Pattern.compile("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{6,12}$");
+        Matcher m = regex.matcher(pass);
+        boolean as = m.find();
+        if (as == true) {
+            ok = true;
+        }
+
+        return ok;
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
