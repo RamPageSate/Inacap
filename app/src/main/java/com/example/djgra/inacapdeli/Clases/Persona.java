@@ -1,12 +1,23 @@
 package com.example.djgra.inacapdeli.Clases;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Persona implements Serializable{
     private String nombre, apellido, correo, contrasena, foto, codigoQr; // hay que cambiar la sede
     private int codigo, saldo, estado, sede, rol;
+    ArrayList<Pedido> lstPedidos = new ArrayList<>();
 
     public Persona() {
+    }
+
+
+    public ArrayList<Pedido> getLstPedidos() {
+        return lstPedidos;
+    }
+
+    public void setLstPedidos(ArrayList<Pedido> lstPedidos) {
+        this.lstPedidos = lstPedidos;
     }
 
     public String getNombre() {
@@ -96,4 +107,9 @@ public class Persona implements Serializable{
     public void setRol(int rol) {
         this.rol = rol;
     }
+
+    public void agregarPedido(Pedido pedido){
+        lstPedidos.add(pedido);
+    }
+
 }

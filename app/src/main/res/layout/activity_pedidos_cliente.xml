@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DatosCliente">
+    tools:context=".PedidosCliente">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -32,7 +32,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="-33dp"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/btnpedidosgris" />
+            app:srcCompat="@drawable/btnpedidosnegro" />
 
         <ImageButton
             android:id="@+id/imageButton5"
@@ -42,12 +42,13 @@
             android:layout_marginTop="-33dp"
             android:layout_marginRight="48dp"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/btndatosusuarionegro" />
+            app:srcCompat="@drawable/btndatosclientes" />
 
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout6"
         android:layout_width="0dp"
         android:layout_height="63dp"
         android:background="#3C3F41"
@@ -62,8 +63,53 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="14dp"
-            android:text="Mi Perfil"
+            android:text="Mis Pedidos"
             android:textColor="@color/BlancoInacap"
             android:textSize="24sp" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnPedidosAnterioresCliente"
+        android:layout_width="200dp"
+        android:layout_height="63dp"
+        android:background="@color/BlancoInacap"
+        android:text="Anteriores"
+        android:textColor="#3C3F41"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
+
+    <Button
+        android:id="@+id/btnPedidosActivosCliente"
+        android:layout_width="200dp"
+        android:layout_height="63dp"
+        android:background="@android:color/darker_gray"
+        android:text="Activos"
+        android:textColor="#3C3F41"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnPedidosAnterioresCliente"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnPedidosAnterioresCliente">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcPedidosCliente"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </ScrollView>
+
 </android.support.constraint.ConstraintLayout>

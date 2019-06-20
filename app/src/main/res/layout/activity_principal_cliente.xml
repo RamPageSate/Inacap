@@ -230,7 +230,7 @@
             app:srcCompat="@drawable/btninicionegro" />
 
         <ImageButton
-            android:id="@+id/imageButton4"
+            android:id="@+id/btnHistorial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -239,7 +239,7 @@
             app:srcCompat="@drawable/btnpedidosgris" />
 
         <ImageButton
-            android:id="@+id/imageButton5"
+            android:id="@+id/btnDatosPersonales"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"

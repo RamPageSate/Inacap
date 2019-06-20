@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,12 +43,12 @@ public class PrincipalCliente extends AppCompatActivity {
     private Producto producto;
     private static int pagarActual = 0, prueba = 0;
     private static LinearLayout linearPagar;
-
+    ImageButton btnDatosPersonales, btnHistorial;
     private static ArrayList<Producto> lstProducto = new ArrayList<>();
     public static ArrayList<Categoria> lstCategorias = new ArrayList<>();
     private static ArrayList<Producto> lstProductoFiltrados = new ArrayList<>();
     public static TextView tvCantidadArticulosCliente ,tvMontoPagar;
-    private static Persona cliente = new Persona();
+    public static Persona cliente = new Persona();
     public static Pedido pedidoCliente = new Pedido();
     private static AdaptadorCategoriasCliente adaptadorCategorias;
     LinearLayout linearCategorias;
@@ -56,6 +57,7 @@ public class PrincipalCliente extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal_cliente);
         linearCategorias = findViewById(R.id.linearCategoriaPrincipalCliente);
+        btnHistorial = findViewById(R.id.btnHistorial);
         tvMontoPagar = findViewById(R.id.tvPagarTotalClienteVerde);
         rcProductosValorados = (RecyclerView) findViewById(R.id.rcViewProducto1Cliente);
         rcCategorias = (RecyclerView) findViewById(R.id.rcCategoriassProductoCliente);
@@ -67,6 +69,7 @@ public class PrincipalCliente extends AppCompatActivity {
         linearPagar = findViewById(R.id.linearPDCTotal);
         fotoUsr = (ImageView) findViewById(R.id.imgFotoCliente);
         tvSedeActual = (TextView) findViewById(R.id.tvSedeActualCliente);
+        btnDatosPersonales = findViewById(R.id.btnDatosPersonales);
         tvSaldoActual = (TextView) findViewById(R.id.tvSaldoCliente);
         tvCantidadArticulosCliente = (TextView) findViewById(R.id.tvCantidadPagarDetalleCliente);
         Bundle bundle = getIntent().getExtras();
@@ -74,6 +77,7 @@ public class PrincipalCliente extends AppCompatActivity {
             cliente = (Persona) bundle.getSerializable("usr");
             tvSaldoActual.setText(tvSaldoActual.getText() + "" + cliente.getSaldo());
             fotoUsr.setImageBitmap(Functions.StringToBitMap(cliente.getFoto()));
+
         }
         final ProgressDialog progressDialog = Functions.CargarDatos("Cangando Productos", PrincipalCliente.this);
         BddProductos.getProducto(PrincipalCliente.this, new Response.Listener<JSONArray>() {
@@ -177,7 +181,21 @@ public class PrincipalCliente extends AppCompatActivity {
             }
         });
 
+        btnDatosPersonales.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PrincipalCliente.this,DatosCliente.class);
+                startActivity(i);
+            }
+        });
 
+        btnHistorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PrincipalCliente.this, PedidosCliente.class);
+                startActivity(i);
+            }
+        });
 
 
     }

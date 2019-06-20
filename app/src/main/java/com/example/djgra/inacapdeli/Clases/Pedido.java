@@ -6,10 +6,51 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Pedido implements Serializable {
-    int codigo;
-    ArrayList<Producto> lstProductoPedido = new ArrayList<>();
+    private int codigo, pedido_estado, id_cliente, id_condicion_pedido, id_vendedor;
+    private String fechaPedido;
 
+    ArrayList<Producto> lstProductoPedido = new ArrayList<>();
     public Pedido() {
+    }
+
+    public int getPedido_estado() {
+        return pedido_estado;
+    }
+
+    public int getId_vendedor() {
+        return id_vendedor;
+    }
+
+    public void setId_vendedor(int id_vendedor) {
+        this.id_vendedor = id_vendedor;
+    }
+
+    public void setPedido_estado(int pedido_estado) {
+        this.pedido_estado = pedido_estado;
+    }
+
+    public int getId_cliente() {
+        return id_cliente;
+    }
+
+    public void setId_cliente(int id_cliente) {
+        this.id_cliente = id_cliente;
+    }
+
+    public int getId_condicion_pedido() {
+        return id_condicion_pedido;
+    }
+
+    public void setId_condicion_pedido(int id_condicion_pedido) {
+        this.id_condicion_pedido = id_condicion_pedido;
+    }
+
+    public String getFechaPedido() {
+        return fechaPedido;
+    }
+
+    public void setFechaPedido(String fechaPedido) {
+        this.fechaPedido = fechaPedido;
     }
 
     public int getCodigo() {
@@ -42,6 +83,14 @@ public class Pedido implements Serializable {
             total = total + (lstProductoPedido.get(x).getCantidad());
         }
         return total;
+    }
+
+    public ArrayList<Producto> PedidoComprado(){
+        ArrayList<Producto> lstPedido = lstProductoPedido;
+        for (int x=0; x < lstPedido.size(); x++){
+               agregarProductoListaPedido(lstPedido.get(x));
+        }
+        return  lstProductoPedido;
     }
 
     public void agregarProductoListaPedido(Producto producto) {

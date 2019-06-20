@@ -43,7 +43,7 @@ public class BddPersonas {
                 map = new HashMap<String, String>();
                 map.put("persona_nombre", persona.getNombre());
                 map.put("persona_apellido", persona.getApellido());
-                map.put("persona_contrasena", persona.getContrasena());
+                map.put("persona_pass", persona.getContrasena());
                 map.put("persona_foto",String.valueOf(persona.getFoto()));
                 map.put("persona_email", persona.getCorreo());
                 map.put("persona_codigo_qr",String.valueOf(persona.getCodigoQr()));
