@@ -96,6 +96,7 @@ public class DetallePagarCliente extends AppCompatActivity {
                     for (Producto pro : pedido.getLstProductoPedido()){
                         if(pro.getCantidad() > 1){
                             for(int x=0; x < pro.getCantidad(); x++){
+                                pro.setCantidad(0);
                                 productosPedidos.add(pro);
                             }
                         }else{

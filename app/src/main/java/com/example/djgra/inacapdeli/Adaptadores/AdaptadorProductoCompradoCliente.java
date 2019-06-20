@@ -35,9 +35,9 @@ public class AdaptadorProductoCompradoCliente  extends RecyclerView.Adapter<Adap
     @Override
     public void onBindViewHolder(@NonNull ViewHolderProductoComprado holder, int position) {
         holder.imagen.setImageBitmap(Functions.StringToBitMap(lstProducto.get(position).getFoto()));
-        holder.tvNombre.setText(lstProducto.get(position).getNombre());
-        holder.tvPrecio.setText("" +lstProducto.get(position).getPrecio());
-        holder.tvCantidad.setText("" +lstProducto.get(position).getCantidad());
+        holder.tvNombre.setText("Nombre: "+lstProducto.get(position).getNombre());
+        holder.tvPrecio.setText("Precio: $" +lstProducto.get(position).getPrecio());
+        holder.tvCantidad.setText("Cantidad: " +lstProducto.get(position).getCantidad());
     }
 
     @Override
@@ -48,7 +48,6 @@ public class AdaptadorProductoCompradoCliente  extends RecyclerView.Adapter<Adap
     public class ViewHolderProductoComprado extends RecyclerView.ViewHolder {
         TextView tvNombre, tvPrecio, tvCantidad, tvFecha;
         ImageView imagen;
-        Button btnVolverComprar;
 
         public ViewHolderProductoComprado(@NonNull View itemView) {
             super(itemView);
@@ -57,7 +56,6 @@ public class AdaptadorProductoCompradoCliente  extends RecyclerView.Adapter<Adap
             tvNombre = itemView.findViewById(R.id.tvNombreProductoPedidoComprado);
             tvPrecio = itemView.findViewById(R.id.tvPrecioProductoPedidoComprado);
             tvCantidad = itemView.findViewById(R.id.tvCantidadArticuloProductoPedidoComprado);
-            btnVolverComprar = itemView.findViewById(R.id.btnVolverComprarPedidoAnteriorCliente);
             tvFecha = itemView.findViewById(R.id.tvFechaPedidoAnteriorCliente);
 
         }

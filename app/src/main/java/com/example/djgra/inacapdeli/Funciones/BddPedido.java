@@ -9,7 +9,11 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.djgra.inacapdeli.Clases.Pedido;
+import com.example.djgra.inacapdeli.Clases.Producto;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,13 +35,20 @@ public class BddPedido {
                 map.put("id_cliente", String.valueOf(pedido.getId_cliente()));
                 map.put("id_vendedor",String.valueOf(pedido.getId_vendedor()));
                 map.put("id_condicion_pedido", String.valueOf(pedido.getId_condicion_pedido()));
+                map.put("producto_id", new JSONObject(arrayToMap(pedido.getLstProductoPedido())).toString());
                 return map;
             }
         };
         queue.add(jsonRequest);
     }
 
-
+    private static Map<String, Integer> arrayToMap(ArrayList<Producto> arrayList) {
+        Map<String, Integer> retorno = new HashMap<>();
+        for (int i = 0; i < arrayList.size(); i++) {
+            retorno.put("id" + i, arrayList.get(i).getCodigo());
+        }
+        return retorno;
+    }
 
 
 }
