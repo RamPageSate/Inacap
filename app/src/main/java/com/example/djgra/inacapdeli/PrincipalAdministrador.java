@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -28,6 +27,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogCategoria;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogFabricantes;
+import com.example.djgra.inacapdeli.AlertDialog.AlertDialogSede;
 import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Fabricante;
 import com.example.djgra.inacapdeli.Clases.Persona;
@@ -308,7 +308,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnSede.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos("Cangando Sede", PrincipalAdministrador.this);
+                final ProgressDialog progressDialog = Functions.CargarDatos("Cargando", PrincipalAdministrador.this);
                 BddSede.getSede(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -324,134 +324,8 @@ public class PrincipalAdministrador extends AppCompatActivity {
                             }
                         }
                         progressDialog.hide();
-                        final AlertDialog formSede = new AlertDialog.Builder(PrincipalAdministrador.this)
-                                .setView(R.layout.addcategoria)
-                                .create();
-                        formSede.setOnShowListener(new DialogInterface.OnShowListener() {
-                            @Override
-                            public void onShow(final DialogInterface dialog) {
-                                TextView tvTitulo = formSede.findViewById(R.id.tvTitulo);
-                                tvTitulo.setText("Sede");
-                                final EditText etNombre = formSede.findViewById(R.id.etNombreView);
-                                etNombre.setHint("Nombre Sede");
-                                final ArrayAdapter<Sede> adapter = new ArrayAdapter<Sede>(PrincipalAdministrador.this, android.R.layout.simple_list_item_multiple_choice, lstSedes);
-                                final ListView lstvSede = formSede.findViewById(R.id.lstView);
-                                if (!lstSedes.isEmpty()) {
-                                    lstvSede.setAdapter(adapter);
-                                    CargarListViewSede(lstvSede, PrincipalAdministrador.this, lstSedes);
-                                }
-                                final ImageButton btnGuardar = formSede.findViewById(R.id.btnGuardarView);
-
-                                ImageButton btnSalir = formSede.findViewById(R.id.btnSalirView);
-                                btnSalir.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        lstSedes.removeAll(lstSedes);
-                                        btn = 0;
-                                        formSede.dismiss();
-                                    }
-                                });
-                                lstvSede.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        if (lstSedes.get(position).getEstado() == 1) {
-                                            // lo cambio a 0
-                                            lstSedes.get(position).setEstado(0);
-                                        } else {
-                                            //lo cambio a 1
-                                            lstSedes.get(position).setEstado(1);
-                                        }
-                                        Sede sede = lstSedes.get(position);
-                                        BddSede.updateSede(sede, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String response) {
-                                                //registro el cambio en la bd
-                                                Log.d("TAG_", "actualizo sede");
-                                            }
-                                        }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo Actualizar"));
-                                    }
-                                });
-
-                                lstvSede.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                                    @Override
-                                    public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
-
-                                        posicionUdpdateDelete = position;
-                                        lstvSede.setItemsCanFocus(true);
-
-                                        etNombre.setText(lstSedes.get(position).getDireccion());
-                                        return true;
-                                    }
-                                });
-
-                                btnGuardar.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (1 == 1) {
-                                            if (!etNombre.getText().toString().isEmpty()) {
-                                                final ProgressDialog progressDialog = Functions.CargarDatos("Agregando", PrincipalAdministrador.this);
-                                                Sede sede = new Sede();
-                                                sede.setDireccion(etNombre.getText().toString().toUpperCase());
-                                                sede.setEstado(1);
-                                                BddSede.setSede(sede, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                                    @Override
-                                                    public void onResponse(String response) {
-                                                        //guarde la sede en la bd
-                                                        Log.d("TAG_", "Registre sede");
-                                                        //lenar el lista
-                                                        BddSede.getSede(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
-                                                            @Override
-                                                            public void onResponse(JSONArray response) {
-                                                                lstSedes.removeAll(lstSedes);
-                                                                for (int x = 0; x < response.length(); ++x) {
-                                                                    try {
-                                                                        lstSedes.add(new Sede(response.getJSONObject(x).getInt("sede_id"),
-                                                                                response.getJSONObject(x).getInt("sede_estado"),
-                                                                                response.getJSONObject(x).getString("sede_direccion")));
-                                                                    } catch (JSONException e) {
-                                                                        e.printStackTrace();
-                                                                    }
-                                                                }
-                                                                CargarListViewSede(lstvSede, PrincipalAdministrador.this, lstSedes);
-                                                                lstvSede.deferNotifyDataSetChanged();
-                                                                progressDialog.hide();
-                                                                Toast.makeText(PrincipalAdministrador.this, "Agregado", Toast.LENGTH_SHORT).show();
-                                                                etNombre.setText("");
-                                                            }
-                                                        }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No Cargo"));
-                                                    }
-                                                }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo Agregar"));
-                                            } else {
-                                                etNombre.setError("Ingrese Sede");
-                                            }
-                                        } else {
-                                            //Actualizo ArrayList y el Listview
-                                            final Sede sede = new Sede();
-                                            sede.setDireccion(etNombre.getText().toString().toUpperCase());
-                                            sede.setEstado(lstSedes.get(posicionUdpdateDelete).getEstado());
-                                            sede.setCodigo(lstSedes.get(posicionUdpdateDelete).getCodigo());
-                                            //Actualizo BD
-                                            final ProgressDialog progressDialog = Functions.CargarDatos("Actualizando", PrincipalAdministrador.this);
-                                            BddSede.updateSede(sede, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                                @Override
-                                                public void onResponse(String response) {
-                                                    lstSedes.get(posicionUdpdateDelete).setDireccion(sede.getDireccion());
-                                                    CargarListViewSede(lstvSede, PrincipalAdministrador.this, lstSedes);
-                                                    lstvSede.deferNotifyDataSetChanged();
-                                                    progressDialog.dismiss();
-                                                    Toast.makeText(PrincipalAdministrador.this, "Actualizado", Toast.LENGTH_SHORT).show();
-                                                    etNombre.setText("");
-                                                    Log.d("TAG_", "Actualizo con nuevo nombre");
-
-                                                }
-                                            }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo Actualizar"));
-                                        }
-
-                                    }
-                                });
-                            }
-                        });
-                        formSede.show();
+                        AlertDialogSede alertDialogSede = new AlertDialogSede(PrincipalAdministrador.this, lstSedes);
+                        alertDialogSede.show();
                     }
                 }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, ""));
             }
