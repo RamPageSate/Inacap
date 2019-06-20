@@ -70,7 +70,7 @@
 
     <Button
         android:id="@+id/btnPedidosAnterioresCliente"
-        android:layout_width="201dp"
+        android:layout_width="200dp"
         android:layout_height="63dp"
         android:background="@color/BlancoInacap"
         android:text="Anteriores"
@@ -81,7 +81,7 @@
 
     <Button
         android:id="@+id/btnPedidosActivosCliente"
-        android:layout_width="0dp"
+        android:layout_width="200dp"
         android:layout_height="63dp"
         android:background="@android:color/darker_gray"
         android:text="Activos"
@@ -105,12 +105,10 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/imageView10"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcPedidosCliente"
                 android:layout_width="match_parent"
-                android:layout_height="570dp"
-                android:layout_gravity="center_horizontal|center_vertical"
-                app:srcCompat="@drawable/sinpedidoanterior" />
+                android:layout_height="match_parent" />
         </LinearLayout>
     </ScrollView>
 

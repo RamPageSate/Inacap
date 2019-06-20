@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,8 +46,9 @@ public class AdaptadorProductoCompradoCliente  extends RecyclerView.Adapter<Adap
     }
 
     public class ViewHolderProductoComprado extends RecyclerView.ViewHolder {
-        TextView tvNombre, tvPrecio, tvCantidad;
+        TextView tvNombre, tvPrecio, tvCantidad, tvFecha;
         ImageView imagen;
+        Button btnVolverComprar;
 
         public ViewHolderProductoComprado(@NonNull View itemView) {
             super(itemView);
@@ -55,6 +57,9 @@ public class AdaptadorProductoCompradoCliente  extends RecyclerView.Adapter<Adap
             tvNombre = itemView.findViewById(R.id.tvNombreProductoPedidoComprado);
             tvPrecio = itemView.findViewById(R.id.tvPrecioProductoPedidoComprado);
             tvCantidad = itemView.findViewById(R.id.tvCantidadArticuloProductoPedidoComprado);
+            btnVolverComprar = itemView.findViewById(R.id.btnVolverComprarPedidoAnteriorCliente);
+            tvFecha = itemView.findViewById(R.id.tvFechaPedidoAnteriorCliente);
+
         }
     }
 }

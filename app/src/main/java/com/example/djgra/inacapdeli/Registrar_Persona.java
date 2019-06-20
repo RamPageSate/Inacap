@@ -165,7 +165,7 @@ public class Registrar_Persona extends AppCompatActivity {
 
     private boolean validarEmail() { //falta hacer la expresion regular antes del inacao
         boolean ok = false;
-        String correo = etCorreo.getText().toString().trim();//^[a-zA-Z ]*$  ^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$
+        String correo = etCorreo.getText().toString().trim();
         Pattern regex = Pattern.compile("^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$");
         Matcher m = regex.matcher(etCorreo.getText().toString());
         boolean as = m.find();

@@ -43,7 +43,7 @@ public class PrincipalCliente extends AppCompatActivity {
     private Producto producto;
     private static int pagarActual = 0, prueba = 0;
     private static LinearLayout linearPagar;
-    ImageButton btnDatosPersonales;
+    ImageButton btnDatosPersonales, btnHistorial;
     private static ArrayList<Producto> lstProducto = new ArrayList<>();
     public static ArrayList<Categoria> lstCategorias = new ArrayList<>();
     private static ArrayList<Producto> lstProductoFiltrados = new ArrayList<>();
@@ -57,6 +57,7 @@ public class PrincipalCliente extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal_cliente);
         linearCategorias = findViewById(R.id.linearCategoriaPrincipalCliente);
+        btnHistorial = findViewById(R.id.btnHistorial);
         tvMontoPagar = findViewById(R.id.tvPagarTotalClienteVerde);
         rcProductosValorados = (RecyclerView) findViewById(R.id.rcViewProducto1Cliente);
         rcCategorias = (RecyclerView) findViewById(R.id.rcCategoriassProductoCliente);
@@ -188,6 +189,13 @@ public class PrincipalCliente extends AppCompatActivity {
             }
         });
 
+        btnHistorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PrincipalCliente.this, PedidosCliente.class);
+                startActivity(i);
+            }
+        });
 
 
     }
