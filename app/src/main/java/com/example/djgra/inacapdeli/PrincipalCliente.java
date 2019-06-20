@@ -48,7 +48,7 @@ public class PrincipalCliente extends AppCompatActivity {
     public static ArrayList<Categoria> lstCategorias = new ArrayList<>();
     private static ArrayList<Producto> lstProductoFiltrados = new ArrayList<>();
     public static TextView tvCantidadArticulosCliente ,tvMontoPagar;
-    private static Persona cliente = new Persona();
+    public static Persona cliente = new Persona();
     public static Pedido pedidoCliente = new Pedido();
     private static AdaptadorCategoriasCliente adaptadorCategorias;
     LinearLayout linearCategorias;
@@ -76,6 +76,7 @@ public class PrincipalCliente extends AppCompatActivity {
             cliente = (Persona) bundle.getSerializable("usr");
             tvSaldoActual.setText(tvSaldoActual.getText() + "" + cliente.getSaldo());
             fotoUsr.setImageBitmap(Functions.StringToBitMap(cliente.getFoto()));
+
         }
         final ProgressDialog progressDialog = Functions.CargarDatos("Cangando Productos", PrincipalCliente.this);
         BddProductos.getProducto(PrincipalCliente.this, new Response.Listener<JSONArray>() {

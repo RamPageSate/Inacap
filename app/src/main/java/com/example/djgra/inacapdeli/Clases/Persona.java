@@ -107,4 +107,9 @@ public class Persona implements Serializable{
     public void setRol(int rol) {
         this.rol = rol;
     }
+
+    public void agregarPedido(Pedido pedido){
+        lstPedidos.add(pedido);
+    }
+
 }

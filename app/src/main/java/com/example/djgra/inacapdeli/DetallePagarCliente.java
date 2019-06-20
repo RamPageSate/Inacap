@@ -1,5 +1,6 @@
 package com.example.djgra.inacapdeli;
 
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,16 +9,31 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.android.volley.Response;
 import com.example.djgra.inacapdeli.Adaptadores.AdaptadorDetalleProductoPagar;
 import com.example.djgra.inacapdeli.Clases.Pedido;
+import com.example.djgra.inacapdeli.Clases.Producto;
+import com.example.djgra.inacapdeli.Funciones.BddPedido;
+import com.example.djgra.inacapdeli.Funciones.Functions;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class DetallePagarCliente extends AppCompatActivity {
     public static Pedido pedido;
     private RecyclerView rcProductos;
     int codigoActividad= 0;
+    LinearLayout linearPagar;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
     ImageButton btnSalir;
     public static TextView tvSubtotalDetallePagar, tvTotalDetalle;
     TextView tvClickAqui, cantidadBarar, totalBarra;
@@ -31,6 +47,7 @@ public class DetallePagarCliente extends AppCompatActivity {
         rcProductos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         tvTotalDetalle = (TextView) findViewById(R.id.tvTotalPagarDetalleCliente);
         cantidadBarar = findViewById(R.id.cantdetalle);
+        linearPagar = findViewById(R.id.linearPagarDetalle);
         btnSalir = findViewById(R.id.btnSalirPDC);
         totalBarra = findViewById(R.id.totaldetalle);
         Bundle bundle = getIntent().getExtras();
@@ -69,10 +86,65 @@ public class DetallePagarCliente extends AppCompatActivity {
                 horaDialog.show();
             }
         });
+
+        linearPagar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(pedido.totalPagarPedido() != 0){
+                    pedido.setId_cliente(PrincipalCliente.cliente.getCodigo());
+                    ArrayList<Producto> productosPedidos = new ArrayList<>();
+                    for (Producto pro : pedido.getLstProductoPedido()){
+                        if(pro.getCantidad() > 1){
+                            for(int x=0; x < pro.getCantidad(); x++){
+                                productosPedidos.add(pro);
+                            }
+                        }else{
+                            productosPedidos.add(pro);
+                        }
+                    }
+                    pedido.setLstProductoPedido(productosPedidos);
+                    pedido.setPedido_estado(1);
+                    pedido.setId_condicion_pedido(2);
+                    pedido.setId_vendedor(181);
+                    pedido.setFechaPedido("" + getTimeStamp());
+                    final ProgressDialog progressDialog = Functions.CargarDatos("Realizando Pedido", DetallePagarCliente.this);
+                    BddPedido.setPedido(pedido, DetallePagarCliente.this, new Response.Listener() {
+                        @Override
+                        public void onResponse(Object response) {
+                            Toast.makeText(DetallePagarCliente.this, "Pedido Realizado", Toast.LENGTH_SHORT).show();
+                            //descontar saldo
+                        }
+                    }, Functions.FalloInternet(DetallePagarCliente.this,progressDialog,"No realizo Compra"));
+                }else{
+                    Toast.makeText(DetallePagarCliente.this, "No Tiene Nada Que Pagar", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
     }
 
     public static void Subtotal(int total){
         tvTotalDetalle.setText(String.valueOf(total));
         tvSubtotalDetallePagar.setText(String.valueOf(total));
+    }
+    private Long getTimeStamp(){
+        Long tiemStamp = System.currentTimeMillis();
+        return tiemStamp;
+    }
+
+    private Date getDate(long time) {
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();//get your local time zone.
+
+        sdf.setTimeZone(tz);//set time zone.
+        String localTime = sdf.format(new Date(time) );
+        Date date = new Date();
+        try {
+            date = sdf.parse(localTime);//get local date
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 }
