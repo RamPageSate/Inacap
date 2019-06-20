@@ -83,6 +83,7 @@ public class AlertDialogCategoria extends AlertDialog {
                                                 Categoria categoria = new Categoria();
                                                 categoria.setCodigo(response.getJSONObject(x).getInt("categoria_id"));
                                                 categoria.setNombre(response.getJSONObject(x).getString("categoria_nombre"));
+                                                categoria.setEstado(response.getJSONObject(x).getInt("categoria_estado"));
                                                 lstCategorias.add(categoria);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
