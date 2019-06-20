@@ -97,20 +97,17 @@ public class Pedido implements Serializable {
         if (lstProductoPedido.isEmpty()) {
             producto.setCantidad(1);
             lstProductoPedido.add(producto);
-            Log.d("TAG_","agreggo primer prodcuto ");
         }else{
             boolean existe = false;
             for(Producto pro : lstProductoPedido){
                 if(pro.getCodigo() == producto.getCodigo()){
                     pro.setCantidad(pro.getCantidad() + 1);
                     existe= true;
-                    Log.d("TAG_","repitio prodcuto ");
                 }
             }
             if(existe == false){
                 producto.setCantidad(1);
                 lstProductoPedido.add(producto);
-                Log.d("TAG_","agreggo prodcuto nuevo");
             }
         }
     }

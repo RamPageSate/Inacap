@@ -7,14 +7,16 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginLeft="36dp"
+        android:foregroundGravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -30,7 +32,7 @@
                 android:layout_weight="1"
                 android:text="N° Pedido: "
                 android:textColor="@color/GrisInacap"
-                android:textSize="18sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tvNumeroPedidoAnteriorCliente"
@@ -40,7 +42,7 @@
                 android:layout_weight="1"
                 android:text="8945693458"
                 android:textColor="@color/NegroInacap"
-                android:textSize="18sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -57,7 +59,7 @@
                 android:layout_weight="1"
                 android:text="Fecha Pedido: "
                 android:textColor="@color/GrisInacap"
-                android:textSize="18sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tvFechaPedidoAnteriorCliente"
@@ -67,7 +69,7 @@
                 android:layout_weight="1"
                 android:text="2019-06-25 20:15"
                 android:textColor="@color/NegroInacap"
-                android:textSize="18sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -76,27 +78,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:layout_marginTop="-50dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginTop="-40dp"
+            android:layout_marginRight="12dp"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/trashpedidocliente" />
+            app:srcCompat="@drawable/eliminarhistorial" />
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="24dp"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rcProductosPedidoAnteriorCliente"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-        </ScrollView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcProductosPedidoAnteriorCliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -111,19 +108,19 @@
                 android:layout_weight="1"
                 android:text="Cantidad:"
                 android:textColor="@color/GrisInacap"
-                android:textSize="18sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tvCantidadArticuloPedidoAnteriorCliente"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:layout_marginRight="16dp"
+                android:layout_marginRight="24dp"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:text="TextView"
                 android:textColor="@color/NegroInacap"
-                android:textSize="18sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -139,31 +136,31 @@
                 android:layout_weight="1"
                 android:text="Monto Total: "
                 android:textColor="@color/GrisInacap"
-                android:textSize="18sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tvMontoPedidoAnteriorCliente"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:layout_marginRight="16dp"
+                android:layout_marginRight="24dp"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:text="$5000"
                 android:textColor="@color/RojoInacap"
-                android:textSize="18sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <Button
             android:id="@+id/btnVolverComprarPedidoAnteriorCliente"
-            android:layout_width="354dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
             android:background="#F5B7B1  "
             android:text="Volver a Comprar"
             android:textColor="@color/RojoInacap"
-            android:textSize="18sp" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 
