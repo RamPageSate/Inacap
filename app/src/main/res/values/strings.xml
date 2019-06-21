@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">InacapDeli</string>
+    <string name="alert_carga">Cargando</string>
 </resources>
