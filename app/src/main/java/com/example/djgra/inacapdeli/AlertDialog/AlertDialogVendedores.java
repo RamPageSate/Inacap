@@ -38,6 +38,7 @@ public class AlertDialogVendedores extends AlertDialog {
         final AutoCompleteTextView acVendedor = view.findViewById(R.id.acVendedores);
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, lstEmail);
         acVendedor.setAdapter(adapter);
+        final ListView lstvVendedores = view.findViewById(R.id.lstVendedores);
         acVendedor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -46,8 +47,9 @@ public class AlertDialogVendedores extends AlertDialog {
             }
         });
 
-        AdaptadorVendedores adpVendedor = new AdaptadorVendedores(context);
+        final AdaptadorVendedores adpVendedor = new AdaptadorVendedores(context, lstPersona);
 
+        lstvVendedores.setAdapter(adpVendedor);
 
         ImageButton imgPlus = view.findViewById(R.id.btnGuardarVendedor);
         ListView lsvVendedores = view.findViewById(R.id.lstVendedores);
@@ -61,14 +63,14 @@ public class AlertDialogVendedores extends AlertDialog {
                     progressDialog.show();
                     progressDialog.setCanceledOnTouchOutside(false);
                     progressDialog.setCancelable(false);
-                    BddPersonas.setVendedor(acVendedor.getText().toString(), 1, 1, context, new Response.Listener<String>() {
+                    BddPersonas.setVendedor(acVendedor.getText().toString(), 2, 1, context, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             BddPersonas.getVendedores(context, new Response.Listener<JSONArray>() {
                                 @Override
                                 public void onResponse(JSONArray response) {
                                     progressDialog.dismiss();
-                                    lstPersona.remove(lstPersona);
+                                    lstPersona.clear();
                                     if (!response.toString().equals("[]")) {
                                         for (int x = 0; x < response.length(); ++x) {
 
@@ -96,7 +98,10 @@ public class AlertDialogVendedores extends AlertDialog {
                                             }
                                         }
                                     }
+
+                                    adpVendedor.notifyDataSetChanged();
                                 }
+
                             }, Functions.FalloInternet(context, progressDialog, "No se pudo conectar"));
 
                         }
@@ -109,8 +114,9 @@ public class AlertDialogVendedores extends AlertDialog {
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lstPersona.remove(lstPersona);
-                lstEmail.remove(lstEmail);
+                lstPersona.clear();
+                lstEmail.clear();
+                adpVendedor.notifyDataSetChanged();
                 dismiss();
             }
         });
