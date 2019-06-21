@@ -84,7 +84,7 @@
         android:id="@+id/btnPedidosActivosCliente"
         android:layout_width="0dp"
         android:layout_height="63dp"
-        android:background="@android:color/darker_gray"
+        android:background="#B2BABB"
         android:text="Activos"
         android:textColor="#3C3F41"
         android:textSize="18sp"
@@ -94,6 +94,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
 
     <ScrollView
+        android:id="@+id/scPedidosCliente"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="8dp"

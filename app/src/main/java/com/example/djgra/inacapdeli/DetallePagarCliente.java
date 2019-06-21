@@ -109,11 +109,6 @@ public class DetallePagarCliente extends AppCompatActivity {
                             //descontar saldo
                         }
                     }, Functions.FalloInternet(DetallePagarCliente.this,progressDialog,"No realizo Compra"));
-
-                    Intent intent = new Intent(DetallePagarCliente.this,PedidosCliente.class);
-                    intent.putExtra("pedido",pedido);
-                    startActivity(intent);
-
                 }else{
                     Toast.makeText(DetallePagarCliente.this, "No Tiene Nada Que Pagar", Toast.LENGTH_SHORT).show();
                 }

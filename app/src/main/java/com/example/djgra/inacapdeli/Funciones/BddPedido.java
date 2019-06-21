@@ -46,9 +46,9 @@ public class BddPedido {
 
 
     //getPedidoByCliente(id_cliente) get
-    public static void getPedidoByCliente(final int id_cliente,Context context, Response.Listener<String> listener){
+    public static void getPedidoByCliente(final int id_cliente,Context context, Response.Listener<JSONArray> listener){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,urlBase+"getPedidoByCliente?id_cliente=",listener,null){
+        JsonArrayRequest stringRequest = new JsonArrayRequest(Request.Method.GET,urlBase+"getPedidoByCliente?id_cliente="+id_cliente,null, listener,null){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError{
                 map.clear();
@@ -62,8 +62,6 @@ public class BddPedido {
 
 
 
-
-    //getProductoByPedido(pedido_id) get
 
 
     private static Map<String, Integer> arrayToMap(ArrayList<Producto> arrayList) {

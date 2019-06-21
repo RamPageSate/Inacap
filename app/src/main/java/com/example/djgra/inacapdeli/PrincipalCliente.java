@@ -27,6 +27,7 @@ import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.Clases.Sede;
 import com.example.djgra.inacapdeli.Funciones.BddCategoria;
+import com.example.djgra.inacapdeli.Funciones.BddPedido;
 import com.example.djgra.inacapdeli.Funciones.BddProductos;
 import com.example.djgra.inacapdeli.Funciones.BddSede;
 import com.example.djgra.inacapdeli.Funciones.Functions;
@@ -189,8 +190,62 @@ public class PrincipalCliente extends AppCompatActivity {
         btnHistorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(PrincipalCliente.this, PedidosCliente.class);
-                startActivity(i);
+                BddPedido.getPedidoByCliente(cliente.getCodigo(), PrincipalCliente.this, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        if (!response.equals("[]")) {
+                            for(int x=0; x< response.length(); x++){
+                                try {
+                                    Pedido pedido = new Pedido();
+                                    pedido.setCodigo(response.getJSONObject(x).getInt("pedido_id"));//fecha_hora estado id_cliente id_vendedor condicion_pedido
+                                    pedido.setFechaPedido(response.getJSONObject(x).getString("pedido_fecha_hora"));
+                                    pedido.setPedido_estado(response.getJSONObject(x).getInt("pedido_estado"));
+                                    pedido.setId_cliente(response.getJSONObject(x).getInt("id_cliente"));
+                                    pedido.setId_vendedor(response.getJSONObject(x).getInt("id_vendedor"));
+                                    pedido.setId_condicion_pedido(response.getJSONObject(x).getInt("id_condicion_pedido"));
+                                    Log.d("TAG_", "entro Pedidos");
+                                    cliente.agregarPedido(pedido);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        for (int x=0; x < cliente.getLstPedidos().size(); x++){
+
+                            BddProductos.getProductoByPedido(cliente.getLstPedidos().get(x).getCodigo(), PrincipalCliente.this, new Response.Listener<JSONArray>() {
+                                @Override
+                                public void onResponse(JSONArray  response) {
+                                    if (!response.equals("[]")) {
+                                        for(int x=0; x< response.length(); x++){
+                                            try {
+                                                Log.d("TAG_", "entro producto de pedido" +cliente.getLstPedidos().get(x).getCodigo() );
+                                                final Producto producto = new Producto();
+                                                producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
+                                                producto.setNombre(response.getJSONObject(x).getString("producto_nombre"));
+                                                producto.setFoto(response.getJSONObject(x).getString("producto_foto"));
+                                                producto.setDescripcion(response.getJSONObject(x).getString("producto_descripcion"));
+                                                producto.setSku(response.getJSONObject(x).getString("producto_sku"));
+                                                producto.setPrecio(response.getJSONObject(x).getInt("producto_precio"));
+                                                producto.setStock(response.getJSONObject(x).getInt("producto_stock"));
+                                                producto.setEstado(response.getJSONObject(x).getInt("producto_estado"));
+                                                producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
+                                                producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
+                                                cliente.getLstPedidos().get(x).agregarProductoListaPedido(producto);
+                                            }catch (JSONException e){
+                                                e.printStackTrace();
+                                            }
+
+                                        }
+                                    }
+                                    Intent i = new Intent(PrincipalCliente.this, PedidosCliente.class);
+                                    i.putExtra("cliente", cliente);
+                                    startActivity(i);
+                                }
+                            }, Functions.FalloInternet(PrincipalCliente.this,progressDialog,"No pudo Cargar"));
+                        }
+                        }
+                });
             }
         });
 
@@ -208,10 +263,6 @@ public class PrincipalCliente extends AppCompatActivity {
         }
         AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56,1,"")),tvCantidadArticulosCliente,tvMontoPagar,pedidoCliente,PrincipalCliente.this,linearPagar);
         AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54,1,"Favoritas")),tvCantidadArticulosCliente,tvMontoPagar,pedidoCliente,PrincipalCliente.this,linearPagar);
-        //rcProductosValorados.setHasFixedSize(true);
-        //rcProductosValorados.setItemViewCacheSize(FiltrarListaPorCategoria(new Categoria(56,1,"")).size());
-        //rcFavoritas.setHasFixedSize(true);
-        //rcFavoritas.setItemViewCacheSize(FiltrarListaPorCategoria(new Categoria(54,1,"Favoritas")).size());
         rcFavoritas.setAdapter(adaptadorFavoritas);
         rcProductosValorados.setAdapter(adaptadorValoradas);
         adaptadorCategorias = new AdaptadorCategoriasCliente(lstCategorias,PrincipalCliente.this,pedidoCliente);
