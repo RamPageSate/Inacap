@@ -1,6 +1,7 @@
 package com.example.djgra.inacapdeli.Adaptadores;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.djgra.inacapdeli.Clases.Pedido;
+import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Clases.Producto;
+import com.example.djgra.inacapdeli.Clases.Producto_Favorito;
 import com.example.djgra.inacapdeli.Funciones.Functions;
 import com.example.djgra.inacapdeli.R;
 
@@ -26,14 +29,16 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
     Pedido pedido = new Pedido();
     Activity context = new Activity();
     LinearLayout linearLayout;
+    Persona cliente;
 
-    public AdaptadorRecyclerViewProductoCliente(ArrayList<Producto> lstProductos, TextView cantidadProductosPedido, TextView totalPagarPedido, Pedido pedido, Activity context, LinearLayout linearLayout) {
+    public AdaptadorRecyclerViewProductoCliente(ArrayList<Producto> lstProductos, TextView cantidadProductosPedido, TextView totalPagarPedido, Pedido pedido, Activity context, LinearLayout linearLayout, Persona cliente) {
         this.lstProductos = lstProductos;
         this.cantidadProductosPedido = cantidadProductosPedido;
         this.totalPagarPedido = totalPagarPedido;
         this.pedido = pedido;
         this.context = context;
         this.linearLayout = linearLayout;
+        this.cliente = cliente;
     }
 
     //muestro la vista
@@ -51,6 +56,13 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
         holder.descripcionProducto.setText(lstProductos.get(position).getDescripcion());
         holder.precioProducto.setText("$ " + lstProductos.get(position).getPrecio());
         holder.imgProducto.setImageBitmap(Functions.StringToBitMap(lstProductos.get(position).getFoto()));
+        if(!cliente.getLstProductosFavoritos().isEmpty()){
+            for(int x=0; x < cliente.getLstProductosFavoritos().size(); x++){
+                if(cliente.getLstProductosFavoritos().get(x).getId_producto() == lstProductos.get(position).getCodigo()){
+                    holder.btnLike.setBackgroundResource(R.drawable.like);
+                }
+            }
+        }
         if(!pedido.getLstProductoPedido().isEmpty()){
             for(int x=0 ; x < pedido.getLstProductoPedido().size(); x++){
                 if(pedido.getLstProductoPedido().get(x).getCodigo() == lstProductos.get(position).getCodigo()){
@@ -68,13 +80,10 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
             holder.cantidadProducto.setVisibility(View.INVISIBLE);
             holder.cantidadProducto.setText("0");
         }
-
-        //cambiar el valor de la barra verde
         holder.btnDescontar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(pedido.quitarProductoListaPedido(lstProductos.get(position)) == true){
-                    //elimino el producto del pedido
                     cantidadProductosPedido.setText(String.valueOf(pedido.cantidadArticulos()));
                     holder.cantidadProducto.setText("0");
                     holder.cantidadProducto.setVisibility(View.INVISIBLE);
@@ -110,6 +119,20 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
                 Log.d("TAG","suma");
             }
         });
+        holder.btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //falta agregar a la BD tabla favoritos
+                Producto_Favorito pro = new Producto_Favorito();
+                pro.setId_cliente(cliente.getCodigo());
+                pro.setId_producto(lstProductos.get(position).getCodigo());
+                if(cliente.ProductoFavorito(pro) == true){
+                    holder.btnLike.setBackgroundResource(R.drawable.like);
+                }else{
+                    holder.btnLike.setBackgroundResource(R.drawable.nolike);
+                }
+            }
+        });
 
     }
 
@@ -123,7 +146,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
     public class ViewHolderProducto extends RecyclerView.ViewHolder {
         TextView nombreProducto, descripcionProducto, precioProducto, cantidadProducto;
         ImageView imgProducto;
-        ImageButton btnAgregar, btnDescontar;
+        ImageButton btnAgregar, btnDescontar, btnLike;
 
 
         //referencio los view
@@ -137,7 +160,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
             imgProducto = itemView.findViewById(R.id.imgProductoClente);
             cantidadProducto = itemView.findViewById(R.id.tvCantidadProductoPDC);
             btnDescontar = itemView.findViewById(R.id.btnRcQuitarPDC);
-
+            btnLike = itemView.findViewById(R.id.btnLike);
 
         }
     }

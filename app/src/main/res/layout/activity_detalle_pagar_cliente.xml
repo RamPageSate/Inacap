@@ -49,7 +49,7 @@
     <LinearLayout
         android:id="@+id/linearLayout4"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="53dp"
         android:background="#3C3F41"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="10dp"
             android:text="Resumen Pedido"
             android:textColor="@color/BlancoInacap"
             android:textSize="24sp" />
@@ -81,6 +81,7 @@
         android:id="@+id/imageView3"
         android:layout_width="147dp"
         android:layout_height="122dp"
+        android:layout_marginTop="8dp"
         android:layout_weight="1"
         android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"

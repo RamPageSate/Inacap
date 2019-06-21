@@ -14,6 +14,7 @@ public class Producto implements Serializable {
     }
 
 
+
     public ArrayList<Categoria> getLstCategoriasProducto() {
         return lstCategoriasProducto;
     }

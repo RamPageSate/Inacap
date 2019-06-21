@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/btnInicioPedidos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="48dp"
@@ -26,16 +26,7 @@
             app:srcCompat="@drawable/btniniciogris" />
 
         <ImageButton
-            android:id="@+id/imageButton4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="-33dp"
-            android:background="@android:color/transparent"
-            app:srcCompat="@drawable/btnpedidosgris" />
-
-        <ImageButton
-            android:id="@+id/imageButton5"
+            android:id="@+id/btnPerfilPedidos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"

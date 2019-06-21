@@ -46,11 +46,12 @@ public class PrincipalCliente extends AppCompatActivity {
     ImageButton btnDatosPersonales, btnHistorial;
     private static ArrayList<Producto> lstProducto = new ArrayList<>();
     public static ArrayList<Categoria> lstCategorias = new ArrayList<>();
-    public static TextView tvCantidadArticulosCliente ,tvMontoPagar;
+    public static TextView tvCantidadArticulosCliente, tvMontoPagar;
     public static Persona cliente = new Persona();
     public static Pedido pedidoCliente = new Pedido();
     private static AdaptadorCategoriasCliente adaptadorCategorias;
     LinearLayout linearCategorias;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +63,9 @@ public class PrincipalCliente extends AppCompatActivity {
         rcProductosValorados = (RecyclerView) findViewById(R.id.rcViewProducto1Cliente);
         rcCategorias = (RecyclerView) findViewById(R.id.rcCategoriassProductoCliente);
         rcFavoritas = (RecyclerView) findViewById(R.id.rcFavoritasCliente);
-        rcFavoritas.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        rcProductosValorados.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false ));
-        rcCategorias.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        //rcCategorias.setHasFixedSize(true);
+        rcFavoritas.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rcProductosValorados.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rcCategorias.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         linearPagar = findViewById(R.id.linearPDCTotal);
         fotoUsr = (ImageView) findViewById(R.id.imgFotoCliente);
         tvSedeActual = (TextView) findViewById(R.id.tvSedeActualCliente);
@@ -77,6 +77,7 @@ public class PrincipalCliente extends AppCompatActivity {
             cliente = (Persona) bundle.getSerializable("usr");
             tvSaldoActual.setText(tvSaldoActual.getText() + "" + cliente.getSaldo());
             fotoUsr.setImageBitmap(Functions.StringToBitMap(cliente.getFoto()));
+            pedidoCliente.setId_cliente(cliente.getCodigo());
 
         }
         final ProgressDialog progressDialog = Functions.CargarDatos("Cangando Productos", PrincipalCliente.this);
@@ -94,7 +95,7 @@ public class PrincipalCliente extends AppCompatActivity {
                                 public void onResponse(JSONArray response) {
                                     if (!response.toString().equals("[]")) {
                                         for (int x = 0; x < response.length(); ++x) {
-                                            try {//falta agrgar las categorias asignadas al producto
+                                            try {
                                                 Categoria categoria = new Categoria(response.getJSONObject(x).getInt("categoria_id"), response.getJSONObject(x).getInt("categoria_estado"), response.getJSONObject(x).getString("categoria_nombre"));
                                                 categoriasProducto.add(categoria);
                                             } catch (JSONException e) {
@@ -103,18 +104,14 @@ public class PrincipalCliente extends AppCompatActivity {
                                         }
                                         producto.setLstCategoriasProducto(categoriasProducto);
                                         lstProducto.add(producto);
-                                        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56,1,"")),tvCantidadArticulosCliente,tvMontoPagar,pedidoCliente,PrincipalCliente.this,linearPagar);
-                                        //rcProductosValorados.setHasFixedSize(true);
-                                        //rcProductosValorados.setItemViewCacheSize(FiltrarListaPorCategoria(new Categoria(56,1,"")).size());
+                                        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56, 1, "")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, cliente);
                                         rcProductosValorados.setAdapter(adaptadorValoradas);
                                         //hacer Condicion de que si esta vacia cambiar el nombre de Favoritas ademas rellenar la vista con otra categoria
-                                        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54,1,"Favoritas")),tvCantidadArticulosCliente,tvMontoPagar,pedidoCliente,PrincipalCliente.this,linearPagar);
-                                        //rcFavoritas.setHasFixedSize(true);
-                                        //rcFavoritas.setItemViewCacheSize(FiltrarListaPorCategoria(new Categoria(54,1,"Favoritas")).size());
+                                        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54, 1, "Favoritas")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, cliente);
                                         rcFavoritas.setAdapter(adaptadorFavoritas);
-                                    } // ya cargo las categorias del producto
+                                    }
                                 }
-                            },null);
+                            }, null);
                             producto.setNombre(response.getJSONObject(x).getString("producto_nombre"));
                             producto.setFoto(response.getJSONObject(x).getString("producto_foto"));
                             producto.setDescripcion(response.getJSONObject(x).getString("producto_descripcion"));
@@ -131,7 +128,7 @@ public class PrincipalCliente extends AppCompatActivity {
                     }
                 }//terminare el proceso de cargar todos los productos
             }
-        },Functions.FalloInternet(PrincipalCliente.this,progressDialog,"No Pudo Cargar"));
+        }, Functions.FalloInternet(PrincipalCliente.this, progressDialog, "No Pudo Cargar"));
         BddSede.getSede(PrincipalCliente.this, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -165,11 +162,11 @@ public class PrincipalCliente extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                    adaptadorCategorias = new AdaptadorCategoriasCliente(lstCategorias,PrincipalCliente.this,pedidoCliente);
+                    adaptadorCategorias = new AdaptadorCategoriasCliente(lstCategorias, PrincipalCliente.this, pedidoCliente);
                     rcCategorias.setAdapter(adaptadorCategorias);
                 }
             }
-        }, Functions.FalloInternet(PrincipalCliente.this,null,""));
+        }, Functions.FalloInternet(PrincipalCliente.this, null, ""));
         linearPagar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,14 +174,15 @@ public class PrincipalCliente extends AppCompatActivity {
                 Intent intent = new Intent(PrincipalCliente.this, DetallePagarCliente.class);
                 intent.putExtra("pedido", pedidoCliente);
                 intent.putExtra("code", 1);
-                startActivityForResult(intent,7);
+                startActivityForResult(intent, 7);
             }
         });
 
         btnDatosPersonales.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(PrincipalCliente.this,DatosCliente.class);
+                Intent i = new Intent(PrincipalCliente.this, DatosCliente.class);
+                i.putExtra("cliente",cliente);
                 startActivity(i);
             }
         });
@@ -196,7 +194,7 @@ public class PrincipalCliente extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         if (!response.equals("[]")) {
-                            for(int x=0; x< response.length(); x++){
+                            for (int x = 0; x < response.length(); x++) {
                                 try {
                                     Pedido pedido = new Pedido();
                                     pedido.setCodigo(response.getJSONObject(x).getInt("pedido_id"));//fecha_hora estado id_cliente id_vendedor condicion_pedido
@@ -213,15 +211,15 @@ public class PrincipalCliente extends AppCompatActivity {
                                 }
                             }
                         }
-                        for (int x=0; x < cliente.getLstPedidos().size(); x++){
+                        for (int x = 0; x < cliente.getLstPedidos().size(); x++) {
 
                             BddProductos.getProductoByPedido(cliente.getLstPedidos().get(x).getCodigo(), PrincipalCliente.this, new Response.Listener<JSONArray>() {
                                 @Override
-                                public void onResponse(JSONArray  response) {
+                                public void onResponse(JSONArray response) {
                                     if (!response.equals("[]")) {
-                                        for(int x=0; x< response.length(); x++){
+                                        for (int x = 0; x < response.length(); x++) {
                                             try {
-                                                Log.d("TAG_", "entro producto de pedido" +cliente.getLstPedidos().get(x).getCodigo() );
+                                                Log.d("TAG_", "entro producto de pedido" + cliente.getLstPedidos().get(x).getCodigo());
                                                 final Producto producto = new Producto();
                                                 producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
                                                 producto.setNombre(response.getJSONObject(x).getString("producto_nombre"));
@@ -234,19 +232,19 @@ public class PrincipalCliente extends AppCompatActivity {
                                                 producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
                                                 producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
                                                 cliente.getLstPedidos().get(x).agregarProductoListaPedido(producto);
-                                            }catch (JSONException e){
+                                            } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
 
                                         }
                                     }
-                                    Intent i = new Intent(PrincipalCliente.this, PedidosCliente.class);
-                                    i.putExtra("cliente", cliente);
-                                    startActivity(i);
                                 }
-                            }, Functions.FalloInternet(PrincipalCliente.this,progressDialog,"No pudo Cargar"));
+                            }, Functions.FalloInternet(PrincipalCliente.this, progressDialog, "No pudo Cargar"));
                         }
-                        }
+                        Intent i = new Intent(PrincipalCliente.this, PedidosCliente.class);
+                        i.putExtra("cliente", cliente);
+                        startActivity(i);
+                    }
                 });
             }
         });
@@ -257,21 +255,21 @@ public class PrincipalCliente extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == 23){
+        if (resultCode == 23) {
             pedidoCliente = ClienteProductosPorCategoria.pedido;
         }
-        if(resultCode == 7){
+        if (resultCode == 7) {
             pedidoCliente = DetallePagarCliente.pedido;
         }
-        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56,1,"")),tvCantidadArticulosCliente,tvMontoPagar,pedidoCliente,PrincipalCliente.this,linearPagar);
-        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54,1,"Favoritas")),tvCantidadArticulosCliente,tvMontoPagar,pedidoCliente,PrincipalCliente.this,linearPagar);
+        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56, 1, "")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, cliente);
+        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54, 1, "Favoritas")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, cliente);
         rcFavoritas.setAdapter(adaptadorFavoritas);
         rcProductosValorados.setAdapter(adaptadorValoradas);
-        adaptadorCategorias = new AdaptadorCategoriasCliente(lstCategorias,PrincipalCliente.this,pedidoCliente);
+        adaptadorCategorias = new AdaptadorCategoriasCliente(lstCategorias, PrincipalCliente.this, pedidoCliente);
         rcCategorias.setAdapter(adaptadorCategorias);
-        if(!pedidoCliente.getLstProductoPedido().isEmpty()){
+        if (!pedidoCliente.getLstProductoPedido().isEmpty()) {
             linearPagar.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             linearPagar.setVisibility(View.INVISIBLE);
         }
 
@@ -289,7 +287,6 @@ public class PrincipalCliente extends AppCompatActivity {
         }
         return lista;
     }
-
 
 
 }

@@ -7,7 +7,7 @@ public class Persona implements Serializable{
     private String nombre, apellido, correo, contrasena, foto, codigoQr; // hay que cambiar la sede
     private int codigo, saldo, estado, sede, rol;
     ArrayList<Pedido> lstPedidos = new ArrayList<>();
-
+    ArrayList<Producto_Favorito> lstProductosFavoritos =  new ArrayList<>();
     public Persona() {
     }
 
@@ -132,7 +132,33 @@ public class Persona implements Serializable{
         return lista;
     }
 
+    public ArrayList<Producto_Favorito> getLstProductosFavoritos() {
+        return lstProductosFavoritos;
+    }
 
+    public void setLstProductosFavoritos(ArrayList<Producto_Favorito> lstProductosFavoritos) {
+        this.lstProductosFavoritos = lstProductosFavoritos;
+    }
+
+    public boolean ProductoFavorito(Producto_Favorito item){
+        boolean ok = false;
+        if(lstProductosFavoritos.isEmpty()){
+            item.setLike(1);
+            lstProductosFavoritos.add(item);
+            ok = true;
+        }else{
+            for(Producto_Favorito pro : lstProductosFavoritos){
+                if(pro.like == 1){
+                    lstProductosFavoritos.remove(pro);
+                    ok = false;
+                }else{
+                    lstProductosFavoritos.add(item);
+                    ok = true;
+                }
+            }
+        }
+        return  ok;
+    }
 
 
 

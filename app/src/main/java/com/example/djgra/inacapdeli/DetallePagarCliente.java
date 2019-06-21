@@ -34,7 +34,7 @@ public class DetallePagarCliente extends AppCompatActivity {
     private RecyclerView rcProductos;
     int codigoActividad= 0;
     LinearLayout linearPagar;
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //yyyy-MM-dd HH:mm:ss
     ImageButton btnSalir;
     public static TextView tvSubtotalDetallePagar, tvTotalDetalle;
     TextView tvClickAqui, cantidadBarar, totalBarra;
@@ -98,7 +98,6 @@ public class DetallePagarCliente extends AppCompatActivity {
                     pedido.setPedido_estado(1);
                     pedido.setId_condicion_pedido(2);
                     pedido.setId_vendedor(181);
-                    //arreglar tiemstamp           enviar a pedidos activos
                     pedido.setFechaPedido(sdf.format(getDate(getTimeStamp())));
                     final ProgressDialog progressDialog = Functions.CargarDatos("Realizando Pedido", DetallePagarCliente.this);
                     BddPedido.setPedido(pedido, DetallePagarCliente.this, new Response.Listener() {
