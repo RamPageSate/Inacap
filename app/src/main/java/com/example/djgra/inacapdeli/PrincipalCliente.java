@@ -2,6 +2,7 @@ package com.example.djgra.inacapdeli;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -54,6 +55,7 @@ public class PrincipalCliente extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal_cliente);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         linearCategorias = findViewById(R.id.linearCategoriaPrincipalCliente);
         btnHistorial = findViewById(R.id.btnHistorial);
         tvMontoPagar = findViewById(R.id.tvPagarTotalClienteVerde);

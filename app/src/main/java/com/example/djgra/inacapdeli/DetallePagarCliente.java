@@ -3,6 +3,7 @@ package com.example.djgra.inacapdeli;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,6 +42,7 @@ public class DetallePagarCliente extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle_pagar_cliente);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         tvClickAqui = (TextView) findViewById(R.id.tvClickAqui);
         tvSubtotalDetallePagar = (TextView)  findViewById(R.id.tvSubTotalPagarCliente);
         rcProductos = (RecyclerView) findViewById(R.id.rcProductoDPC);

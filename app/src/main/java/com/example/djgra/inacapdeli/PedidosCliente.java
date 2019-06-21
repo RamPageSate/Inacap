@@ -1,5 +1,6 @@
 package com.example.djgra.inacapdeli;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ public class PedidosCliente extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedidos_cliente);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         scroll = (ScrollView) findViewById(R.id.scPedidosCliente);
         rcPedidos = (RecyclerView) findViewById(R.id.rcPedidosCliente);
         btnActivos = findViewById(R.id.btnPedidosActivosCliente);
