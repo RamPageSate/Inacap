@@ -14,12 +14,14 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.android.volley.Response;
+import com.example.djgra.inacapdeli.Adaptadores.AdaptadorVendedores;
 import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Funciones.BddPersonas;
 import com.example.djgra.inacapdeli.Funciones.Functions;
 import com.example.djgra.inacapdeli.R;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -43,6 +45,10 @@ public class AlertDialogVendedores extends AlertDialog {
                 imm.hideSoftInputFromWindow(acVendedor.getWindowToken(), 0);
             }
         });
+
+        AdaptadorVendedores adpVendedor = new AdaptadorVendedores(context);
+
+
         ImageButton imgPlus = view.findViewById(R.id.btnGuardarVendedor);
         ListView lsvVendedores = view.findViewById(R.id.lstVendedores);
         imgPlus.setOnClickListener(new View.OnClickListener() {
@@ -61,9 +67,38 @@ public class AlertDialogVendedores extends AlertDialog {
                             BddPersonas.getVendedores(context, new Response.Listener<JSONArray>() {
                                 @Override
                                 public void onResponse(JSONArray response) {
+                                    progressDialog.dismiss();
+                                    lstPersona.remove(lstPersona);
+                                    if (!response.toString().equals("[]")) {
+                                        for (int x = 0; x < response.length(); ++x) {
 
+                                            try {
+                                                int codigo = response.getJSONObject(x).getInt("persona_id");
+                                                String nombre = response.getJSONObject(x).getString("persona_nombre");
+                                                String apellido = response.getJSONObject(x).getString("persona_apellido");
+                                                String email = response.getJSONObject(x).getString("persona_email");
+                                                int estado = response.getJSONObject(x).getInt("persona_estado");
+                                                String foto = response.getJSONObject(x).getString("persona_foto");
+                                                int rol = response.getJSONObject(x).getInt("id_rol");
+                                                int sede = response.getJSONObject(x).getInt("id_sede");
+                                                Persona vendedor = new Persona();
+                                                vendedor.setCodigo(codigo);
+                                                vendedor.setNombre(nombre);
+                                                vendedor.setFoto(foto);
+                                                vendedor.setApellido(apellido);
+                                                vendedor.setCorreo(email);
+                                                vendedor.setEstado(estado);
+                                                vendedor.setRol(rol);
+                                                vendedor.setSede(sede);
+                                                lstPersona.add(vendedor);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
                                 }
                             }, Functions.FalloInternet(context, progressDialog, "No se pudo conectar"));
+
                         }
                     });
                 }

@@ -1,6 +1,5 @@
 package com.example.djgra.inacapdeli;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,16 +7,10 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogCategoria;
@@ -55,7 +48,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
     private static ArrayList<Fabricante> lstFabricantes = new ArrayList<>();
     private AlertDialogFabricantes fabricantes;
     private AlertDialogCategoria categorias;
-    private  AdapterPesonas adapterPesonas;
+
     private ProgressDialog progressDialog;
     ListView lstvVendedores;
 
@@ -367,77 +360,6 @@ public class PrincipalAdministrador extends AppCompatActivity {
         }
     }
 
-    class AdapterPesonas extends ArrayAdapter<Persona> {
-        Activity context;
 
-        public AdapterPesonas(Activity context) {
-            super(context, R.layout.listviewvendedores, lstPersonas);
-            this.context = context;
-        }
-
-        public View getView(final int posicion, View view, ViewGroup parent) {
-
-            LayoutInflater inflater = context.getLayoutInflater();
-            View item = inflater.inflate(R.layout.listviewvendedores, null);
-            TextView titulo = item.findViewById(R.id.tvNombreVendedor);
-            titulo.setText(lstPersonas.get(posicion).getNombre().toUpperCase() + " " + lstPersonas.get(posicion).getApellido().toUpperCase());
-            TextView email = item.findViewById(R.id.tvEmailVendedor);
-            email.setText(lstPersonas.get(posicion).getCorreo().toUpperCase());
-            TextView sede = item.findViewById(R.id.tvSedeLstVendedor);
-            sede.setText("SANTIAGO CENTRO");
-            ImageView imgFoto = item.findViewById(R.id.imgLstVendedor);
-            imgFoto.setId(100 + posicion);
-            ImageButton btnQuitarVendedor = item.findViewById(R.id.btnQuitarVendedor);
-            Switch swEstadoVendedor = item.findViewById(R.id.swEstadoVendedor);
-            swEstadoVendedor.setId(300+posicion);
-            if(lstPersonas.get(posicion).getEstado() == 1){
-                swEstadoVendedor.setChecked(true);
-            }else{
-                swEstadoVendedor.setChecked(false);
-            }
-            swEstadoVendedor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    //solo actualizo el estado del vendedor a la bd falta preguntar el estado actual para cambiar
-                    Persona per = lstPersonas.get(posicion);//*#*#3646633#
-                    if(per.getEstado() == 0){
-                        lstPersonas.get(posicion).setEstado(1);
-                        per.setEstado(1);
-                    }else{
-                        lstPersonas.get(posicion).setEstado(0);
-                        per.setEstado(0);
-                    }
-                    BddPersonas.setVendedor(per.getCorreo(), 2, per.getEstado(), PrincipalAdministrador.this, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("TAG_", "Cambio el estado del vendedor a 0 ");
-                        }
-                    });
-                }
-            });
-            imgFoto.setImageBitmap(Functions.StringToBitMap(lstPersonas.get(posicion).getFoto()));
-            btnQuitarVendedor.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //aqui digo que vendedor voy a quitar de vendedor
-                    Persona per = lstPersonas.get(posicion);
-                    progressDialog = Functions.CargarDatos("Quitando Vendedor", PrincipalAdministrador.this);
-                    BddPersonas.setVendedor(per.getCorreo(), 1, 1, PrincipalAdministrador.this, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("TAG_", "ya no es vendedor ");
-                            lstPersonas.remove(posicion);
-                            lstvVendedores.setAdapter(adapterPesonas);
-                            lstvVendedores.deferNotifyDataSetChanged();
-                            progressDialog.dismiss();
-                            //enviar mensaje de confirmacion
-                        }
-                    });
-                }
-            });
-            return item;
-        }
-
-    }
 
 }
