@@ -6,11 +6,13 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.Clases.Producto;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -41,6 +43,26 @@ public class BddPedido {
         };
         queue.add(jsonRequest);
     }
+
+
+    //getPedidoByCliente(id_cliente) get
+    public static void getPedidoByCliente(final int id_cliente,Context context, Response.Listener<JSONArray> listener){
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest stringRequest = new JsonArrayRequest(Request.Method.GET,urlBase+"getPedidoByCliente?id_cliente="+id_cliente,null, listener,null){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError{
+                map.clear();
+                map = new HashMap<String,String>();
+                map.put("id_cliente",String.valueOf(id_cliente));
+                return map;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
+
+
+
 
     private static Map<String, Integer> arrayToMap(ArrayList<Producto> arrayList) {
         Map<String, Integer> retorno = new HashMap<>();

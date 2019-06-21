@@ -3,6 +3,7 @@ package com.example.djgra.inacapdeli;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,7 +34,7 @@ public class DetallePagarCliente extends AppCompatActivity {
     private RecyclerView rcProductos;
     int codigoActividad= 0;
     LinearLayout linearPagar;
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //yyyy-MM-dd HH:mm:ss
     ImageButton btnSalir;
     public static TextView tvSubtotalDetallePagar, tvTotalDetalle;
     TextView tvClickAqui, cantidadBarar, totalBarra;
@@ -41,6 +42,7 @@ public class DetallePagarCliente extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle_pagar_cliente);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         tvClickAqui = (TextView) findViewById(R.id.tvClickAqui);
         tvSubtotalDetallePagar = (TextView)  findViewById(R.id.tvSubTotalPagarCliente);
         rcProductos = (RecyclerView) findViewById(R.id.rcProductoDPC);
@@ -92,35 +94,22 @@ public class DetallePagarCliente extends AppCompatActivity {
             public void onClick(View v) {
                 if(pedido.totalPagarPedido() != 0){
                     pedido.setId_cliente(PrincipalCliente.cliente.getCodigo());
-                    ArrayList<Producto> productosPedidos = new ArrayList<>();
-                    for (Producto pro : pedido.getLstProductoPedido()){
-                        if(pro.getCantidad() > 1){
-                            for(int x=0; x < pro.getCantidad(); x++){
-                                pro.setCantidad(0);
-                                productosPedidos.add(pro);
-                            }
-                        }else{
-                            productosPedidos.add(pro);
-                        }
-                    }
-                    pedido.setLstProductoPedido(productosPedidos);
+                    pedido.setLstProductoPedido(pedido.listaProductosFinal(pedido.getLstProductoPedido()));
                     pedido.setPedido_estado(1);
                     pedido.setId_condicion_pedido(2);
                     pedido.setId_vendedor(181);
-                    pedido.setFechaPedido("" + getTimeStamp());
+                    pedido.setFechaPedido(sdf.format(getDate(getTimeStamp())));
                     final ProgressDialog progressDialog = Functions.CargarDatos("Realizando Pedido", DetallePagarCliente.this);
                     BddPedido.setPedido(pedido, DetallePagarCliente.this, new Response.Listener() {
                         @Override
                         public void onResponse(Object response) {
                             Toast.makeText(DetallePagarCliente.this, "Pedido Realizado", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                            //enviar pedido a vendedor
+                            //enviar pedido a a historial activos
                             //descontar saldo
                         }
                     }, Functions.FalloInternet(DetallePagarCliente.this,progressDialog,"No realizo Compra"));
-
-                    Intent intent = new Intent(DetallePagarCliente.this,PedidosCliente.class);
-                    intent.putExtra("pedido",pedido);
-                    startActivity(intent);
-
                 }else{
                     Toast.makeText(DetallePagarCliente.this, "No Tiene Nada Que Pagar", Toast.LENGTH_SHORT).show();
                 }

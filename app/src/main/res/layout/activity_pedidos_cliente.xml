@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/btnInicioPedidos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="48dp"
@@ -29,20 +29,11 @@
             android:id="@+id/imageButton4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="-33dp"
-            android:background="@android:color/transparent"
-            app:srcCompat="@drawable/btnpedidosnegro" />
-
-        <ImageButton
-            android:id="@+id/imageButton5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginTop="-33dp"
             android:layout_marginRight="48dp"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/btndatosclientes" />
+            app:srcCompat="@drawable/btnpedidosnegro" />
 
 
     </LinearLayout>
@@ -84,7 +75,7 @@
         android:id="@+id/btnPedidosActivosCliente"
         android:layout_width="0dp"
         android:layout_height="63dp"
-        android:background="@android:color/darker_gray"
+        android:background="#B2BABB"
         android:text="Activos"
         android:textColor="#3C3F41"
         android:textSize="18sp"
@@ -94,6 +85,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
 
     <ScrollView
+        android:id="@+id/scPedidosCliente"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="8dp"

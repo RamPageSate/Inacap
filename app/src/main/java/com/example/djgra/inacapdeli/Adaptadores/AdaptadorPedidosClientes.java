@@ -39,7 +39,7 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
         holder.tvNumeroPedido.setText(String.valueOf(lstPedidos.get(position).getCodigo()));
         holder.tvMontoCompra.setText(String.valueOf(lstPedidos.get(position).totalPagarPedido()));
         holder.tvCandidadArticulosPedidos.setText(String.valueOf(lstPedidos.get(position).PedidoComprado().size()));
-        ArrayList<Producto> lstProducto = lstPedidos.get(position).PedidoComprado();
+        ArrayList<Producto> lstProducto = lstPedidos.get(position).getLstProductoPedido();
         AdaptadorProductoCompradoCliente adp = new AdaptadorProductoCompradoCliente(lstProducto,context);
         holder.rcProductos.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
         holder.rcProductos.setAdapter(adp);
