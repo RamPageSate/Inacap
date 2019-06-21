@@ -28,6 +28,7 @@ import com.android.volley.Response;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogCategoria;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogFabricantes;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogSede;
+import com.example.djgra.inacapdeli.AlertDialog.AlertDialogTipo;
 import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Fabricante;
 import com.example.djgra.inacapdeli.Clases.Persona;
@@ -389,100 +390,9 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                 }
                             }
                         }
-                        final AlertDialog formTipo = new AlertDialog.Builder(PrincipalAdministrador.this)
-                                .setView(R.layout.addcategoria)
-                                .create();
-                        formTipo.setCanceledOnTouchOutside(false);
-                        formTipo.setCancelable(false);
-                        formTipo.setOnShowListener(new DialogInterface.OnShowListener() {
-                            @Override
-                            public void onShow(final DialogInterface dialog) {
-                                final ListView lstvTipo = formTipo.findViewById(R.id.lstView);
+                        AlertDialogTipo alertTipo = new AlertDialogTipo(PrincipalAdministrador.this, lstTipo);
 
-                                TextView tvTitulo = formTipo.findViewById(R.id.tvTitulo);
-                                tvTitulo.setText("Tipos");
-                                final EditText etNombre = formTipo.findViewById(R.id.etNombreView);
-                                etNombre.setHint("Tipos");
-                                final ArrayAdapter<Tipo> adapterTipo = new ArrayAdapter<Tipo>(PrincipalAdministrador.this, android.R.layout.simple_expandable_list_item_1, lstTipo);
-                                final ImageButton btnGuardar = formTipo.findViewById(R.id.btnGuardarView);
-                                ImageButton btnSalir = formTipo.findViewById(R.id.btnSalirView);
-                                if(!lstTipo.isEmpty()){
-                                    lstvTipo.setAdapter(adapterTipo);
-                                }
 
-                                btnSalir.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        lstTipo.removeAll(lstTipo);
-                                        dialog.dismiss();
-                                    }
-                                });
-                                btnGuardar.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (1 == 1) {
-                                            if (!etNombre.getText().toString().isEmpty()) {
-                                                final ProgressDialog progressDialog = Functions.CargarDatos("Agregando Tipo", PrincipalAdministrador.this);
-                                                final Tipo tipo = new Tipo();
-                                                tipo.setNombre(etNombre.getText().toString().toUpperCase());
-                                                BddTipo.setTipo(tipo, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                                    @Override
-                                                    public void onResponse(String response) {
-                                                        Log.d("TAG_", "agregue tipo");
-                                                        BddTipo.getTipo(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
-                                                            @Override
-                                                            public void onResponse(JSONArray response) {
-                                                                lstTipo.removeAll(lstTipo);
-                                                                for (int x = 0; x < response.length(); ++x) {
-                                                                    try {
-                                                                        Tipo tipo = new Tipo();
-                                                                        tipo.setId(response.getJSONObject(x).getInt("tipo _id"));
-                                                                        tipo.setNombre(response.getJSONObject(x).getString("tipo"));
-                                                                        lstTipo.add(tipo);
-                                                                    } catch (JSONException e) {
-                                                                        e.printStackTrace();
-                                                                    }
-                                                                }
-                                                                lstTipo.add(tipo);
-                                                                lstvTipo.setAdapter(adapterTipo);
-                                                                lstvTipo.deferNotifyDataSetChanged();
-                                                                progressDialog.hide();
-                                                                etNombre.setText("");
-                                                                Toast.makeText(PrincipalAdministrador.this, "Agregado", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "no Pudo Cargar"));
-                                                    }
-                                                }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "no Pudo Cargar"));
-                                            } else {
-                                                etNombre.setError("Ingrese Fabricante");
-                                            }
-                                        } else {
-                                            //Actualizo ArrayList y el Listview
-                                            int codigo = lstTipo.get(posicionUdpdateDelete).getId();
-                                            String nuevoNombre = etNombre.getText().toString().toUpperCase();
-                                            Tipo tipo = new Tipo();
-                                            tipo.setId(codigo);
-                                            tipo.setNombre(nuevoNombre);
-                                            lstTipo.get(posicionUdpdateDelete).setNombre(nuevoNombre);
-                                            lstvTipo.setAdapter(adapterTipo);
-                                            lstvTipo.deferNotifyDataSetChanged();
-                                            etNombre.setText("");
-                                            final ProgressDialog progressDialog = Functions.CargarDatos("Actualizando", PrincipalAdministrador.this);
-                                            Toast.makeText(PrincipalAdministrador.this, "Actualizado", Toast.LENGTH_SHORT).show();
-                                            //Actualizo BD
-                                            //BddTipo.updateTipo(tipo, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                              //  @Override
-                                               // public void onResponse(String response) {
-                                                 //   progressDialog.hide();
-                                                   // Log.d("TAG_", "actualizo fabricante");
-                                                //}
-                                            //}, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, ""));
-                                        }
-                                    }
-                                });
-                            }
-                        });
-                        formTipo.show();
                     }
                 }, Functions.FalloInternet(PrincipalAdministrador.this,progressDialogF,"No pudo Cargar"));
             }

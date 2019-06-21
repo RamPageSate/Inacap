@@ -61,6 +61,7 @@ public class BddFabricante {
         };
         requestQueue.add(stringRequest);
     }
+
     public static void deleteFabricante(final Fabricante fabricante, Context context, Response.Listener<String> listener){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.POST,urlBase+"deleteFabricante",listener,null){
