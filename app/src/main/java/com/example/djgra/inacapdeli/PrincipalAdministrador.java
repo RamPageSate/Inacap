@@ -3,32 +3,28 @@ package com.example.djgra.inacapdeli;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogCategoria;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogFabricantes;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogSede;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogTipo;
+import com.example.djgra.inacapdeli.AlertDialog.AlertDialogVendedores;
 import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Fabricante;
 import com.example.djgra.inacapdeli.Clases.Persona;
@@ -45,7 +41,6 @@ import com.example.djgra.inacapdeli.Funciones.Functions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -192,7 +187,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnLstVendedores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos("Cargando Vendedores", PrincipalAdministrador.this);
+                final ProgressDialog progressDialog = Functions.CargarDatos(getString(R.string.alert_carga), PrincipalAdministrador.this);
                 BddPersonas.getVendedores(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -218,88 +213,13 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     vendedor.setRol(rol);
                                     vendedor.setSede(sede);
                                     lstPersonas.add(vendedor);
-                                    Log.d("TAG_", "encotnó vendedor" + vendedor.getNombre() + " " + vendedor.getApellido());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
                         }
-                        final AlertDialog formLstVendedores = new AlertDialog.Builder(PrincipalAdministrador.this)
-                                .setView(R.layout.lstvendedores)
-                                .create();
-                        formLstVendedores.setCanceledOnTouchOutside(false);
-                        formLstVendedores.setCancelable(false);
-                        formLstVendedores.setOnShowListener(new DialogInterface.OnShowListener() {
-                            @Override
-                            public void onShow(DialogInterface dialog) {
-                                lstvVendedores = formLstVendedores.findViewById(R.id.lstVendedores);
-                                adapterPesonas = new AdapterPesonas(PrincipalAdministrador.this);
-                                progressDialog.hide();
-                                lstvVendedores.setAdapter(adapterPesonas);
-                                final EditText etEmail = formLstVendedores.findViewById(R.id.etLstVendedorEmail);
-                                Button btnGuardar = formLstVendedores.findViewById(R.id.btnAgregarListaVendedor);
-                                ImageButton btnSalir = formLstVendedores.findViewById(R.id.btnlstVendedorAtras);
-                                btnGuardar.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(final View v) {
-                                        final ProgressDialog progressDialog = Functions.CargarDatos("Buscando Usuario", PrincipalAdministrador.this);
-                                        int validarEmail = 0;
-                                        for (int x = 0; x < lstPersonas.size(); x++) {
-                                            if (etEmail.getText().toString().equals(lstPersonas.get(x).getCorreo())) {
-                                                etEmail.setError("El VENDEDOR YA ESTA EN LA LISTA");
-                                                validarEmail = 1;
-                                                progressDialog.hide();
-                                            }
-                                        }
-                                        if (validarEmail == 0) {
-                                            BddPersonas.setVendedor(etEmail.getText().toString(), 2, 1, PrincipalAdministrador.this, new Response.Listener<String>() {
-                                                @Override
-                                                public void onResponse(String response) {
-                                                    Log.d("TAG_", "el usuario sera vendedor");
-                                                    //ACTUALIZAR EL LISTVIEW
-                                                    //traer un vendedor
-                                                    BddPersonas.getPersona(etEmail.getText().toString(), PrincipalAdministrador.this, new Response.Listener<String>() {
-                                                        @Override
-                                                        public void onResponse(String response) {
-                                                            try {
-                                                                Log.d("TAG_", "tengo la persona ingresada completa");
-                                                                JSONObject jsonRespuesta = new JSONObject(response);
-                                                                Persona persona = new Persona();
-                                                                persona.setCodigo(jsonRespuesta.getInt("persona_id"));
-                                                                persona.setNombre(jsonRespuesta.getString("persona_nombre"));
-                                                                persona.setApellido(jsonRespuesta.getString("persona_apellido"));
-                                                                persona.setFoto(jsonRespuesta.getString("persona_foto"));
-                                                                persona.setCorreo(jsonRespuesta.getString("persona_email"));
-                                                                persona.setEstado(jsonRespuesta.getInt("persona_estado"));
-                                                                persona.setSede(jsonRespuesta.getInt("id_sede"));
-                                                                persona.setRol(jsonRespuesta.getInt("id_rol"));
-                                                                lstPersonas.add(persona);
-                                                                lstvVendedores.setAdapter(adapterPesonas);
-                                                                lstvVendedores.deferNotifyDataSetChanged();
-                                                                etEmail.setText("");
-                                                                Toast.makeText(PrincipalAdministrador.this, "AGREGADO", Toast.LENGTH_SHORT).show();
-                                                                progressDialog.hide();
-                                                            } catch (JSONException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-                                btnSalir.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        lstPersonas.removeAll(lstPersonas);
-                                        formLstVendedores.dismiss();
-
-                                    }
-                                });
-                            }
-                        });
-                        formLstVendedores.show();
+                        AlertDialogVendedores vendedores = new AlertDialogVendedores(PrincipalAdministrador.this, lstPersonas);
+                        vendedores.show();
                     }
                 }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo Cargar"));
             }
