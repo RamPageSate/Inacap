@@ -56,6 +56,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
     private AlertDialogFabricantes fabricantes;
     private AlertDialogCategoria categorias;
     private  AdapterPesonas adapterPesonas;
+    private ProgressDialog progressDialog;
     ListView lstvVendedores;
 
     @Override
@@ -76,7 +77,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnCategoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos("Cargando Categorias", PrincipalAdministrador.this);
+                progressDialog = Functions.CargarDatos("Cargando Categorias", PrincipalAdministrador.this);
                 BddCategoria.getCategoria(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -111,7 +112,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnProductos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos("Cangando Productos", PrincipalAdministrador.this);
+                progressDialog = Functions.CargarDatos("Cangando Productos", PrincipalAdministrador.this);
                 BddProductos.getProducto(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -187,7 +188,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnLstVendedores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos(getString(R.string.alert_carga), PrincipalAdministrador.this);
+                progressDialog = Functions.CargarDatos(getString(R.string.alert_carga), PrincipalAdministrador.this);
                 BddPersonas.getVendedores(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -218,8 +219,26 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                 }
                             }
                         }
-                        AlertDialogVendedores vendedores = new AlertDialogVendedores(PrincipalAdministrador.this, lstPersonas);
-                        vendedores.show();
+                        BddPersonas.getPersonaEmail(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                ArrayList<String> lstEmail = new ArrayList<>();
+                                if (!response.toString().equals("[]")) {
+                                    for (int x = 0; x < response.length(); ++x) {
+                                        try {
+                                            lstEmail.add(response.getJSONObject(x).getString("persona_email"));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                                progressDialog.dismiss();
+                                AlertDialogVendedores vendedores = new AlertDialogVendedores(PrincipalAdministrador.this, lstPersonas, lstEmail);
+                                vendedores.show();
+                            }
+                        }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No se pudo Cargar"));
+
+
                     }
                 }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo Cargar"));
             }
@@ -229,7 +248,8 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnSede.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos("Cargando", PrincipalAdministrador.this);
+                progressDialog = Functions.CargarDatos("Cargando", PrincipalAdministrador.this);
+
                 BddSede.getSede(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -259,7 +279,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnFabricante.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos("Cargando Fabricantes", PrincipalAdministrador.this);
+                progressDialog = Functions.CargarDatos("Cargando Fabricantes", PrincipalAdministrador.this);
                 BddFabricante.getFabricantes(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -294,7 +314,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialogF = Functions.CargarDatos(getString(R.string.alert_carga), PrincipalAdministrador.this);
+                progressDialog = Functions.CargarDatos(getString(R.string.alert_carga), PrincipalAdministrador.this);
                 BddTipo.getTipo(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -311,12 +331,12 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                 }
                             }
                         }
-                        progressDialogF.dismiss();
+                        progressDialog.dismiss();
                         AlertDialogTipo alertTipo = new AlertDialogTipo(PrincipalAdministrador.this, lstTipo);
                         alertTipo.show();
 
                     }
-                }, Functions.FalloInternet(PrincipalAdministrador.this,progressDialogF,"No pudo Cargar"));
+                }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo Cargar"));
             }
         });
         //endregion
@@ -359,9 +379,9 @@ public class PrincipalAdministrador extends AppCompatActivity {
 
             LayoutInflater inflater = context.getLayoutInflater();
             View item = inflater.inflate(R.layout.listviewvendedores, null);
-            TextView titulo = item.findViewById(R.id.tvNombreLstProducto);
+            TextView titulo = item.findViewById(R.id.tvNombreVendedor);
             titulo.setText(lstPersonas.get(posicion).getNombre().toUpperCase() + " " + lstPersonas.get(posicion).getApellido().toUpperCase());
-            TextView email = item.findViewById(R.id.tvPrecioLstProducto);
+            TextView email = item.findViewById(R.id.tvEmailVendedor);
             email.setText(lstPersonas.get(posicion).getCorreo().toUpperCase());
             TextView sede = item.findViewById(R.id.tvSedeLstVendedor);
             sede.setText("SANTIAGO CENTRO");
@@ -401,7 +421,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                 public void onClick(View v) {
                     //aqui digo que vendedor voy a quitar de vendedor
                     Persona per = lstPersonas.get(posicion);
-                    final ProgressDialog progressDialog = Functions.CargarDatos("Quitando Vendedor", PrincipalAdministrador.this);
+                    progressDialog = Functions.CargarDatos("Quitando Vendedor", PrincipalAdministrador.this);
                     BddPersonas.setVendedor(per.getCorreo(), 1, 1, PrincipalAdministrador.this, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

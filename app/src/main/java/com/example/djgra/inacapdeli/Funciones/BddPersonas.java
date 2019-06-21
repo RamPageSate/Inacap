@@ -1,22 +1,15 @@
 package com.example.djgra.inacapdeli.Funciones;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.djgra.inacapdeli.Clases.Persona;
-import com.example.djgra.inacapdeli.Inicio;
-import com.example.djgra.inacapdeli.Registrar_Persona;
 
 import org.json.JSONArray;
 
@@ -82,6 +75,12 @@ public class BddPersonas {
                 return map;
             }
         };
+        requestQueue.add(request);
+    }
+
+    public static void getPersonaEmail(Context context, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlBase + "getPersonaEmail", null, listener, errorListener);
         requestQueue.add(request);
     }
 
