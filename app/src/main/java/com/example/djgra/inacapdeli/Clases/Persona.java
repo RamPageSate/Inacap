@@ -112,4 +112,29 @@ public class Persona implements Serializable{
         lstPedidos.add(pedido);
     }
 
+    public ArrayList<Pedido> lstPedidosPendientes(){
+        ArrayList<Pedido> lista = new ArrayList<>();
+        for(int x=0; x< lstPedidos.size(); x++){
+            if(lstPedidos.get(x).getId_condicion_pedido() == 2){
+                lista.add(lstPedidos.get(x));
+            }
+        }
+        return lista;
+    }
+
+    public ArrayList<Pedido> lstPedidosEntregados(){
+        ArrayList<Pedido> lista = new ArrayList<>();
+        for(int x=0; x< lstPedidos.size(); x++){
+            if(lstPedidos.get(x).getId_condicion_pedido() == 1){
+                lista.add(lstPedidos.get(x));
+            }
+        }
+        return lista;
+    }
+
+
+
+
+
+
 }

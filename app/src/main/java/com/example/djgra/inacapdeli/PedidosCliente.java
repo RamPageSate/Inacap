@@ -29,7 +29,8 @@ public class PedidosCliente extends AppCompatActivity {
         rcPedidos = (RecyclerView) findViewById(R.id.rcPedidosCliente);
         btnActivos = findViewById(R.id.btnPedidosActivosCliente);
         btnAnteriores = findViewById(R.id.btnPedidosAnterioresCliente);
-
+        //inicia con las compras ya entregadas anteriormente     condicion 2 pendiente
+        btnAnteriores.setEnabled(false);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             pedido = (Pedido) bundle.getSerializable("pedido");
@@ -46,7 +47,18 @@ public class PedidosCliente extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 btnActivos.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                btnAnteriores.setBackgroundColor(Color.parseColor("#808080"));
+                //btnAnteriores.setBackgroundColor(Color.parseColor("#aaa"));
+                btnAnteriores.setEnabled(true);
+            }
+        });
+
+        // hacer adapter si no hay pedido anterior o historial  cuando ingresa el btn anteriores debera estar deshabilitado
+        btnAnteriores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnAnteriores.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                //btnActivos.setBackgroundColor(Color.parseColor("#aaa"));
+
             }
         });
 

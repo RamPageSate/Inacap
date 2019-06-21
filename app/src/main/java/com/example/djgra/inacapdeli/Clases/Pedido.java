@@ -3,6 +3,7 @@ package com.example.djgra.inacapdeli.Clases;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 
 public class Pedido implements Serializable {
@@ -69,6 +70,8 @@ public class Pedido implements Serializable {
         this.lstProductoPedido = lstProductoPedido;
     }
 
+
+
     public int totalPagarPedido(){
         int total = 0;
         for (int x=0; x< lstProductoPedido.size(); x++){
@@ -127,4 +130,24 @@ public class Pedido implements Serializable {
         }
         return ok;
     }
+
+    public static ArrayList<Producto> listaProductosFinal(ArrayList<Producto> lst){
+        ArrayList<Producto> lista = new ArrayList<>();
+        for(int x=0 ; x <lst.size(); x++){
+            if(lst.get(x).getCantidad() > 1){
+                for(int c=0; c < lst.get(x).getCantidad(); x++){
+                    lista.add(lst.get(x));
+                }
+            }else{
+                lista.add(lst.get(x));
+            }
+        }
+        for (int x=0; x < lista.size(); x++ ){
+            lista.get(x).setCantidad(1);
+        }
+        return lista;
+    }
+
+
+
 }

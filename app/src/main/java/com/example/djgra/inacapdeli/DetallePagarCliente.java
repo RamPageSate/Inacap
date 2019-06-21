@@ -92,27 +92,20 @@ public class DetallePagarCliente extends AppCompatActivity {
             public void onClick(View v) {
                 if(pedido.totalPagarPedido() != 0){
                     pedido.setId_cliente(PrincipalCliente.cliente.getCodigo());
-                    ArrayList<Producto> productosPedidos = new ArrayList<>();
-                    for (Producto pro : pedido.getLstProductoPedido()){
-                        if(pro.getCantidad() > 1){
-                            for(int x=0; x < pro.getCantidad(); x++){
-                                pro.setCantidad(0);
-                                productosPedidos.add(pro);
-                            }
-                        }else{
-                            productosPedidos.add(pro);
-                        }
-                    }
-                    pedido.setLstProductoPedido(productosPedidos);
+                    pedido.setLstProductoPedido(pedido.listaProductosFinal(pedido.getLstProductoPedido()));
                     pedido.setPedido_estado(1);
                     pedido.setId_condicion_pedido(2);
                     pedido.setId_vendedor(181);
-                    pedido.setFechaPedido("" + getTimeStamp());
+                    //arreglar tiemstamp           enviar a pedidos activos
+                    pedido.setFechaPedido(sdf.format(getDate(getTimeStamp())));
                     final ProgressDialog progressDialog = Functions.CargarDatos("Realizando Pedido", DetallePagarCliente.this);
                     BddPedido.setPedido(pedido, DetallePagarCliente.this, new Response.Listener() {
                         @Override
                         public void onResponse(Object response) {
                             Toast.makeText(DetallePagarCliente.this, "Pedido Realizado", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                            //enviar pedido a vendedor
+                            //enviar pedido a a historial activos
                             //descontar saldo
                         }
                     }, Functions.FalloInternet(DetallePagarCliente.this,progressDialog,"No realizo Compra"));

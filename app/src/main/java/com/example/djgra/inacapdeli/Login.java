@@ -16,9 +16,11 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.example.djgra.inacapdeli.Clases.Categoria;
+import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.Funciones.BddCategoria;
+import com.example.djgra.inacapdeli.Funciones.BddPedido;
 import com.example.djgra.inacapdeli.Funciones.BddPersonas;
 import com.example.djgra.inacapdeli.Funciones.BddProductos;
 import com.example.djgra.inacapdeli.Funciones.Functions;
@@ -118,7 +120,29 @@ public class Login extends AppCompatActivity {
                                     editor.putString("pass", persona.getContrasena());
                                     editor.commit();
                                 }
+                                BddPedido.getPedidoByCliente(persona.getCodigo(), Login.this, new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        if (!response.equals("[]")) {
+                                            try {
+                                                JSONObject objeto = new JSONObject(response);
+                                                Pedido pedido = new Pedido();
+                                                pedido.setCodigo(objeto.getInt("pedido_id"));//fecha_hora estado id_cliente id_vendedor condicion_pedido
+                                                pedido.setFechaPedido(objeto.getString("pedido_fecha_hora"));
+                                                pedido.setPedido_estado(objeto.getInt("pedido_estado"));
+                                                pedido.setId_cliente(objeto.getInt("id_cliente"));
+                                                pedido.setId_vendedor(objeto.getInt("id_vendedor"));
+                                                pedido.setId_condicion_pedido(objeto.getInt("id_condicion_pedido"));
 
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+
+
+                                    }
+                                });
                                 switch (persona.getRol()) {
                                     case (1):
                                         final Intent c = new Intent(Login.this, PrincipalCliente.class);
