@@ -374,7 +374,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialogF = Functions.CargarDatos("Espere..", PrincipalAdministrador.this);
+                final ProgressDialog progressDialogF = Functions.CargarDatos(getString(R.string.alert_carga), PrincipalAdministrador.this);
                 BddTipo.getTipo(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -384,14 +384,16 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     Tipo tipo = new Tipo();
                                     tipo.setId(response.getJSONObject(x).getInt("tipo_id"));
                                     tipo.setNombre(response.getJSONObject(x).getString("tipo"));
+                                    tipo.setEstado(response.getJSONObject(x).getInt("tipo_estado"));
                                     lstTipo.add(tipo);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
                         }
+                        progressDialogF.dismiss();
                         AlertDialogTipo alertTipo = new AlertDialogTipo(PrincipalAdministrador.this, lstTipo);
-
+                        alertTipo.show();
 
                     }
                 }, Functions.FalloInternet(PrincipalAdministrador.this,progressDialogF,"No pudo Cargar"));

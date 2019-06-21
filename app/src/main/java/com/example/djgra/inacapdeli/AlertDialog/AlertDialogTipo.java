@@ -45,9 +45,9 @@ public class AlertDialogTipo extends AlertDialog {
         final ListView lstvTipo = view.findViewById(R.id.lstView);
 
         TextView tvTitulo = view.findViewById(R.id.tvTitulo);
-        tvTitulo.setText("Sede");
+        tvTitulo.setText("Tipo");
         final EditText etNombre = view.findViewById(R.id.etNombreView);
-        etNombre.setHint("Agregar nueva sede");
+        etNombre.setHint("Agregar nuevo Tipo");
         final ImageButton btnGuardar = view.findViewById(R.id.btnGuardarView);
         final AdaptadorTipo adapter = new AdaptadorTipo(lstTipo, context, etNombre, btnGuardar);
         //SI ESTA VACIA  NO CARGA
