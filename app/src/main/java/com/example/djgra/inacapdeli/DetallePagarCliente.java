@@ -34,6 +34,7 @@ import java.util.TimeZone;
 public class DetallePagarCliente extends AppCompatActivity {
     public static Pedido pedido;
     private RecyclerView rcProductos;
+
     int codigoActividad= 0;
     LinearLayout linearPagar;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //yyyy-MM-dd HH:mm:ss
@@ -54,6 +55,7 @@ public class DetallePagarCliente extends AppCompatActivity {
         linearPagar = findViewById(R.id.linearPagarDetalle);
         btnSalir = findViewById(R.id.btnSalirPDC);
         totalBarra = findViewById(R.id.totaldetalle);
+        linearPagar.setEnabled(false);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             pedido = (Pedido) bundle.getSerializable("pedido");
@@ -83,9 +85,23 @@ public class DetallePagarCliente extends AppCompatActivity {
                 TimePickerDialog horaDialog = new TimePickerDialog(DetallePagarCliente.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        if(String.valueOf(minute).equals("0")){
+                            String fecha = hourOfDay + ":00:00";
+                        }else{
+                            String fecha = hourOfDay + ":" + minute+":00";
+                        }
+                        String fecha = hourOfDay + ":" + minute;
+                        if(HoraRetiro(fecha) <= getTimeStamp()){
+                            tvClickAqui.setText("Seleccione otra Hora");
+                            tvClickAqui.setTextColor(Color.parseColor("#FF0000"));
+                        }else{
+                            tvClickAqui.setTextColor(Color.parseColor("#3C3F41"));
+                            linearPagar.setEnabled(true);
+                            tvClickAqui.setText(fecha);
+                        }
 
                     }
-                }, 19, 25, true);
+                }, 00, 00, true);
                 horaDialog.show();
             }
         });
