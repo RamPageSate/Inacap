@@ -47,7 +47,7 @@ public class PrincipalCliente extends AppCompatActivity {
     private static ArrayList<Producto> lstProducto = new ArrayList<>();
     public static ArrayList<Categoria> lstCategorias = new ArrayList<>();
     public static TextView tvCantidadArticulosCliente, tvMontoPagar;
-    public static Persona cliente = new Persona();
+    public static Persona clientePrincipal = new Persona();
     public static Pedido pedidoCliente = new Pedido();
     private static AdaptadorCategoriasCliente adaptadorCategorias;
     LinearLayout linearCategorias;
@@ -74,10 +74,10 @@ public class PrincipalCliente extends AppCompatActivity {
         tvCantidadArticulosCliente = (TextView) findViewById(R.id.tvCantidadPagarDetalleCliente);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            cliente = (Persona) bundle.getSerializable("usr");
-            tvSaldoActual.setText(tvSaldoActual.getText() + "" + cliente.getSaldo());
-            fotoUsr.setImageBitmap(Functions.StringToBitMap(cliente.getFoto()));
-            pedidoCliente.setId_cliente(cliente.getCodigo());
+            clientePrincipal = (Persona) bundle.getSerializable("usr");
+            tvSaldoActual.setText(tvSaldoActual.getText() + "" + clientePrincipal.getSaldo());
+            fotoUsr.setImageBitmap(Functions.StringToBitMap(clientePrincipal.getFoto()));
+            pedidoCliente.setId_cliente(clientePrincipal.getCodigo());
 
         }
         final ProgressDialog progressDialog = Functions.CargarDatos("Cangando Productos", PrincipalCliente.this);
@@ -104,10 +104,10 @@ public class PrincipalCliente extends AppCompatActivity {
                                         }
                                         producto.setLstCategoriasProducto(categoriasProducto);
                                         lstProducto.add(producto);
-                                        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56, 1, "")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, cliente);
+                                        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56, 1, "")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, clientePrincipal);
                                         rcProductosValorados.setAdapter(adaptadorValoradas);
                                         //hacer Condicion de que si esta vacia cambiar el nombre de Favoritas ademas rellenar la vista con otra categoria
-                                        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54, 1, "Favoritas")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, cliente);
+                                        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54, 1, "Favoritas")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, clientePrincipal);
                                         rcFavoritas.setAdapter(adaptadorFavoritas);
                                     }
                                 }
@@ -138,7 +138,7 @@ public class PrincipalCliente extends AppCompatActivity {
                             final Sede sede = (new Sede(response.getJSONObject(x).getInt("sede_id"),
                                     response.getJSONObject(x).getInt("sede_estado"),
                                     response.getJSONObject(x).getString("sede_direccion")));
-                            if (sede.getCodigo() == cliente.getSede()) {
+                            if (sede.getCodigo() == clientePrincipal.getSede()) {
                                 tvSedeActual.setText(sede.getDireccion().toUpperCase());
                                 break;
                             }
@@ -182,7 +182,7 @@ public class PrincipalCliente extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(PrincipalCliente.this, DatosCliente.class);
-                i.putExtra("cliente",cliente);
+                i.putExtra("cliente",clientePrincipal);
                 startActivity(i);
             }
         });
@@ -190,62 +190,61 @@ public class PrincipalCliente extends AppCompatActivity {
         btnHistorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BddPedido.getPedidoByCliente(cliente.getCodigo(), PrincipalCliente.this, new Response.Listener<JSONArray>() {
+                final ProgressDialog progressDialog = Functions.CargarDatos("Cangando Historial", PrincipalCliente.this);
+                BddPedido.getPedidoByCliente(clientePrincipal.getCodigo(), PrincipalCliente.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         if (!response.equals("[]")) {
                             for (int x = 0; x < response.length(); x++) {
                                 try {
-                                    Pedido pedido = new Pedido();
-                                    pedido.setCodigo(response.getJSONObject(x).getInt("pedido_id"));//fecha_hora estado id_cliente id_vendedor condicion_pedido
+                                    final Pedido pedido = new Pedido();
+                                    pedido.setCodigo(response.getJSONObject(x).getInt("pedido_id"));
+                                    BddProductos.getProductoByPedido(pedido.getCodigo(), PrincipalCliente.this, new Response.Listener<JSONArray>() {
+                                        @Override
+                                        public void onResponse(JSONArray response) {
+                                            if (!response.equals("[]")) {
+                                                ArrayList<Producto> lista = new ArrayList<>();
+                                                for (int x = 0; x < response.length(); x++) {
+                                                    try {
+                                                        final Producto producto = new Producto();
+                                                        producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
+                                                        producto.setNombre(response.getJSONObject(x).getString("producto_nombre"));
+                                                        producto.setFoto(response.getJSONObject(x).getString("producto_foto"));
+                                                        producto.setDescripcion(response.getJSONObject(x).getString("producto_descripcion"));
+                                                        producto.setSku(response.getJSONObject(x).getString("producto_sku"));
+                                                        producto.setPrecio(response.getJSONObject(x).getInt("producto_precio"));
+                                                        producto.setStock(response.getJSONObject(x).getInt("producto_stock"));
+                                                        producto.setEstado(response.getJSONObject(x).getInt("producto_estado"));
+                                                        producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
+                                                        producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
+                                                        lista.add(producto);
+                                                        Log.d("TAG_", "CP-> " + producto.getNombre());
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                                pedido.setLstProductoPedido(lista);
+                                                clientePrincipal.agregarPedido(pedido);
+                                            }
+                                        }
+                                    }, Functions.FalloInternet(PrincipalCliente.this, progressDialog, "No pudo Cargar"));
                                     pedido.setFechaPedido(response.getJSONObject(x).getString("pedido_fecha_hora"));
                                     pedido.setPedido_estado(response.getJSONObject(x).getInt("pedido_estado"));
                                     pedido.setId_cliente(response.getJSONObject(x).getInt("id_cliente"));
                                     pedido.setId_vendedor(response.getJSONObject(x).getInt("id_vendedor"));
                                     pedido.setId_condicion_pedido(response.getJSONObject(x).getInt("id_condicion_pedido"));
                                     Log.d("TAG_", "entro Pedidos");
-                                    cliente.agregarPedido(pedido);
-
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
                         }
-                        for (int x = 0; x < cliente.getLstPedidos().size(); x++) {
-
-                            BddProductos.getProductoByPedido(cliente.getLstPedidos().get(x).getCodigo(), PrincipalCliente.this, new Response.Listener<JSONArray>() {
-                                @Override
-                                public void onResponse(JSONArray response) {
-                                    if (!response.equals("[]")) {
-                                        for (int x = 0; x < response.length(); x++) {
-                                            try {
-                                                Log.d("TAG_", "entro producto de pedido" + cliente.getLstPedidos().get(x).getCodigo());
-                                                final Producto producto = new Producto();
-                                                producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
-                                                producto.setNombre(response.getJSONObject(x).getString("producto_nombre"));
-                                                producto.setFoto(response.getJSONObject(x).getString("producto_foto"));
-                                                producto.setDescripcion(response.getJSONObject(x).getString("producto_descripcion"));
-                                                producto.setSku(response.getJSONObject(x).getString("producto_sku"));
-                                                producto.setPrecio(response.getJSONObject(x).getInt("producto_precio"));
-                                                producto.setStock(response.getJSONObject(x).getInt("producto_stock"));
-                                                producto.setEstado(response.getJSONObject(x).getInt("producto_estado"));
-                                                producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
-                                                producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
-                                                cliente.getLstPedidos().get(x).agregarProductoListaPedido(producto);
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-
-                                        }
-                                    }
-                                }
-                            }, Functions.FalloInternet(PrincipalCliente.this, progressDialog, "No pudo Cargar"));
-                        }
+                        progressDialog.dismiss();
                         Intent i = new Intent(PrincipalCliente.this, PedidosCliente.class);
-                        i.putExtra("cliente", cliente);
                         startActivity(i);
                     }
                 });
+
             }
         });
 
@@ -261,9 +260,13 @@ public class PrincipalCliente extends AppCompatActivity {
         if (resultCode == 7) {
             pedidoCliente = DetallePagarCliente.pedido;
         }
-        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56, 1, "")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, cliente);
-        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54, 1, "Favoritas")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, cliente);
+        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56, 1, "")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, clientePrincipal);
+        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54, 1, "Favoritas")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, clientePrincipal);
+        rcFavoritas.setItemViewCacheSize(FiltrarListaPorCategoria(new Categoria(54, 1, "Favoritas")).size());
+        rcFavoritas.setHasFixedSize(true);
         rcFavoritas.setAdapter(adaptadorFavoritas);
+        rcProductosValorados.setItemViewCacheSize(FiltrarListaPorCategoria(new Categoria(56, 1, "")).size());
+        rcProductosValorados.setHasFixedSize(true);
         rcProductosValorados.setAdapter(adaptadorValoradas);
         adaptadorCategorias = new AdaptadorCategoriasCliente(lstCategorias, PrincipalCliente.this, pedidoCliente);
         rcCategorias.setAdapter(adaptadorCategorias);

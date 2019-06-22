@@ -71,7 +71,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
                     holder.btnDescontar.setVisibility(View.VISIBLE);
                     holder.cantidadProducto.setText(String.valueOf(pedido.getLstProductoPedido().get(x).getCantidad()));
                 }else{
-                    holder.cantidadProducto.setText("0");
+                    holder.cantidadProducto.setText("1");
                 }
                 cantidadProductosPedido.setText(String.valueOf(pedido.cantidadArticulos()));
                 totalPagarPedido.setText(String.valueOf(pedido.totalPagarPedido()));

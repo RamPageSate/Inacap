@@ -39,7 +39,8 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
         holder.tvNumeroPedido.setText(String.valueOf(lstPedidos.get(position).getCodigo()));
         holder.tvMontoCompra.setText(String.valueOf(lstPedidos.get(position).totalPagarPedido()));
         holder.tvCandidadArticulosPedidos.setText(String.valueOf(lstPedidos.get(position).PedidoComprado().size()));
-        ArrayList<Producto> lstProducto = lstPedidos.get(position).getLstProductoPedido();
+        holder.tvFecha.setText(lstPedidos.get(position).getFechaPedido());
+        ArrayList<Producto> lstProducto = Pedido.filtrarPedidos(lstPedidos.get(position).getLstProductoPedido());
         AdaptadorProductoCompradoCliente adp = new AdaptadorProductoCompradoCliente(lstProducto,context);
         holder.rcProductos.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
         holder.rcProductos.setAdapter(adp);
@@ -57,7 +58,7 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
     }
 
     public class ViewHolderPedidosClientes extends RecyclerView.ViewHolder {
-        TextView tvNumeroPedido, tvCandidadArticulosPedidos, tvMontoCompra;
+        final TextView tvNumeroPedido, tvCandidadArticulosPedidos, tvMontoCompra, tvFecha;
         ImageButton btnEliminar;
         RecyclerView rcProductos;
         Button btnVolverComprar;
@@ -72,6 +73,7 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
             tvMontoCompra = itemView.findViewById(R.id.tvMontoPedidoAnteriorCliente);
             rcProductos = itemView.findViewById(R.id.rcProductosPedidoAnteriorCliente);
             btnVolverComprar = itemView.findViewById(R.id.btnVolverComprarPedidoAnteriorCliente);
+            tvFecha = itemView.findViewById(R.id.tvFechaPedidoAnteriorCliente);
 
         }
     }

@@ -75,7 +75,7 @@ public class Pedido implements Serializable {
     public int totalPagarPedido(){
         int total = 0;
         for (int x=0; x< lstProductoPedido.size(); x++){
-            total = total + (lstProductoPedido.get(x).getPrecio() * lstProductoPedido.get(x).getCantidad());
+            total = total + lstProductoPedido.get(x).getPrecio();
         }
         return total;
     }
@@ -135,7 +135,7 @@ public class Pedido implements Serializable {
         ArrayList<Producto> lista = new ArrayList<>();
         for(int x=0 ; x <lst.size(); x++){
             if(lst.get(x).getCantidad() > 1){
-                for(int c=0; c < lst.get(x).getCantidad(); x++){
+                for(int c=0; c < lst.get(x).getCantidad(); c++){
                     lista.add(lst.get(x));
                 }
             }else{
@@ -148,6 +148,21 @@ public class Pedido implements Serializable {
         return lista;
     }
 
+    public static ArrayList<Producto> filtrarPedidos(ArrayList<Producto> lst){
+        ArrayList<Producto> lista = new ArrayList<>();
+        for (int x=0; x < lst.size(); x++){
+            if(lista.isEmpty()){
+                lista.add(lst.get(x));
+            }else{
+                for(int c=0; c < lista.size(); c++){
+                    if(lista.get(c).getCodigo() != lst.get(x).getCodigo()){
+                        lista.add(lst.get(x));
+                    }
+                }
+            }
+        }
 
+        return lista;
+    }
 
 }
