@@ -226,6 +226,8 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     }
                                 }
                                 progressDialog.dismiss();
+                                Collections.reverse(lstPersonas);
+                                Collections.reverse(lstEmail);
                                 AlertDialogVendedores vendedores = new AlertDialogVendedores(PrincipalAdministrador.this, lstPersonas, lstEmail);
                                 vendedores.show();
                             }

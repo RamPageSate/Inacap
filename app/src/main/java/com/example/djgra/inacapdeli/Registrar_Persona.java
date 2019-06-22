@@ -152,7 +152,7 @@ public class Registrar_Persona extends AppCompatActivity {
                             final AlertDialog.Builder builder = new AlertDialog.Builder(Registrar_Persona.this);
                             builder.setTitle("Notificacion");
                             builder.setMessage("Se a agregado correctamente");
-                            builder.setPositiveButton("1", new DialogInterface.OnClickListener() {
+                            builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 

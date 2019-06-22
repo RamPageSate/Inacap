@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AlertDialogVendedores extends AlertDialog {
     private int posicionUdpdateDelete;
@@ -32,12 +33,14 @@ public class AlertDialogVendedores extends AlertDialog {
         super(context);
         setCancelable(false);
         setCanceledOnTouchOutside(false);
+
         LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.lstvendedores, null);
         setView(view);
         final AutoCompleteTextView acVendedor = view.findViewById(R.id.acVendedores);
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, lstEmail);
         acVendedor.setAdapter(adapter);
+        acVendedor.setThreshold(1);
         final ListView lstvVendedores = view.findViewById(R.id.lstVendedores);
         acVendedor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -69,7 +72,7 @@ public class AlertDialogVendedores extends AlertDialog {
                             BddPersonas.getVendedores(context, new Response.Listener<JSONArray>() {
                                 @Override
                                 public void onResponse(JSONArray response) {
-                                    progressDialog.dismiss();
+
                                     lstPersona.clear();
                                     if (!response.toString().equals("[]")) {
                                         for (int x = 0; x < response.length(); ++x) {
@@ -97,8 +100,28 @@ public class AlertDialogVendedores extends AlertDialog {
                                                 e.printStackTrace();
                                             }
                                         }
-                                    }
+                                        BddPersonas.getPersonaEmail(context, new Response.Listener<JSONArray>() {
+                                            @Override
+                                            public void onResponse(JSONArray response) {
+                                                progressDialog.dismiss();
+                                                lstEmail.clear();
+                                                if (!response.toString().equals("[]")) {
+                                                    for (int y = 0; y < response.length(); y++) {
+                                                        try {
+                                                            lstEmail.add(response.getJSONObject(y).getString("persona_email"));
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                }
+                                                Collections.reverse(lstEmail);
+                                                adapter.notifyDataSetChanged();
 
+
+                                            }
+                                        }, Functions.FalloInternet(context, progressDialog, "Fallo la conexion"));
+                                    }
+                                    Collections.reverse(lstPersona);
                                     adpVendedor.notifyDataSetChanged();
                                 }
 
