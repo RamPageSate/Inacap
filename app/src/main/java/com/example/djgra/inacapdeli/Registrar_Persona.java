@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -143,6 +142,9 @@ public class Registrar_Persona extends AppCompatActivity {
 
                     progressDialog = Functions.CargarDatos("Agregando Persona", Registrar_Persona.this);
                     progressDialog.show();
+                    progressDialog.setCancelable(false);
+                    progressDialog.setCanceledOnTouchOutside(false);
+
                     BddPersonas.setPersona(per, Registrar_Persona.this, new Response.Listener() {
                         @Override
                         public void onResponse(Object response) {
@@ -167,7 +169,8 @@ public class Registrar_Persona extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(Registrar_Persona.this, "El correo ya existe", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+
                         }
                     });
                 }

@@ -54,9 +54,9 @@ public class AdaptadorProductosAdministrador extends BaseAdapter {
         if (!lstProducto.isEmpty()) {
             ImageView imagen = item.findViewById(R.id.imgLstVendedor);
             imagen.setId(300 + posicion);
-            TextView nombre = item.findViewById(R.id.tvNombreLstProducto);
+            TextView nombre = item.findViewById(R.id.tvNombreVendedor);
             nombre.setText("" + lstProducto.get(posicion).getNombre());
-            final TextView precio = item.findViewById(R.id.tvPrecioLstProducto);
+            final TextView precio = item.findViewById(R.id.tvEmailVendedor);
             precio.setText("$ " + lstProducto.get(posicion).getPrecio());
             ImageButton btnEdit = item.findViewById(R.id.btnEditProducto);
             TextView descripcion = item.findViewById(R.id.tvDescripcionListViewProducto);

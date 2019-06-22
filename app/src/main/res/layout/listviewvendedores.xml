@@ -20,7 +20,7 @@
         app:srcCompat="@drawable/logooficial" />
 
     <TextView
-        android:id="@+id/tvNombreLstProducto"
+        android:id="@+id/tvNombreVendedor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -33,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvPrecioLstProducto"
+        android:id="@+id/tvEmailVendedor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -43,20 +43,7 @@
         android:textColor="#000000"
         android:textSize="9sp"
         app:layout_constraintStart_toEndOf="@+id/imgLstVendedor"
-        app:layout_constraintTop_toBottomOf="@+id/tvNombreLstProducto" />
-
-    <TextView
-        android:id="@+id/tvSedeLstVendedor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        android:text="Sede"
-        android:textColor="#000000"
-        android:textSize="9sp"
-        app:layout_constraintStart_toEndOf="@+id/imgLstVendedor"
-        app:layout_constraintTop_toBottomOf="@+id/tvPrecioLstProducto" />
+        app:layout_constraintTop_toBottomOf="@+id/tvNombreVendedor" />
 
     <Switch
         android:id="@+id/swEstadoVendedor"
@@ -67,7 +54,7 @@
         android:layout_marginRight="8dp"
         android:textSize="8sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+        app:layout_constraintTop_toBottomOf="@+id/tvEstadoVendedor" />
 
     <ImageButton
         android:id="@+id/btnQuitarVendedor"
@@ -82,7 +69,7 @@
         app:srcCompat="@drawable/removendedores" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/tvEstadoVendedor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="9dp"

@@ -1,6 +1,5 @@
 package com.example.djgra.inacapdeli;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,16 +7,10 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogCategoria;
@@ -55,7 +48,8 @@ public class PrincipalAdministrador extends AppCompatActivity {
     private static ArrayList<Fabricante> lstFabricantes = new ArrayList<>();
     private AlertDialogFabricantes fabricantes;
     private AlertDialogCategoria categorias;
-    private  AdapterPesonas adapterPesonas;
+
+    private ProgressDialog progressDialog;
     ListView lstvVendedores;
 
     @Override
@@ -76,7 +70,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnCategoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos("Cargando Categorias", PrincipalAdministrador.this);
+                progressDialog = Functions.CargarDatos("Cargando Categorias", PrincipalAdministrador.this);
                 BddCategoria.getCategoria(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -111,7 +105,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnProductos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos("Cangando Productos", PrincipalAdministrador.this);
+                progressDialog = Functions.CargarDatos("Cangando Productos", PrincipalAdministrador.this);
                 BddProductos.getProducto(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -187,7 +181,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnLstVendedores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos(getString(R.string.alert_carga), PrincipalAdministrador.this);
+                progressDialog = Functions.CargarDatos(getString(R.string.alert_carga), PrincipalAdministrador.this);
                 BddPersonas.getVendedores(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -218,8 +212,26 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                 }
                             }
                         }
-                        AlertDialogVendedores vendedores = new AlertDialogVendedores(PrincipalAdministrador.this, lstPersonas);
-                        vendedores.show();
+                        BddPersonas.getPersonaEmail(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                ArrayList<String> lstEmail = new ArrayList<>();
+                                if (!response.toString().equals("[]")) {
+                                    for (int x = 0; x < response.length(); ++x) {
+                                        try {
+                                            lstEmail.add(response.getJSONObject(x).getString("persona_email"));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                                progressDialog.dismiss();
+                                AlertDialogVendedores vendedores = new AlertDialogVendedores(PrincipalAdministrador.this, lstPersonas, lstEmail);
+                                vendedores.show();
+                            }
+                        }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No se pudo Cargar"));
+
+
                     }
                 }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo Cargar"));
             }
@@ -229,7 +241,8 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnSede.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos("Cargando", PrincipalAdministrador.this);
+                progressDialog = Functions.CargarDatos("Cargando", PrincipalAdministrador.this);
+
                 BddSede.getSede(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -259,7 +272,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnFabricante.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos("Cargando Fabricantes", PrincipalAdministrador.this);
+                progressDialog = Functions.CargarDatos("Cargando Fabricantes", PrincipalAdministrador.this);
                 BddFabricante.getFabricantes(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -294,7 +307,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialogF = Functions.CargarDatos(getString(R.string.alert_carga), PrincipalAdministrador.this);
+                progressDialog = Functions.CargarDatos(getString(R.string.alert_carga), PrincipalAdministrador.this);
                 BddTipo.getTipo(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -311,12 +324,12 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                 }
                             }
                         }
-                        progressDialogF.dismiss();
+                        progressDialog.dismiss();
                         AlertDialogTipo alertTipo = new AlertDialogTipo(PrincipalAdministrador.this, lstTipo);
                         alertTipo.show();
 
                     }
-                }, Functions.FalloInternet(PrincipalAdministrador.this,progressDialogF,"No pudo Cargar"));
+                }, Functions.FalloInternet(PrincipalAdministrador.this, progressDialog, "No pudo Cargar"));
             }
         });
         //endregion
@@ -347,77 +360,6 @@ public class PrincipalAdministrador extends AppCompatActivity {
         }
     }
 
-    class AdapterPesonas extends ArrayAdapter<Persona> {
-        Activity context;
 
-        public AdapterPesonas(Activity context) {
-            super(context, R.layout.listviewvendedores, lstPersonas);
-            this.context = context;
-        }
-
-        public View getView(final int posicion, View view, ViewGroup parent) {
-
-            LayoutInflater inflater = context.getLayoutInflater();
-            View item = inflater.inflate(R.layout.listviewvendedores, null);
-            TextView titulo = item.findViewById(R.id.tvNombreLstProducto);
-            titulo.setText(lstPersonas.get(posicion).getNombre().toUpperCase() + " " + lstPersonas.get(posicion).getApellido().toUpperCase());
-            TextView email = item.findViewById(R.id.tvPrecioLstProducto);
-            email.setText(lstPersonas.get(posicion).getCorreo().toUpperCase());
-            TextView sede = item.findViewById(R.id.tvSedeLstVendedor);
-            sede.setText("SANTIAGO CENTRO");
-            ImageView imgFoto = item.findViewById(R.id.imgLstVendedor);
-            imgFoto.setId(100 + posicion);
-            ImageButton btnQuitarVendedor = item.findViewById(R.id.btnQuitarVendedor);
-            Switch swEstadoVendedor = item.findViewById(R.id.swEstadoVendedor);
-            swEstadoVendedor.setId(300+posicion);
-            if(lstPersonas.get(posicion).getEstado() == 1){
-                swEstadoVendedor.setChecked(true);
-            }else{
-                swEstadoVendedor.setChecked(false);
-            }
-            swEstadoVendedor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    //solo actualizo el estado del vendedor a la bd falta preguntar el estado actual para cambiar
-                    Persona per = lstPersonas.get(posicion);//*#*#3646633#
-                    if(per.getEstado() == 0){
-                        lstPersonas.get(posicion).setEstado(1);
-                        per.setEstado(1);
-                    }else{
-                        lstPersonas.get(posicion).setEstado(0);
-                        per.setEstado(0);
-                    }
-                    BddPersonas.setVendedor(per.getCorreo(), 2, per.getEstado(), PrincipalAdministrador.this, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("TAG_", "Cambio el estado del vendedor a 0 ");
-                        }
-                    });
-                }
-            });
-            imgFoto.setImageBitmap(Functions.StringToBitMap(lstPersonas.get(posicion).getFoto()));
-            btnQuitarVendedor.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //aqui digo que vendedor voy a quitar de vendedor
-                    Persona per = lstPersonas.get(posicion);
-                    final ProgressDialog progressDialog = Functions.CargarDatos("Quitando Vendedor", PrincipalAdministrador.this);
-                    BddPersonas.setVendedor(per.getCorreo(), 1, 1, PrincipalAdministrador.this, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("TAG_", "ya no es vendedor ");
-                            lstPersonas.remove(posicion);
-                            lstvVendedores.setAdapter(adapterPesonas);
-                            lstvVendedores.deferNotifyDataSetChanged();
-                            progressDialog.dismiss();
-                            //enviar mensaje de confirmacion
-                        }
-                    });
-                }
-            });
-            return item;
-        }
-
-    }
 
 }

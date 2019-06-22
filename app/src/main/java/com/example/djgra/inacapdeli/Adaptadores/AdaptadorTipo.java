@@ -54,7 +54,7 @@ public class AdaptadorTipo extends BaseAdapter {
         LayoutInflater inflater = context.getLayoutInflater();
         final View item = inflater.inflate(R.layout.listview_administracion, null);
         TextView tvActivo = item.findViewById(R.id.tvActivo);
-        final TextView nombre = item.findViewById(R.id.tvNombreLstProducto);
+        final TextView nombre = item.findViewById(R.id.tvNombreVendedor);
         nombre.setText("" + lista.get(posicion).getNombre());
         ImageButton btnEdit = item.findViewById(R.id.btnEditProducto);
         final Switch swEstado = item.findViewById(R.id.swEstadoListViewProducto);
