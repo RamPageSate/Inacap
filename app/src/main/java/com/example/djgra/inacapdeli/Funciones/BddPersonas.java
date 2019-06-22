@@ -37,8 +37,8 @@ public class BddPersonas {
                 map.put("persona_nombre", persona.getNombre());
                 map.put("persona_apellido", persona.getApellido());
                 map.put("persona_pass", persona.getContrasena());
-                map.put("persona_foto",String.valueOf(persona.getFoto()));
                 map.put("persona_email", persona.getCorreo());
+                map.put("persona_foto",String.valueOf(persona.getFoto()));
                 map.put("persona_codigo_qr",String.valueOf(persona.getCodigoQr()));
                 map.put("id_sede", String.valueOf(persona.getSede()));
 

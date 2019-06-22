@@ -12,6 +12,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Producto;
+import com.example.djgra.inacapdeli.Clases.Producto_Favorito;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -104,5 +105,20 @@ public class BddProductos {
         return retorno;
     }
 
+
+    public static void setProductoFavorito(final Producto_Favorito producto, Context context,Response.Listener listener, Response.ErrorListener errorListener){
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlBase+"setProductoFavorito", listener, errorListener) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                map.clear();
+                map = new HashMap<String, String>();
+                map.put("id_cliente", String.valueOf(producto.getId_cliente()));
+                map.put("id_producto", String.valueOf(producto.getId_producto()));
+                return map;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
 
 }

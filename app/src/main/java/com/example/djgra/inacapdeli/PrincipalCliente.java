@@ -275,10 +275,7 @@ public class PrincipalCliente extends AppCompatActivity {
         } else {
             linearPagar.setVisibility(View.INVISIBLE);
         }
-
     }
-
-
     public static ArrayList<Producto> FiltrarListaPorCategoria(Categoria categoria) {
         ArrayList<Producto> lista = new ArrayList<>();
         for (int x = 0; x < lstProducto.size(); x++) {
