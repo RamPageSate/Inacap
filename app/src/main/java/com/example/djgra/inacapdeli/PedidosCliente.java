@@ -23,11 +23,9 @@ public class PedidosCliente extends AppCompatActivity {
     Pedido pedido = new Pedido();
     RecyclerView rcPedidos;
     ScrollView scroll;
-    Persona cliente = new Persona();
     Button btnAnteriores, btnActivos;
     ImageButton btnInicio;
     AdaptadorPedidosClientes adaptadorPedidosClientes;
-    ArrayList<Pedido> lstPedidos = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,13 +36,8 @@ public class PedidosCliente extends AppCompatActivity {
         btnActivos = findViewById(R.id.btnPedidosActivosCliente);
         btnAnteriores = findViewById(R.id.btnPedidosAnterioresCliente);
         btnInicio = findViewById(R.id.btnInicioPedidos);
-        //inicia con las compras ya entregadas anteriormente     condicion 2 pendiente
         btnAnteriores.setEnabled(false);
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            cliente = (Persona) bundle.getSerializable("cliente");
-            cargarVistaPedidoAnterior();
-        }
+        cargarVistaPedidoAnterior();
 
         btnInicio.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,11 +69,14 @@ public class PedidosCliente extends AppCompatActivity {
     }
     //cargar vistas anterior primero
     private void cargarVistaPedidoAnterior(){
-        if(!cliente.lstPedidosEntregados().isEmpty()){
+        if(!PrincipalCliente.clientePrincipal.lstPedidosEntregados().isEmpty()){
             scroll.setBackgroundResource(R.drawable.limpiarhistorial);
+            adaptadorPedidosClientes = null;
+            rcPedidos.setAdapter(adaptadorPedidosClientes);
             rcPedidos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-            adaptadorPedidosClientes = new AdaptadorPedidosClientes(cliente.lstPedidosEntregados(),PedidosCliente.this);
-            adaptadorPedidosClientes.notifyDataSetChanged();
+            adaptadorPedidosClientes = new AdaptadorPedidosClientes(PrincipalCliente.clientePrincipal.lstPedidosEntregados(),PedidosCliente.this);
+            rcPedidos.setHasFixedSize(true);
+            rcPedidos.setItemViewCacheSize(PrincipalCliente.clientePrincipal.lstPedidosEntregados().size());
             rcPedidos.setAdapter(adaptadorPedidosClientes);
         }else{
             //cargar la imagen de vacio
@@ -92,11 +88,14 @@ public class PedidosCliente extends AppCompatActivity {
     }
 
     private void cargarVistaPedidosActivos(){
-        if(!cliente.lstPedidosPendientes().isEmpty()){
+        if(!PrincipalCliente.clientePrincipal.lstPedidosPendientes().isEmpty()){
             scroll.setBackgroundResource(R.drawable.limpiarhistorial);
+            adaptadorPedidosClientes = null;
+            rcPedidos.setAdapter(adaptadorPedidosClientes);
             rcPedidos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-            adaptadorPedidosClientes = new AdaptadorPedidosClientes(cliente.lstPedidosPendientes(),PedidosCliente.this);
-            adaptadorPedidosClientes.notifyDataSetChanged();
+            adaptadorPedidosClientes = new AdaptadorPedidosClientes(PrincipalCliente.clientePrincipal.lstPedidosPendientes(),PedidosCliente.this);
+            rcPedidos.setHasFixedSize(true);
+            rcPedidos.setItemViewCacheSize(PrincipalCliente.clientePrincipal.lstPedidosEntregados().size());
             rcPedidos.setAdapter(adaptadorPedidosClientes);
         }else{
             //cargar la imagen de vacio

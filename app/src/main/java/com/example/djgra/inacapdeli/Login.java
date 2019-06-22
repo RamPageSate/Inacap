@@ -90,7 +90,6 @@ public class Login extends AppCompatActivity {
                 public void onResponse(String response) {
                     if (!response.equals("[]")) {
                         try {
-                            progress.dismiss();
                             JSONObject objeto = new JSONObject(response);
                             Persona persona = new Persona();
                             persona.setCorreo(objeto.getString("persona_email"));
@@ -115,6 +114,7 @@ public class Login extends AppCompatActivity {
                                     case (1):
                                         final Intent c = new Intent(Login.this, PrincipalCliente.class);
                                         c.putExtra("usr", persona);
+                                        progress.dismiss();
                                         startActivity(c);
                                         break;
                                     case (2):

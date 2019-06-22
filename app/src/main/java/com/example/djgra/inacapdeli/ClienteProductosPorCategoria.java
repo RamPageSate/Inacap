@@ -48,7 +48,7 @@ public class ClienteProductosPorCategoria extends AppCompatActivity {
                 linearBarra.setVisibility(View.INVISIBLE);
             }
         }
-        AdaptadorRecyclerViewProductoCliente adpatador = new AdaptadorRecyclerViewProductoCliente(lstProducto, tvCantidadProductos,tvTotal,pedido,ClienteProductosPorCategoria.this,linearBarra,PrincipalCliente.cliente);
+        AdaptadorRecyclerViewProductoCliente adpatador = new AdaptadorRecyclerViewProductoCliente(lstProducto, tvCantidadProductos,tvTotal,pedido,ClienteProductosPorCategoria.this,linearBarra,PrincipalCliente.clientePrincipal);
         rcProductos.setHasFixedSize(false);
         rcProductos.setItemViewCacheSize(lstProducto.size());
         rcProductos.setAdapter(adpatador);
@@ -81,7 +81,7 @@ public class ClienteProductosPorCategoria extends AppCompatActivity {
             if( requestCode == 7){
                 pedido = DetallePagarCliente.pedido;
             }
-            AdaptadorRecyclerViewProductoCliente adp = new AdaptadorRecyclerViewProductoCliente(lstProducto, tvCantidadProductos,tvTotal,pedido,ClienteProductosPorCategoria.this,linearBarra, PrincipalCliente.cliente);
+            AdaptadorRecyclerViewProductoCliente adp = new AdaptadorRecyclerViewProductoCliente(lstProducto, tvCantidadProductos,tvTotal,pedido,ClienteProductosPorCategoria.this,linearBarra, PrincipalCliente.clientePrincipal);
             rcProductos.setHasFixedSize(true);
             rcProductos.setItemViewCacheSize(lstProducto.size());
             rcProductos.setAdapter(adp);

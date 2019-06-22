@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class DetallePagarCliente extends AppCompatActivity {
@@ -58,7 +60,6 @@ public class DetallePagarCliente extends AppCompatActivity {
             codigoActividad = bundle.getInt("code");
         }
         AdaptadorDetalleProductoPagar adapter = new AdaptadorDetalleProductoPagar(pedido.getLstProductoPedido(),cantidadBarar,totalBarra,pedido,DetallePagarCliente.this);
-        rcProductos.setHasFixedSize(true);
         rcProductos.setAdapter(adapter);
 
         btnSalir.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +83,7 @@ public class DetallePagarCliente extends AppCompatActivity {
                 TimePickerDialog horaDialog = new TimePickerDialog(DetallePagarCliente.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        tvClickAqui.setText("" + hourOfDay+":"+minute);
+
                     }
                 }, 19, 25, true);
                 horaDialog.show();
@@ -93,7 +94,7 @@ public class DetallePagarCliente extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(pedido.totalPagarPedido() != 0){
-                    pedido.setId_cliente(PrincipalCliente.cliente.getCodigo());
+                    pedido.setId_cliente(PrincipalCliente.clientePrincipal.getCodigo());
                     pedido.setLstProductoPedido(pedido.listaProductosFinal(pedido.getLstProductoPedido()));
                     pedido.setPedido_estado(1);
                     pedido.setId_condicion_pedido(2);
@@ -108,6 +109,7 @@ public class DetallePagarCliente extends AppCompatActivity {
                             //enviar pedido a vendedor
                             //enviar pedido a a historial activos
                             //descontar saldo
+                            //cuando paga hay que resetear la barra verde
                         }
                     }, Functions.FalloInternet(DetallePagarCliente.this,progressDialog,"No realizo Compra"));
                 }else{
@@ -142,4 +144,25 @@ public class DetallePagarCliente extends AppCompatActivity {
         }
         return date;
     }
+
+    private Long HoraRetiro(String horaSeleccionada){
+        boolean ok = false;
+        long millis;
+        Date date = new Date();
+        SimpleDateFormat fechaActual = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String fecha = fechaActual.format(date);
+        String mytime = horaSeleccionada;
+        String toParse = fecha + " " + mytime;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        Date dates = null;
+        try {
+            dates = formatter.parse(toParse);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        millis = dates.getTime();
+
+        return millis;
+    }
+
 }

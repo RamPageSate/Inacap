@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class Persona implements Serializable{
     private String nombre, apellido, correo, contrasena, foto, codigoQr; // hay que cambiar la sede
     private int codigo, saldo, estado, sede, rol;
-    ArrayList<Pedido> lstPedidos = new ArrayList<>();
-    ArrayList<Producto_Favorito> lstProductosFavoritos =  new ArrayList<>();
+    private ArrayList<Pedido> lstPedidos = new ArrayList<>();
+    private ArrayList<Producto_Favorito> lstProductosFavoritos =  new ArrayList<>();
     public Persona() {
     }
 

@@ -46,7 +46,7 @@ public class AdaptadorProductoCompradoCliente  extends RecyclerView.Adapter<Adap
     }
 
     public class ViewHolderProductoComprado extends RecyclerView.ViewHolder {
-        TextView tvNombre, tvPrecio, tvCantidad, tvFecha;
+        final TextView tvNombre, tvPrecio, tvCantidad, tvFecha;
         ImageView imagen;
 
         public ViewHolderProductoComprado(@NonNull View itemView) {
