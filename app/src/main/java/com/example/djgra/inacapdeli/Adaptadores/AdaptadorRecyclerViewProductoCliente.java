@@ -14,10 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.Clases.Producto_Favorito;
+import com.example.djgra.inacapdeli.Funciones.BddProductos;
 import com.example.djgra.inacapdeli.Funciones.Functions;
 import com.example.djgra.inacapdeli.R;
 
@@ -30,8 +34,8 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
     Activity context = new Activity();
     LinearLayout linearLayout;
     Persona cliente;
-
-    public AdaptadorRecyclerViewProductoCliente(ArrayList<Producto> lstProductos, TextView cantidadProductosPedido, TextView totalPagarPedido, Pedido pedido, Activity context, LinearLayout linearLayout, Persona cliente) {
+    Categoria categoria;
+    public AdaptadorRecyclerViewProductoCliente(ArrayList<Producto> lstProductos, TextView cantidadProductosPedido, TextView totalPagarPedido, Pedido pedido, Activity context, LinearLayout linearLayout, Persona cliente, Categoria categoria) {
         this.lstProductos = lstProductos;
         this.cantidadProductosPedido = cantidadProductosPedido;
         this.totalPagarPedido = totalPagarPedido;
@@ -39,6 +43,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
         this.context = context;
         this.linearLayout = linearLayout;
         this.cliente = cliente;
+        this.categoria = categoria;
     }
 
     //muestro la vista
@@ -119,6 +124,8 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
                 Log.d("TAG","suma");
             }
         });
+
+
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,15 +133,38 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
                 Producto_Favorito pro = new Producto_Favorito();
                 pro.setId_cliente(cliente.getCodigo());
                 pro.setId_producto(lstProductos.get(position).getCodigo());
-                if(cliente.ProductoFavorito(pro) == true){
-                    holder.btnLike.setBackgroundResource(R.drawable.like);
+                if(categoria.getCodigo() == 48){
+                    //falta el deleteProductoFavorito corregir ubicacion
+                    int lugar = posicionProducto(lstProductos,lstProductos.get(position).getCodigo());
+                    lstProductos.remove(lugar);
+                    notifyItemRemoved(lugar);
                 }else{
-                    holder.btnLike.setBackgroundResource(R.drawable.nolike);
+                    if(cliente.ProductoFavorito(pro) == true){
+                        BddProductos.setProductoFavorito(pro, context, new Response.Listener() {
+                            @Override
+                            public void onResponse(Object response) {
+                                holder.btnLike.setBackgroundResource(R.drawable.like);
+                                Toast.makeText(context, "Agrego cambio", Toast.LENGTH_SHORT).show();
+                                //cuando este en la categoria 48 mis favoritas poder quitar el producto con like = 0
+
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                holder.btnLike.setBackgroundResource(R.drawable.nolike);
+                                Toast.makeText(context, "No pudo cambiar estado", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }else{
+                        //quitarlo de la base de datos
+                        holder.btnLike.setBackgroundResource(R.drawable.nolike);
+                    }
                 }
             }
         });
 
     }
+
 
     //le digo la cantidad de items
     @Override
@@ -163,5 +193,16 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
             btnLike = itemView.findViewById(R.id.btnLike);
 
         }
+    }
+
+
+    private int posicionProducto (ArrayList<Producto> lst, int  codigoProducto){
+        int posicion = 0;
+        for(int x= 0;  x < lst.size(); x++){
+            if(lst.get(x).getCodigo() == codigoProducto){
+                posicion = x;
+            }
+        }
+        return posicion;
     }
 }

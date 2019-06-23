@@ -1,6 +1,7 @@
 package com.example.djgra.inacapdeli.Adaptadores;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.Clases.Producto;
+import com.example.djgra.inacapdeli.DetallePagarCliente;
 import com.example.djgra.inacapdeli.R;
 
 
@@ -35,7 +37,7 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
     }
 
     @Override
-    public void onBindViewHolder( ViewHolderPedidosClientes holder, int position) {
+    public void onBindViewHolder(ViewHolderPedidosClientes holder, final int position) {
         holder.tvNumeroPedido.setText(String.valueOf(lstPedidos.get(position).getCodigo()));
         holder.tvMontoCompra.setText(String.valueOf(lstPedidos.get(position).totalPagarPedido()));
         holder.tvCandidadArticulosPedidos.setText(String.valueOf(lstPedidos.get(position).PedidoComprado().size()));
@@ -50,6 +52,22 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
                 Toast.makeText(context, "Eliminara Pedido", Toast.LENGTH_SHORT).show();
             }
         });
+
+        holder.btnVolverComprar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<Producto> listaComprar = new ArrayList<>();
+                listaComprar= Pedido.filtrarPedidos(lstPedidos.get(position).getLstProductoPedido());
+                Pedido pedido = new Pedido();
+                pedido.setLstProductoPedido(listaComprar);
+                Intent intent = new Intent(context, DetallePagarCliente.class);
+                intent.putExtra("pedido", pedido);
+                context.startActivity(intent);
+
+
+            }
+        });
+
     }
 
     @Override

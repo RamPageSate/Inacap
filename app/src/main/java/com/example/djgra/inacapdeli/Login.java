@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,11 +16,17 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.example.djgra.inacapdeli.Clases.Persona;
+import com.example.djgra.inacapdeli.Clases.Producto;
+import com.example.djgra.inacapdeli.Clases.Producto_Favorito;
 import com.example.djgra.inacapdeli.Funciones.BddPersonas;
+import com.example.djgra.inacapdeli.Funciones.BddProductos;
 import com.example.djgra.inacapdeli.Funciones.Functions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class Login extends AppCompatActivity {
 
@@ -91,7 +98,7 @@ public class Login extends AppCompatActivity {
                     if (!response.equals("[]")) {
                         try {
                             JSONObject objeto = new JSONObject(response);
-                            Persona persona = new Persona();
+                            final Persona persona = new Persona();
                             persona.setCorreo(objeto.getString("persona_email"));
                             persona.setContrasena(objeto.getString("persona_contrasena"));
                             persona.setNombre(objeto.getString("persona_nombre"));
@@ -109,13 +116,31 @@ public class Login extends AppCompatActivity {
                                     editor.putString("pass", persona.getContrasena());
                                     editor.commit();
                                 }
-
                                 switch (persona.getRol()) {
                                     case (1):
                                         final Intent c = new Intent(Login.this, PrincipalCliente.class);
-                                        c.putExtra("usr", persona);
-                                        progress.dismiss();
-                                        startActivity(c);
+                                        BddProductos.getProductoFavorito(persona.getCodigo(), Login.this, new Response.Listener<JSONArray>() {
+                                            @Override
+                                            public void onResponse(JSONArray response) {
+                                                if (!response.equals("[]")) {
+                                                    for (int x = 0; x < response.length(); x++) {
+                                                        try {
+                                                            Producto_Favorito producto_favorito = new Producto_Favorito();
+                                                            producto_favorito.setId_cliente(persona.getCodigo());
+                                                            producto_favorito.setId_producto(response.getJSONObject(x).getInt("id_producto"));
+                                                            persona.addProductoFavorito(producto_favorito);
+                                                            Log.d("TAG_", "c->"+ producto_favorito.getId_producto());
+                                                        }catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                }
+                                                c.putExtra("usr", persona);
+                                                progress.dismiss();
+                                                startActivity(c);
+
+                                            }
+                                        }, null);
                                         break;
                                     case (2):
                                         break;

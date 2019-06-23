@@ -104,10 +104,10 @@ public class PrincipalCliente extends AppCompatActivity {
                                         }
                                         producto.setLstCategoriasProducto(categoriasProducto);
                                         lstProducto.add(producto);
-                                        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56, 1, "")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, clientePrincipal);
+                                        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(51, 1, "")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, clientePrincipal,null);
                                         rcProductosValorados.setAdapter(adaptadorValoradas);
                                         //hacer Condicion de que si esta vacia cambiar el nombre de Favoritas ademas rellenar la vista con otra categoria
-                                        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54, 1, "Favoritas")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, clientePrincipal);
+                                        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(74, 1, "Favoritas")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, clientePrincipal,null);
                                         rcFavoritas.setAdapter(adaptadorFavoritas);
                                     }
                                 }
@@ -260,12 +260,12 @@ public class PrincipalCliente extends AppCompatActivity {
         if (resultCode == 7) {
             pedidoCliente = DetallePagarCliente.pedido;
         }
-        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(56, 1, "")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, clientePrincipal);
-        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(54, 1, "Favoritas")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, clientePrincipal);
-        rcFavoritas.setItemViewCacheSize(FiltrarListaPorCategoria(new Categoria(54, 1, "Favoritas")).size());
+        AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(51, 1, "")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, clientePrincipal,null);
+        AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(74, 1, "Favoritas")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, clientePrincipal,null);
+        rcFavoritas.setItemViewCacheSize(FiltrarListaPorCategoria(new Categoria(74, 1, "Favoritas")).size());
         rcFavoritas.setHasFixedSize(true);
         rcFavoritas.setAdapter(adaptadorFavoritas);
-        rcProductosValorados.setItemViewCacheSize(FiltrarListaPorCategoria(new Categoria(56, 1, "")).size());
+        rcProductosValorados.setItemViewCacheSize(FiltrarListaPorCategoria(new Categoria(51, 1, "")).size());
         rcProductosValorados.setHasFixedSize(true);
         rcProductosValorados.setAdapter(adaptadorValoradas);
         adaptadorCategorias = new AdaptadorCategoriasCliente(lstCategorias, PrincipalCliente.this, pedidoCliente);
@@ -279,14 +279,23 @@ public class PrincipalCliente extends AppCompatActivity {
     public static ArrayList<Producto> FiltrarListaPorCategoria(Categoria categoria) {
         ArrayList<Producto> lista = new ArrayList<>();
         for (int x = 0; x < lstProducto.size(); x++) {
-            for (int c = 0; c < lstProducto.get(x).getLstCategoriasProducto().size(); c++) {
-                if (lstProducto.get(x).getLstCategoriasProducto().get(c).getCodigo() == categoria.getCodigo()) {
-                    lista.add(lstProducto.get(x));
+            if(categoria.getCodigo() == 48){
+                for (int c=0; c < clientePrincipal.getLstProductosFavoritos().size(); c++){
+                    if(lstProducto.get(x).getCodigo() == clientePrincipal.getLstProductosFavoritos().get(c).getId_producto()){
+                       lista.add(lstProducto.get(x));
+                    }
+                }
+            }else{
+                for (int c = 0; c < lstProducto.get(x).getLstCategoriasProducto().size(); c++) {
+                    if (lstProducto.get(x).getLstCategoriasProducto().get(c).getCodigo() == categoria.getCodigo()) {
+                        lista.add(lstProducto.get(x));
+                    }
                 }
             }
         }
         return lista;
     }
+
 
 
 }

@@ -32,4 +32,8 @@ public class Producto_Favorito implements Serializable {
     public void setLike(int like) {
         this.like = like;
     }
+
+
+
+
 }

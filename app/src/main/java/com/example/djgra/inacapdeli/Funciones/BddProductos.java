@@ -121,4 +121,18 @@ public class BddProductos {
         requestQueue.add(stringRequest);
     }
 
+    public static void getProductoFavorito(final int id_cliente, Context context, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,urlBase+"getProductoFavorito?id_cliente="+id_cliente, null, listener, errorListener){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                map.clear();
+                map = new HashMap<String, String>();
+                map.put("id_cliente", String.valueOf(id_cliente));
+                return map;
+            }
+        };
+        requestQueue.add(request);
+    }
+
 }

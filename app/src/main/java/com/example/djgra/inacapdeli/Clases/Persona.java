@@ -160,6 +160,12 @@ public class Persona implements Serializable{
         return  ok;
     }
 
+    public void addProductoFavorito(Producto_Favorito pro){
+        lstProductosFavoritos.add(pro);
+    }
+
+
+
 
 
 

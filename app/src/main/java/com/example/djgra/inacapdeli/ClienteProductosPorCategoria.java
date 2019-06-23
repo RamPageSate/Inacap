@@ -24,6 +24,7 @@ public class ClienteProductosPorCategoria extends AppCompatActivity {
     public static TextView tvCantidadProductos, tvTotal;
     RecyclerView rcProductos;
     ImageButton btnSalir;
+    Categoria categoria;
     ArrayList<Producto> lstProducto = new ArrayList<>();
     public static Pedido pedido = new Pedido();
     LinearLayout linearBarra;
@@ -40,15 +41,18 @@ public class ClienteProductosPorCategoria extends AppCompatActivity {
         rcProductos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         Bundle bundle = getIntent().getExtras();
         if(bundle!= null){
-            Categoria categoria = (Categoria) bundle.getSerializable("categoria");
+            categoria = (Categoria) bundle.getSerializable("categoria");
             lstProducto = (ArrayList<Producto>) bundle.getSerializable("listaProducto") ;
             tvNombreCategoria.setText(""+ categoria.getNombre());
             pedido = (Pedido) bundle.getSerializable("pedido");
             if(pedido.getLstProductoPedido().isEmpty()){
                 linearBarra.setVisibility(View.INVISIBLE);
             }
+
+
+
         }
-        AdaptadorRecyclerViewProductoCliente adpatador = new AdaptadorRecyclerViewProductoCliente(lstProducto, tvCantidadProductos,tvTotal,pedido,ClienteProductosPorCategoria.this,linearBarra,PrincipalCliente.clientePrincipal);
+        AdaptadorRecyclerViewProductoCliente adpatador = new AdaptadorRecyclerViewProductoCliente(lstProducto, tvCantidadProductos,tvTotal,pedido,ClienteProductosPorCategoria.this,linearBarra,PrincipalCliente.clientePrincipal,categoria);
         rcProductos.setHasFixedSize(false);
         rcProductos.setItemViewCacheSize(lstProducto.size());
         rcProductos.setAdapter(adpatador);
@@ -81,7 +85,7 @@ public class ClienteProductosPorCategoria extends AppCompatActivity {
             if( requestCode == 7){
                 pedido = DetallePagarCliente.pedido;
             }
-            AdaptadorRecyclerViewProductoCliente adp = new AdaptadorRecyclerViewProductoCliente(lstProducto, tvCantidadProductos,tvTotal,pedido,ClienteProductosPorCategoria.this,linearBarra, PrincipalCliente.clientePrincipal);
+            AdaptadorRecyclerViewProductoCliente adp = new AdaptadorRecyclerViewProductoCliente(lstProducto, tvCantidadProductos,tvTotal,pedido,ClienteProductosPorCategoria.this,linearBarra, PrincipalCliente.clientePrincipal,null);
             rcProductos.setHasFixedSize(true);
             rcProductos.setItemViewCacheSize(lstProducto.size());
             rcProductos.setAdapter(adp);
