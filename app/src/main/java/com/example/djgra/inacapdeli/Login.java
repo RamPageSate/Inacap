@@ -119,6 +119,11 @@ public class Login extends AppCompatActivity {
                                 switch (persona.getRol()) {
                                     case (1):
                                         final Intent c = new Intent(Login.this, PrincipalCliente.class);
+                                        //quitar esto cuando funcione el getProductoFavorito
+                                        c.putExtra("usr", persona);
+                                        progress.dismiss();
+                                        startActivity(c);
+                                        //
                                         BddProductos.getProductoFavorito(persona.getCodigo(), Login.this, new Response.Listener<JSONArray>() {
                                             @Override
                                             public void onResponse(JSONArray response) {

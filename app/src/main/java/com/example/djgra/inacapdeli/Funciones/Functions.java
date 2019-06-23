@@ -15,6 +15,8 @@ import com.example.djgra.inacapdeli.R;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Functions {
 
@@ -70,6 +72,33 @@ public class Functions {
             e.getMessage();
             return null;
         }
+    }
+
+    public static boolean validarLetras(String dato) {
+        boolean ok = false;
+
+        Pattern regex = Pattern.compile("^[a-zA-Z ]*$");
+        Matcher m = regex.matcher(dato);
+        boolean as = m.find();
+        if (as == true) {
+            ok = true;
+        }
+
+        return ok;
+    }
+
+
+
+    public static boolean contraseñaSegura(String pass) {
+        boolean ok = false;
+        Pattern regex = Pattern.compile("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{6,12}$");
+        Matcher m = regex.matcher(pass);
+        boolean as = m.find();
+        if (as == true) {
+            ok = true;
+        }
+
+        return ok;
     }
 
 

@@ -29,7 +29,7 @@ import com.example.djgra.inacapdeli.Funciones.BddPersonas;
 import com.example.djgra.inacapdeli.Funciones.BddSede;
 import com.example.djgra.inacapdeli.Funciones.Functions;
 
-import net.glxn.qrgen.android.QRCode;
+//import net.glxn.qrgen.android.QRCode;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -136,9 +136,9 @@ public class Registrar_Persona extends AppCompatActivity {
 
                     }
 
-                    String email = per.getCorreo();
-                    Bitmap qr = QRCode.from(email).bitmap();
-                    per.setCodigoQr(Functions.getStringImage(qr));
+                    //String email = per.getCorreo();
+                    //Bitmap qr = QRCode.from(email).bitmap();
+                    //per.setCodigoQr(Functions.getStringImage(qr));
 
                     progressDialog = Functions.CargarDatos("Agregando Persona", Registrar_Persona.this);
                     progressDialog.show();
@@ -221,7 +221,7 @@ public class Registrar_Persona extends AppCompatActivity {
             etNombre.setError("Ingrese Nombre");
             ok++;
         } else {
-            if (validarLetras(etNombre.getText().toString()) != true) {
+            if (Functions.validarLetras(etNombre.getText().toString()) != true) {
                 etNombre.setError("Solo Ingrese Letras");
                 ok++;
             }
@@ -229,7 +229,7 @@ public class Registrar_Persona extends AppCompatActivity {
         if (etApellido.getText().toString().isEmpty()) {
             etApellido.setError("Ingrese Nombre");
         } else {
-            if (validarLetras(etApellido.getText().toString()) != true) {
+            if (Functions.validarLetras(etApellido.getText().toString()) != true) {
                 etApellido.setError("Solo Ingrese Letras");
                 ok++;
             }
@@ -241,7 +241,7 @@ public class Registrar_Persona extends AppCompatActivity {
             etContraseña.setError("Contraseña Necesaria");
             ok++;
         } else {
-            if (contraseñaSegura(etContraseña.getText().toString()) == false) {
+            if (Functions.contraseñaSegura(etContraseña.getText().toString()) == false) {
                 etContraseña.setText("");
                 etConfirmar.setText("");
                 etContraseña.setError("Requiere como minimo 1 minuscula, 1 mayuscula, 1 digito y un largo de 6 a 12 caracteres ");
@@ -262,30 +262,7 @@ public class Registrar_Persona extends AppCompatActivity {
         return ok;
     }
 
-    private boolean validarLetras(String dato) {
-        boolean ok = false;
 
-        Pattern regex = Pattern.compile("^[a-zA-Z ]*$");
-        Matcher m = regex.matcher(dato);
-        boolean as = m.find();
-        if (as == true) {
-            ok = true;
-        }
-
-        return ok;
-    }
-
-    private boolean contraseñaSegura(String pass) {
-        boolean ok = false;
-        Pattern regex = Pattern.compile("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{6,12}$");
-        Matcher m = regex.matcher(pass);
-        boolean as = m.find();
-        if (as == true) {
-            ok = true;
-        }
-
-        return ok;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
