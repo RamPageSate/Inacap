@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PedidosCliente"></activity>
+        <activity android:name=".PrepararPedido"></activity>
+        <activity android:name=".PrincipalVendedor" />
+        <activity android:name=".PedidosCliente" />
         <activity android:name=".DatosCliente" />
         <activity android:name=".DetallePagarCliente" />
         <activity android:name=".ClienteProductosPorCategoria" />
