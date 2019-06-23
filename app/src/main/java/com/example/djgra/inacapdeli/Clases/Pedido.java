@@ -75,7 +75,7 @@ public class Pedido implements Serializable {
     public int totalPagarPedido(){
         int total = 0;
         for (int x=0; x< lstProductoPedido.size(); x++){
-            total = total + lstProductoPedido.get(x).getPrecio();
+            total = total + (lstProductoPedido.get(x).getPrecio() * lstProductoPedido.get(x).getCantidad());
         }
         return total;
     }

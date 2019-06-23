@@ -173,7 +173,6 @@ public class PrincipalCliente extends AppCompatActivity {
                 //me tengo que enviar los productos pedidos el cliente
                 Intent intent = new Intent(PrincipalCliente.this, DetallePagarCliente.class);
                 intent.putExtra("pedido", pedidoCliente);
-                intent.putExtra("code", 1);
                 startActivityForResult(intent, 7);
             }
         });
@@ -182,8 +181,9 @@ public class PrincipalCliente extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(PrincipalCliente.this, DatosCliente.class);
-                i.putExtra("cliente",clientePrincipal);
-                startActivity(i);
+                i.putExtra("cliente",clientePrincipal);;
+                i.putExtra("code",1);
+                startActivityForResult(i,12);
             }
         });
 

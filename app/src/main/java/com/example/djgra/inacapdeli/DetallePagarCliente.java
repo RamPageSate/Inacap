@@ -39,6 +39,7 @@ public class DetallePagarCliente extends AppCompatActivity {
     LinearLayout linearPagar;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //yyyy-MM-dd HH:mm:ss
     ImageButton btnSalir;
+    Long horaSeleccionada= System.currentTimeMillis();
     public static TextView tvSubtotalDetallePagar, tvTotalDetalle;
     TextView tvClickAqui, cantidadBarar, totalBarra;
     @Override
@@ -95,6 +96,7 @@ public class DetallePagarCliente extends AppCompatActivity {
                             tvClickAqui.setText("Seleccione otra Hora");
                             tvClickAqui.setTextColor(Color.parseColor("#FF0000"));
                         }else{
+                            horaSeleccionada = HoraRetiro(fecha);
                             tvClickAqui.setTextColor(Color.parseColor("#3C3F41"));
                             linearPagar.setEnabled(true);
                             tvClickAqui.setText(fecha);
@@ -109,13 +111,13 @@ public class DetallePagarCliente extends AppCompatActivity {
         linearPagar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(pedido.totalPagarPedido() != 0){
+                if(pedido.totalPagarPedido() != 0 && horaSeleccionada > getTimeStamp()){
                     pedido.setId_cliente(PrincipalCliente.clientePrincipal.getCodigo());
                     pedido.setLstProductoPedido(pedido.listaProductosFinal(pedido.getLstProductoPedido()));
                     pedido.setPedido_estado(1);
                     pedido.setId_condicion_pedido(2);
                     pedido.setId_vendedor(181);
-                    pedido.setFechaPedido(sdf.format(getDate(getTimeStamp())));
+                    pedido.setFechaPedido(sdf.format(getDate(horaSeleccionada)));
                     final ProgressDialog progressDialog = Functions.CargarDatos("Realizando Pedido", DetallePagarCliente.this);
                     BddPedido.setPedido(pedido, DetallePagarCliente.this, new Response.Listener() {
                         @Override

@@ -24,10 +24,12 @@ import java.util.ArrayList;
 public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedidosClientes.ViewHolderPedidosClientes> {
     ArrayList<Pedido> lstPedidos = new ArrayList<>();
     Activity context = new Activity();
+    String tipoHistorial = "";
     //cuando meto el pedido en el adaptador hay que meter el pedidoComprado
-    public AdaptadorPedidosClientes(ArrayList<Pedido> lstPedidos, Activity context) {
+    public AdaptadorPedidosClientes(ArrayList<Pedido> lstPedidos, Activity context, String tipoHistorial) {
         this.lstPedidos = lstPedidos;
         this.context = context;
+        this.tipoHistorial = tipoHistorial;
     }
 
     @Override
@@ -38,6 +40,12 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
 
     @Override
     public void onBindViewHolder(ViewHolderPedidosClientes holder, final int position) {
+        if(tipoHistorial.equals("PENDIENTES")){
+            holder.btnVolverComprar.setEnabled(false);
+            holder.btnVolverComprar.setVisibility(View.INVISIBLE);
+            holder.btnEliminar.setVisibility(View.INVISIBLE);
+            holder.btnEliminar.setEnabled(false);
+        }
         holder.tvNumeroPedido.setText(String.valueOf(lstPedidos.get(position).getCodigo()));
         holder.tvMontoCompra.setText(String.valueOf(lstPedidos.get(position).totalPagarPedido()));
         holder.tvCandidadArticulosPedidos.setText(String.valueOf(lstPedidos.get(position).PedidoComprado().size()));
@@ -63,8 +71,6 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
                 Intent intent = new Intent(context, DetallePagarCliente.class);
                 intent.putExtra("pedido", pedido);
                 context.startActivity(intent);
-
-
             }
         });
 

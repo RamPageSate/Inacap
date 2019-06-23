@@ -74,7 +74,7 @@ public class PedidosCliente extends AppCompatActivity {
             adaptadorPedidosClientes = null;
             rcPedidos.setAdapter(adaptadorPedidosClientes);
             rcPedidos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-            adaptadorPedidosClientes = new AdaptadorPedidosClientes(PrincipalCliente.clientePrincipal.lstPedidosEntregados(),PedidosCliente.this);
+            adaptadorPedidosClientes = new AdaptadorPedidosClientes(PrincipalCliente.clientePrincipal.lstPedidosEntregados(),PedidosCliente.this,"ENTREGADOS");
             rcPedidos.setHasFixedSize(true);
             rcPedidos.setItemViewCacheSize(PrincipalCliente.clientePrincipal.lstPedidosEntregados().size());
             rcPedidos.setAdapter(adaptadorPedidosClientes);
@@ -93,7 +93,7 @@ public class PedidosCliente extends AppCompatActivity {
             adaptadorPedidosClientes = null;
             rcPedidos.setAdapter(adaptadorPedidosClientes);
             rcPedidos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-            adaptadorPedidosClientes = new AdaptadorPedidosClientes(PrincipalCliente.clientePrincipal.lstPedidosPendientes(),PedidosCliente.this);
+            adaptadorPedidosClientes = new AdaptadorPedidosClientes(PrincipalCliente.clientePrincipal.lstPedidosPendientes(),PedidosCliente.this,"PENDIENTES");
             rcPedidos.setHasFixedSize(true);
             rcPedidos.setItemViewCacheSize(PrincipalCliente.clientePrincipal.lstPedidosEntregados().size());
             rcPedidos.setAdapter(adaptadorPedidosClientes);

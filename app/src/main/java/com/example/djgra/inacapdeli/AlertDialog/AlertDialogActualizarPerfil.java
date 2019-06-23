@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -36,10 +38,12 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static android.text.InputType.TYPE_CLASS_TEXT;
+
 public class AlertDialogActualizarPerfil extends AlertDialog {
     private int posicionUdpdateDelete;
 
-    public AlertDialogActualizarPerfil(final Activity context, final String dato, final Persona persona, final EditText editText) {
+    public AlertDialogActualizarPerfil(final Activity context, final String dato, final Persona persona, final EditText editText, final Button btnActualizar) {
         super(context);
         setCancelable(false);
         setCanceledOnTouchOutside(false);
@@ -65,6 +69,8 @@ public class AlertDialogActualizarPerfil extends AlertDialog {
                                 persona.setNombre(etPrincipal.getText().toString().trim());
                                 editText.setText(persona.getNombre());
                                 checkVerde.setVisibility(View.VISIBLE);
+                                btnActualizar.setEnabled(true);
+                                btnActualizar.setBackgroundColor(Color.parseColor("#FF0000"));
                                 Toast.makeText(context, "Guardado", Toast.LENGTH_SHORT).show();
                             } else {
                                 etPrincipal.setText("");
@@ -88,6 +94,8 @@ public class AlertDialogActualizarPerfil extends AlertDialog {
                                 persona.setApellido(etPrincipal.getText().toString().trim());
                                 editText.setText(persona.getApellido());
                                 checkVerde.setVisibility(View.VISIBLE);
+                                btnActualizar.setEnabled(true);
+                                btnActualizar.setBackgroundColor(Color.parseColor("#FF0000"));
                                 Toast.makeText(context, "Guardado", Toast.LENGTH_SHORT).show();
                             } else {
                                 etPrincipal.setText("");
@@ -99,11 +107,12 @@ public class AlertDialogActualizarPerfil extends AlertDialog {
                 });
                 break;
             case "PASS":
+                etPrincipal.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 final EditText etNuevaContraseña = view.findViewById(R.id.etNuevaPassActualizarPerfil);
                 final TextView tvRequerimiento = view.findViewById(R.id.tvRequerimientoPass);
                 etPrincipal.setHint("Ingrese Contraseña");
                 btnGuardar.setEnabled(false);
-                tvTitulo.setText("Cambiar mi COntraseña");
+                tvTitulo.setText("Cambiar mi Contraseña");
                 btnGuardar.setBackgroundColor(Color.parseColor("#808080"));
                 etPrincipal.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
@@ -115,6 +124,8 @@ public class AlertDialogActualizarPerfil extends AlertDialog {
                             btnGuardar.setEnabled(true);
                             tvRequerimiento.setVisibility(View.VISIBLE);
                             etPrincipal.setEnabled(false);
+                        }else{
+                            etPrincipal.setError("Contraseña Incorrecta");
                         }
                         return false;
                     }
@@ -123,12 +134,14 @@ public class AlertDialogActualizarPerfil extends AlertDialog {
                     @Override
                     public void onClick(View v) {
                         if (Functions.contraseñaSegura(etNuevaContraseña.getText().toString()) == true) {
-                            persona.setContrasena(etPrincipal.getText().toString().trim());
+                            persona.setContrasena(etNuevaContraseña.getText().toString().trim());
                             editText.setText(persona.getContrasena());
                             etPrincipal.setText("");
                             etNuevaContraseña.setText("");
                             checkVerde.setVisibility(View.INVISIBLE);
                             tvRequerimiento.setVisibility(View.INVISIBLE);
+                            btnActualizar.setEnabled(true);
+                            btnActualizar.setBackgroundColor(Color.parseColor("#FF0000"));
                             etNuevaContraseña.setVisibility(View.INVISIBLE);
                             btnGuardar.setBackgroundColor(Color.parseColor("#808080"));
                             btnGuardar.setEnabled(false);
