@@ -58,6 +58,8 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "Eliminara Pedido", Toast.LENGTH_SHORT).show();
+
+
             }
         });
 

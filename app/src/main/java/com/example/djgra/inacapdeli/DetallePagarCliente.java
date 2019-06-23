@@ -83,15 +83,19 @@ public class DetallePagarCliente extends AppCompatActivity {
         tvClickAqui.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerDialog horaDialog = new TimePickerDialog(DetallePagarCliente.this, new TimePickerDialog.OnTimeSetListener() {
+                final TimePickerDialog horaDialog = new TimePickerDialog(DetallePagarCliente.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        if(String.valueOf(minute).equals("0")){
-                            String fecha = hourOfDay + ":00:00";
+                        String fecha = "";
+                        if(minute == 00){
+                            fecha = hourOfDay + ":00:00";
                         }else{
-                            String fecha = hourOfDay + ":" + minute+":00";
+                            if(minute < 10){
+                                fecha = hourOfDay + ":0" + minute+":00";
+                            }else{
+                                fecha = hourOfDay + ":" + minute+":00";
+                            }
                         }
-                        String fecha = hourOfDay + ":" + minute;
                         if(HoraRetiro(fecha) <= getTimeStamp()){
                             tvClickAqui.setText("Seleccione otra Hora");
                             tvClickAqui.setTextColor(Color.parseColor("#FF0000"));
@@ -118,6 +122,7 @@ public class DetallePagarCliente extends AppCompatActivity {
                     pedido.setId_condicion_pedido(2);
                     pedido.setId_vendedor(181);
                     pedido.setFechaPedido(sdf.format(getDate(horaSeleccionada)));
+                    Toast.makeText(DetallePagarCliente.this, ""+pedido.getFechaPedido(), Toast.LENGTH_SHORT).show();
                     final ProgressDialog progressDialog = Functions.CargarDatos("Realizando Pedido", DetallePagarCliente.this);
                     BddPedido.setPedido(pedido, DetallePagarCliente.this, new Response.Listener() {
                         @Override
