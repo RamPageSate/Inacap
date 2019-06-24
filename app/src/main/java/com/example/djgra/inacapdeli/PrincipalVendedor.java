@@ -23,7 +23,16 @@ public class PrincipalVendedor extends AppCompatActivity {
             vendedor = (Persona) bundle.getSerializable("usr");
         }
         btnPorPreparar = findViewById(R.id.btnPrepararPedido);
+        btnEntregarPedido = findViewById(R.id.btnEntregarPedido);
 
+
+        btnEntregarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PrincipalVendedor.this, EntregarPedido.class);
+                startActivity(i);
+            }
+        });
 
 
 
@@ -58,6 +67,7 @@ public class PrincipalVendedor extends AppCompatActivity {
                 lstPedido.add(pedido);
                 i.putExtra("usr", vendedor);
                 i.putExtra("lstPedidosPorPreparar",lstPedido);
+                //enviar los pedidos con id_condicion_2
                 startActivity(i);
             }
         });
