@@ -115,7 +115,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
                 }else{
                     pedido.agregarProductoListaPedido(lstProductos.get(position));
                     holder.cantidadProducto.setVisibility(View.VISIBLE);
-                    holder.cantidadProducto.setText(String.valueOf(Integer.parseInt(holder.cantidadProducto.getText().toString()) + 1));// aqui no
+                    holder.cantidadProducto.setText(String.valueOf(pedido.cantidadProductoPedido(lstProductos.get(position).getCodigo())));
                     linearLayout.setVisibility(View.VISIBLE);
                     holder.btnDescontar.setVisibility(View.VISIBLE);
                     cantidadProductosPedido.setText(String.valueOf(pedido.cantidadArticulos()));

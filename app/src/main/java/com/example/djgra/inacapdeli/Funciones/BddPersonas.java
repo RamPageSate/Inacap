@@ -77,11 +77,28 @@ public class BddPersonas {
         };
         requestQueue.add(request);
     }
-
     public static void getPersonaEmail(Context context, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlBase + "getPersonaEmail", null, listener, errorListener);
         requestQueue.add(request);
+    }
+
+
+    public static void updatePersona(final Persona persona, final Context context, Response.Listener listener, Response.ErrorListener errorListener){
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlBase+"updatePersona",listener,errorListener){
+            @Override
+            protected Map<String,String> getParams() throws AuthFailureError{
+                map.clear();
+                map=new HashMap<String, String>();
+                map.put("persona_id", String.valueOf(persona.getCodigo()));
+                map.put("persona_nombre",persona.getNombre());
+                map.put("persona_apellido",persona.getApellido());
+                map.put("persona_pass",persona.getContrasena());
+                return map;
+            }
+        };
+        requestQueue.add(stringRequest);
     }
 
 }

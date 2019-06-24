@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.Clases.Producto_Favorito;
@@ -119,11 +120,6 @@ public class Login extends AppCompatActivity {
                                 switch (persona.getRol()) {
                                     case (1):
                                         final Intent c = new Intent(Login.this, PrincipalCliente.class);
-                                        //quitar esto cuando funcione el getProductoFavorito
-                                        c.putExtra("usr", persona);
-                                        progress.dismiss();
-                                        startActivity(c);
-                                        //
                                         BddProductos.getProductoFavorito(persona.getCodigo(), Login.this, new Response.Listener<JSONArray>() {
                                             @Override
                                             public void onResponse(JSONArray response) {
@@ -148,6 +144,9 @@ public class Login extends AppCompatActivity {
                                         }, null);
                                         break;
                                     case (2):
+                                        Intent inten = new Intent(Login.this, PrincipalVendedor.class);
+                                        inten.putExtra("usr", persona);
+                                        startActivity(inten);
                                         break;
                                     case (3):
                                         Intent i = new Intent(Login.this, PrincipalAdministrador.class);

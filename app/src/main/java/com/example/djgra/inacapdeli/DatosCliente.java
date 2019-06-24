@@ -1,7 +1,9 @@
 package com.example.djgra.inacapdeli;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -19,8 +21,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogActualizarPerfil;
 import com.example.djgra.inacapdeli.Clases.Persona;
+import com.example.djgra.inacapdeli.Funciones.BddPersonas;
 import com.example.djgra.inacapdeli.Funciones.Functions;
 
 import java.io.IOException;
@@ -56,6 +60,7 @@ public class DatosCliente extends AppCompatActivity {
             etApellido.setText(cliente.getApellido());
             etPass.setText(cliente.getContrasena());
             imagen.setImageBitmap(Functions.StringToBitMap(cliente.getFoto()));
+            NuevosDatos.setCodigo(cliente.getCodigo());
             NuevosDatos.setNombre(cliente.getNombre());
             NuevosDatos.setApellido(cliente.getApellido());
             NuevosDatos.setFoto(cliente.getFoto());
@@ -113,21 +118,36 @@ public class DatosCliente extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ProgressDialog progressDialog = Functions.CargarDatos("Actualizando Perfil", DatosCliente.this);
-                cliente.setNombre(NuevosDatos.getNombre());
-                cliente.setContrasena(NuevosDatos.getContrasena());
-                cliente.setApellido(NuevosDatos.getApellido());
-                cliente.setFoto(NuevosDatos.getFoto());
-                Actualizo=true;
-                SharedPreferences preferences = getSharedPreferences("usuarioConectado", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editorPreferencias = preferences.edit();
-                editorPreferencias.clear();
-                editorPreferencias.putString("email", cliente.getCorreo());
-                editorPreferencias.putString("pass", cliente.getContrasena());
-                editorPreferencias.commit();
-                Intent intent = new Intent(DatosCliente.this,Login.class);
-                startActivity(intent);
-                //guardar en la bd hacer activityforresult
-
+                BddPersonas.updatePersona(NuevosDatos, DatosCliente.this, new Response.Listener() {
+                    @Override
+                    public void onResponse(Object response) {
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(DatosCliente.this);
+                        builder.setTitle("Notificacion");
+                        builder.setMessage("Actualizo Los Datos");
+                        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                cliente.setNombre(NuevosDatos.getNombre());
+                                cliente.setContrasena(NuevosDatos.getContrasena());
+                                cliente.setApellido(NuevosDatos.getApellido());
+                                cliente.setFoto(NuevosDatos.getFoto());
+                                Actualizo=true;
+                                SharedPreferences preferences = getSharedPreferences("usuarioConectado", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editorPreferencias = preferences.edit();
+                                editorPreferencias.clear();
+                                editorPreferencias.putString("email", cliente.getCorreo());
+                                editorPreferencias.putString("pass", cliente.getContrasena());
+                                editorPreferencias.commit();
+                                Intent intent = new Intent(DatosCliente.this,Login.class);
+                                startActivity(intent);
+                            }
+                        });
+                        AlertDialog mostrar = builder.create();
+                        mostrar.setCancelable(false);
+                        mostrar.setCanceledOnTouchOutside(false);
+                        mostrar.show();
+                    }
+                }, Functions.FalloInternet(DatosCliente.this,progressDialog,"No pudo Actualizar Perfil"));
             }
         });
     }

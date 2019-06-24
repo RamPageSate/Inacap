@@ -61,6 +61,21 @@ public class BddPedido {
     }
 
 
+    public static void updateCondicionPedido(final int pedido_id, final int id_condidcion, Context context, Response.Listener<String> listener, Response.ErrorListener errorListener){
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlBase+"updateCondidcionPedido",listener,errorListener){
+            @Override
+            protected Map<String,String> getParams() throws AuthFailureError{
+                map.clear();
+                map=new HashMap<String, String>();
+                map.put("pedido_id", String.valueOf(pedido_id));
+                map.put("condidion_pedido", String.valueOf(id_condidcion));
+
+                return map;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
 
 
 

@@ -71,7 +71,16 @@ public class Pedido implements Serializable {
     }
 
 
+    public int cantidadProductoPedido(int codigo){
+        int cant = 0;
+        for (int x=0; x < lstProductoPedido.size(); x++){
+            if(codigo == lstProductoPedido.get(x).getCodigo()) {
+                cant= lstProductoPedido.get(x).getCantidad();
+            }
+        }
 
+        return cant;
+    }
     public int totalPagarPedido(){
         int total = 0;
         for (int x=0; x< lstProductoPedido.size(); x++){

@@ -130,6 +130,7 @@ public class DetallePagarCliente extends AppCompatActivity {
                             Toast.makeText(DetallePagarCliente.this, "Pedido Realizado", Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                             //enviar pedido a vendedor
+                            //eliminartodo el pedido ya comptado
                             //enviar pedido a a historial activos
                             //descontar saldo
                             //cuando paga hay que resetear la barra verde

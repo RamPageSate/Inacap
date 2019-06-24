@@ -238,10 +238,10 @@ public class PrincipalCliente extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             }
+                            progressDialog.dismiss();
+                            Intent i = new Intent(PrincipalCliente.this, PedidosCliente.class);
+                            startActivity(i);
                         }
-                        progressDialog.dismiss();
-                        Intent i = new Intent(PrincipalCliente.this, PedidosCliente.class);
-                        startActivity(i);
                     }
                 });
 
