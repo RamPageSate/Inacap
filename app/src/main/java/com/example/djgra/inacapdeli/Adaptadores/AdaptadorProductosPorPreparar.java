@@ -50,9 +50,8 @@ public class AdaptadorProductosPorPreparar extends BaseAdapter {
         final TextView tvNombre = item.findViewById(R.id.tvProductoPrepararPedido);
         TextView tvCantidad = item.findViewById(R.id.tvCantidadProductoPrepararPedido);
         RadioGroup rdGrupo = item.findViewById(R.id.rdGrupo);
-        RadioButton rdFalta = item.findViewById(R.id.rdFalta);
+        final RadioButton rdFalta = item.findViewById(R.id.rdFalta);
         final RadioButton rdListo = item.findViewById(R.id.rdListo);
-        rdFalta.setChecked(true);
         tvNombre.setText(listaProducto.get(position).getNombre());
         //tvCantidad.setText(listaProducto.get(position).getCantidad());
         rdFalta.setId(200 + position);
@@ -61,28 +60,24 @@ public class AdaptadorProductosPorPreparar extends BaseAdapter {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(rdListo.isChecked()){
+                    rdListo.setChecked(true);
                     listaProducto.get(position).setEstado(0);
+                    rdFalta.setChecked(false);
                     if(habilitarBotonTerminar() == false){
                         btnTerminarPedido.setEnabled(true);
                         btnTerminarPedido.setBackgroundColor(Color.parseColor("#972CD6"));
 
                     }
-                    Toast.makeText(context, "Listo"+tvNombre.getText().toString(),Toast.LENGTH_SHORT).show();
-
                 }else{
                     listaProducto.get(position).setEstado(1);
+                    rdListo.setChecked(false);
                     if(habilitarBotonTerminar() == true){
                         btnTerminarPedido.setEnabled(false);
                         btnTerminarPedido.setBackgroundColor(Color.parseColor("#808080"));
                     }
-                    Toast.makeText(context, "Nada"+tvNombre.getText().toString(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
-
-
         return item;
     }
 

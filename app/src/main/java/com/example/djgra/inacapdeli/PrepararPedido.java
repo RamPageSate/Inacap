@@ -1,5 +1,7 @@
 package com.example.djgra.inacapdeli;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,11 +14,13 @@ import android.widget.ListView;
 
 import com.android.volley.Response;
 import com.example.djgra.inacapdeli.Adaptadores.AdaptadorPedidosPorPreparar;
+import com.example.djgra.inacapdeli.Adaptadores.AdaptadorProductosPorPreparar;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogPrepararProductoPedidos;
 import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.Funciones.BddProductos;
+import com.example.djgra.inacapdeli.Funciones.Functions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +49,7 @@ public class PrepararPedido extends AppCompatActivity {
         lstPedidosPorPreparar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                final ProgressDialog progressDialog = Functions.CargarDatos("Cargando Productos... !", PrepararPedido.this);
                 BddProductos.getProductoByPedido(lstPedido.get(position).getCodigo(), PrepararPedido.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -62,13 +67,13 @@ public class PrepararPedido extends AppCompatActivity {
                                     producto.setEstado(response.getJSONObject(x).getInt("producto_estado"));
                                     producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
                                     producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
-                                    lstPedido.get(x).agregarProductoListaPedido(producto);
-                                    Log.d("TAG_", "CP-> " + producto.getNombre());
+                                    lstPedido.get(position).agregarProductoListaPedido(producto);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
-                            AlertDialogPrepararProductoPedidos alert = new AlertDialogPrepararProductoPedidos(PrepararPedido.this,lstPedido.get(position).getLstProductoPedido(),lstPedido.get(position).getCodigo());
+                            progressDialog.dismiss();
+                            AlertDialogPrepararProductoPedidos alert = new AlertDialogPrepararProductoPedidos(PrepararPedido.this,lstPedido.get(position).getLstProductoPedido(),lstPedido.get(position).getCodigo(),lstPedido,lstPedidosPorPreparar);
                             alert.show();
                         }
 
@@ -101,9 +106,10 @@ public class PrepararPedido extends AppCompatActivity {
 
 
     }
-    private void llenarTabla(){
+    public void llenarTabla(){
         adaptador = new AdaptadorPedidosPorPreparar(lstPedido,PrepararPedido.this);
         lstPedidosPorPreparar.setAdapter(adaptador);
         lstPedidosPorPreparar.deferNotifyDataSetChanged();
     }
 }
+
