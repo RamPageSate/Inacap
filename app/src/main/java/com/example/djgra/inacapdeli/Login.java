@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.example.djgra.inacapdeli.AlertDialog.AlertDialogRecuperarPass;
 import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Clases.Producto;
@@ -66,6 +67,13 @@ public class Login extends AppCompatActivity {
 
         });
 
+        tvRecuperarPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialogRecuperarPass alert = new AlertDialogRecuperarPass(Login.this);
+                alert.show();
+            }
+        });
     }
 
     public void Logeo() {
