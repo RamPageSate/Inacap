@@ -51,7 +51,7 @@ public class ClienteProductosPorCategoria extends AppCompatActivity {
             if(pedido.getLstProductoPedido().isEmpty()){
                 linearBarra.setVisibility(View.INVISIBLE);
             }
-            if(categoria.getNombre().equals("Mis Favoritas") && lstProducto.isEmpty()){
+            if(categoria.getCodigo() == 48 && lstProducto.isEmpty()){
                 favoritos.setVisibility(View.VISIBLE);
             }else{
                 favoritos.setVisibility(View.INVISIBLE);
