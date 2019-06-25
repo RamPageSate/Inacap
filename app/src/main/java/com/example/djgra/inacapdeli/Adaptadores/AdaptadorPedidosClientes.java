@@ -47,7 +47,11 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
             holder.btnEliminar.setEnabled(false);
         }
         holder.tvNumeroPedido.setText(String.valueOf(lstPedidos.get(position).getCodigo()));
-        holder.tvMontoCompra.setText(String.valueOf(lstPedidos.get(position).totalPagarPedido()));
+        int total = 0;
+        for(int x = 0;  x < lstPedidos.get(position).getLstProductoPedido().size(); x++){
+            total = total + lstPedidos.get(position).getLstProductoPedido().get(x).getPrecio();
+        }
+        holder.tvMontoCompra.setText(String.valueOf(total));
         holder.tvCandidadArticulosPedidos.setText(String.valueOf(lstPedidos.get(position).PedidoComprado().size()));
         holder.tvFecha.setText(lstPedidos.get(position).getFechaPedido());
         ArrayList<Producto> lstProducto = Pedido.filtrarPedidos(lstPedidos.get(position).getLstProductoPedido());

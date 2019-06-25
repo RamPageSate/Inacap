@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ public class ClienteProductosPorCategoria extends AppCompatActivity {
     RecyclerView rcProductos;
     ImageButton btnSalir;
     Categoria categoria;
+    ImageView favoritos;
     ArrayList<Producto> lstProducto = new ArrayList<>();
     public static Pedido pedido = new Pedido();
     LinearLayout linearBarra;
@@ -35,6 +37,7 @@ public class ClienteProductosPorCategoria extends AppCompatActivity {
         tvNombreCategoria = (TextView) findViewById(R.id.tvTituloCategoriasFiltrada);
         rcProductos = (RecyclerView) findViewById(R.id.rcProductoCPC);
         linearBarra = (LinearLayout) findViewById(R.id.linearahora);
+        favoritos = findViewById(R.id.imgFavoritos);
         tvCantidadProductos = (TextView) findViewById(R.id.tvCantidadArticulosCPC);
         tvTotal = (TextView) findViewById(R.id.tvTotalCPC);
         btnSalir = (ImageButton) findViewById(R.id.btnSalirCPC);
@@ -48,9 +51,11 @@ public class ClienteProductosPorCategoria extends AppCompatActivity {
             if(pedido.getLstProductoPedido().isEmpty()){
                 linearBarra.setVisibility(View.INVISIBLE);
             }
-
-
-
+            if(categoria.getNombre().equals("Mis Favoritas") && lstProducto.isEmpty()){
+                favoritos.setVisibility(View.VISIBLE);
+            }else{
+                favoritos.setVisibility(View.INVISIBLE);
+            }
         }
         AdaptadorRecyclerViewProductoCliente adpatador = new AdaptadorRecyclerViewProductoCliente(lstProducto, tvCantidadProductos,tvTotal,pedido,ClienteProductosPorCategoria.this,linearBarra,PrincipalCliente.clientePrincipal,categoria);
         rcProductos.setHasFixedSize(false);

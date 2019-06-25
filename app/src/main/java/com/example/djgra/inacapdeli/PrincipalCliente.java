@@ -170,7 +170,6 @@ public class PrincipalCliente extends AppCompatActivity {
         linearPagar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //me tengo que enviar los productos pedidos el cliente
                 Intent intent = new Intent(PrincipalCliente.this, DetallePagarCliente.class);
                 intent.putExtra("pedido", pedidoCliente);
                 startActivityForResult(intent, 7);
@@ -181,7 +180,7 @@ public class PrincipalCliente extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(PrincipalCliente.this, DatosCliente.class);
-                i.putExtra("cliente",clientePrincipal);;
+                i.putExtra("cliente",clientePrincipal);
                 i.putExtra("code",1);
                 startActivityForResult(i,12);
             }
@@ -190,61 +189,10 @@ public class PrincipalCliente extends AppCompatActivity {
         btnHistorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialog = Functions.CargarDatos("Cangando Historial", PrincipalCliente.this);
-                BddPedido.getPedidoByCliente(clientePrincipal.getCodigo(), PrincipalCliente.this, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        if (!response.equals("[]")) {
-                            for (int x = 0; x < response.length(); x++) {
-                                try {
-                                    final Pedido pedido = new Pedido();
-                                    pedido.setCodigo(response.getJSONObject(x).getInt("pedido_id"));
-                                    BddProductos.getProductoByPedido(pedido.getCodigo(), PrincipalCliente.this, new Response.Listener<JSONArray>() {
-                                        @Override
-                                        public void onResponse(JSONArray response) {
-                                            if (!response.equals("[]")) {
-                                                ArrayList<Producto> lista = new ArrayList<>();
-                                                for (int x = 0; x < response.length(); x++) {
-                                                    try {
-                                                        final Producto producto = new Producto();
-                                                        producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
-                                                        producto.setNombre(response.getJSONObject(x).getString("producto_nombre"));
-                                                        producto.setFoto(response.getJSONObject(x).getString("producto_foto"));
-                                                        producto.setDescripcion(response.getJSONObject(x).getString("producto_descripcion"));
-                                                        producto.setSku(response.getJSONObject(x).getString("producto_sku"));
-                                                        producto.setPrecio(response.getJSONObject(x).getInt("producto_precio"));
-                                                        producto.setStock(response.getJSONObject(x).getInt("producto_stock"));
-                                                        producto.setEstado(response.getJSONObject(x).getInt("producto_estado"));
-                                                        producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
-                                                        producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
-                                                        lista.add(producto);
-                                                        Log.d("TAG_", "CP-> " + producto.getNombre());
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                                pedido.setLstProductoPedido(lista);
-                                                clientePrincipal.agregarPedido(pedido);
-                                            }
-                                        }
-                                    }, Functions.FalloInternet(PrincipalCliente.this, progressDialog, "No pudo Cargar"));
-                                    pedido.setFechaPedido(response.getJSONObject(x).getString("pedido_fecha_hora"));
-                                    pedido.setPedido_estado(response.getJSONObject(x).getInt("pedido_estado"));
-                                    pedido.setId_cliente(response.getJSONObject(x).getInt("id_cliente"));
-                                    pedido.setId_vendedor(response.getJSONObject(x).getInt("id_vendedor"));
-                                    pedido.setId_condicion_pedido(response.getJSONObject(x).getInt("id_condicion_pedido"));
-                                    Log.d("TAG_", "entro Pedidos");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            progressDialog.dismiss();
-                            Intent i = new Intent(PrincipalCliente.this, PedidosCliente.class);
-                            startActivity(i);
-                        }
-                    }
-                });
-
+                Intent i = new Intent(PrincipalCliente.this, PedidosCliente.class);
+                i.putExtra("cliente",clientePrincipal);
+                i.putExtra("code",1);
+                startActivity(i);
             }
         });
 
@@ -259,6 +207,9 @@ public class PrincipalCliente extends AppCompatActivity {
         }
         if (resultCode == 7) {
             pedidoCliente = DetallePagarCliente.pedido;
+        }
+        if(requestCode == 39){
+            pedidoCliente = new Pedido();
         }
         AdaptadorRecyclerViewProductoCliente adaptadorValoradas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(51, 1, "")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, clientePrincipal,null);
         AdaptadorRecyclerViewProductoCliente adaptadorFavoritas = new AdaptadorRecyclerViewProductoCliente(FiltrarListaPorCategoria(new Categoria(74, 1, "Favoritas")), tvCantidadArticulosCliente, tvMontoPagar, pedidoCliente, PrincipalCliente.this, linearPagar, clientePrincipal,null);

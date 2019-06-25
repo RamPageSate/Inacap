@@ -1,5 +1,6 @@
 package com.example.djgra.inacapdeli;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -7,14 +8,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 
+import com.android.volley.Response;
 import com.example.djgra.inacapdeli.Adaptadores.AdaptadorPedidosClientes;
 import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.Clases.Persona;
+import com.example.djgra.inacapdeli.Clases.Producto;
+import com.example.djgra.inacapdeli.Funciones.BddPedido;
+import com.example.djgra.inacapdeli.Funciones.BddProductos;
+import com.example.djgra.inacapdeli.Funciones.Functions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -22,26 +33,91 @@ public class PedidosCliente extends AppCompatActivity {
 
     Pedido pedido = new Pedido();
     RecyclerView rcPedidos;
-    ScrollView scroll;
+    Persona cliente = new Persona();
+    //ScrollView scroll;
+    ImageView imagensinPedido;
     Button btnAnteriores, btnActivos;
     ImageButton btnInicio;
+    int code=0;
     AdaptadorPedidosClientes adaptadorPedidosClientes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedidos_cliente);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        scroll = (ScrollView) findViewById(R.id.scPedidosCliente);
+        //scroll = (ScrollView) findViewById(R.id.scPedidosCliente);
         rcPedidos = (RecyclerView) findViewById(R.id.rcPedidosCliente);
         btnActivos = findViewById(R.id.btnPedidosActivosCliente);
+        imagensinPedido = findViewById(R.id.fondossinpedidos);
         btnAnteriores = findViewById(R.id.btnPedidosAnterioresCliente);
         btnInicio = findViewById(R.id.btnInicioPedidos);
         btnAnteriores.setEnabled(false);
-        cargarVistaPedidoAnterior();
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            cliente = (Persona) bundle.getSerializable("cliente");
+            code = bundle.getInt("code");
+        }
+        final ProgressDialog progressDialog = Functions.CargarDatos("Cangando Historial", PedidosCliente.this);
+        BddPedido.getPedidoByCliente(cliente.getCodigo(), PedidosCliente.this, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                if (!response.equals("[]")) {
+                    for (int x = 0; x < response.length(); x++) {
+                        try {
+                            final Pedido pedido = new Pedido();
+                            pedido.setCodigo(response.getJSONObject(x).getInt("pedido_id"));
+                            BddProductos.getProductoByPedido(pedido.getCodigo(), PedidosCliente.this, new Response.Listener<JSONArray>() {
+                                @Override
+                                public void onResponse(JSONArray response) {
+                                    if (!response.equals("[]")) {
+                                        ArrayList<Producto> lista = new ArrayList<>();
+                                        for (int x = 0; x < response.length(); x++) {
+                                            try {
+                                                final Producto producto = new Producto();
+                                                producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
+                                                producto.setNombre(response.getJSONObject(x).getString("producto_nombre"));
+                                                producto.setFoto(response.getJSONObject(x).getString("producto_foto"));
+                                                producto.setDescripcion(response.getJSONObject(x).getString("producto_descripcion"));
+                                                producto.setSku(response.getJSONObject(x).getString("producto_sku"));
+                                                producto.setPrecio(response.getJSONObject(x).getInt("producto_precio"));
+                                                producto.setStock(response.getJSONObject(x).getInt("producto_stock"));
+                                                producto.setEstado(response.getJSONObject(x).getInt("producto_estado"));
+                                                producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
+                                                producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
+                                                lista.add(producto);
+                                                Log.d("TAG_", "CP-> " + producto.getNombre());
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        pedido.setLstProductoPedido(lista);
+                                        cliente.agregarPedido(pedido);
+                                    }
+                                }
+                            }, Functions.FalloInternet(PedidosCliente.this, progressDialog, "No pudo Cargar"));
+                            pedido.setFechaPedido(response.getJSONObject(x).getString("pedido_fecha_hora"));
+                            pedido.setPedido_estado(response.getJSONObject(x).getInt("pedido_estado"));
+                            pedido.setId_cliente(response.getJSONObject(x).getInt("id_cliente"));
+                            pedido.setId_vendedor(response.getJSONObject(x).getInt("id_vendedor"));
+                            pedido.setId_condicion_pedido(response.getJSONObject(x).getInt("id_condicion_pedido"));
+                            Log.d("TAG_", "entro Pedidos");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    progressDialog.dismiss();
+                }
+                cargarVistaPedidoAnterior();
+            }
+        });
+
 
         btnInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(code == 3){
+                    PrincipalCliente.pedidoCliente = new Pedido();
+                }
                 onBackPressed();
                 finish();
             }
@@ -69,39 +145,40 @@ public class PedidosCliente extends AppCompatActivity {
     }
     //cargar vistas anterior primero
     private void cargarVistaPedidoAnterior(){
-        if(!PrincipalCliente.clientePrincipal.lstPedidosEntregados().isEmpty()){
-            scroll.setBackgroundResource(R.drawable.limpiarhistorial);
+        if(!cliente.lstPedidosEntregados().isEmpty()){
+            imagensinPedido.setVisibility(View.INVISIBLE);
             adaptadorPedidosClientes = null;
             rcPedidos.setAdapter(adaptadorPedidosClientes);
             rcPedidos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-            adaptadorPedidosClientes = new AdaptadorPedidosClientes(PrincipalCliente.clientePrincipal.lstPedidosEntregados(),PedidosCliente.this,"ENTREGADOS");
+            adaptadorPedidosClientes = new AdaptadorPedidosClientes(cliente.lstPedidosEntregados(),PedidosCliente.this,"ENTREGADOS");
             rcPedidos.setHasFixedSize(true);
-            rcPedidos.setItemViewCacheSize(PrincipalCliente.clientePrincipal.lstPedidosEntregados().size());
+            rcPedidos.setItemViewCacheSize(cliente.lstPedidosEntregados().size());
             rcPedidos.setAdapter(adaptadorPedidosClientes);
         }else{
             //cargar la imagen de vacio
             adaptadorPedidosClientes = null;
             rcPedidos.setAdapter(adaptadorPedidosClientes);
-            scroll.setBackgroundResource(R.drawable.anteriores);
+            imagensinPedido.setImageDrawable(getResources().getDrawable(R.drawable.anteriores));
+            imagensinPedido.setVisibility(View.VISIBLE);
         }
 
     }
 
     private void cargarVistaPedidosActivos(){
-        if(!PrincipalCliente.clientePrincipal.lstPedidosPendientes().isEmpty()){
-            scroll.setBackgroundResource(R.drawable.limpiarhistorial);
+        if(!cliente.lstPedidosPendientes().isEmpty()){
+            imagensinPedido.setVisibility(View.INVISIBLE);
             adaptadorPedidosClientes = null;
             rcPedidos.setAdapter(adaptadorPedidosClientes);
             rcPedidos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-            adaptadorPedidosClientes = new AdaptadorPedidosClientes(PrincipalCliente.clientePrincipal.lstPedidosPendientes(),PedidosCliente.this,"PENDIENTES");
+            adaptadorPedidosClientes = new AdaptadorPedidosClientes(cliente.lstPedidosPendientes(),PedidosCliente.this,"PENDIENTES");
             rcPedidos.setHasFixedSize(true);
-            rcPedidos.setItemViewCacheSize(PrincipalCliente.clientePrincipal.lstPedidosEntregados().size());
+            rcPedidos.setItemViewCacheSize(cliente.lstPedidosEntregados().size());
             rcPedidos.setAdapter(adaptadorPedidosClientes);
         }else{
-            //cargar la imagen de vacio
             adaptadorPedidosClientes = null;
             rcPedidos.setAdapter(adaptadorPedidosClientes);
-            scroll.setBackgroundResource(R.drawable.sinactivos);
+            imagensinPedido.setVisibility(View.VISIBLE);
+            imagensinPedido.setImageDrawable(getResources().getDrawable(R.drawable.sinactivos));
 
         }
     }

@@ -120,7 +120,7 @@ public class DetallePagarCliente extends AppCompatActivity {
                     pedido.setLstProductoPedido(pedido.listaProductosFinal(pedido.getLstProductoPedido()));
                     pedido.setPedido_estado(1);
                     pedido.setId_condicion_pedido(2);
-                    pedido.setId_vendedor(181);
+                    pedido.setId_vendedor(pedido.getId_cliente());
                     pedido.setFechaPedido(sdf.format(getDate(horaSeleccionada)));
                     Toast.makeText(DetallePagarCliente.this, ""+pedido.getFechaPedido(), Toast.LENGTH_SHORT).show();
                     final ProgressDialog progressDialog = Functions.CargarDatos("Realizando Pedido", DetallePagarCliente.this);
@@ -128,8 +128,13 @@ public class DetallePagarCliente extends AppCompatActivity {
                         @Override
                         public void onResponse(Object response) {
                             Toast.makeText(DetallePagarCliente.this, "Pedido Realizado", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(DetallePagarCliente.this,PedidosCliente.class);
+                            intent.putExtra("cliente",PrincipalCliente.clientePrincipal);
+                            intent.putExtra("code",3);
+                            startActivity(intent);
+                            finish();
                             progressDialog.dismiss();
-                            //enviar pedido a vendedor
+                            //enviar pedido a vendedor//
                             //eliminartodo el pedido ya comptado
                             //enviar pedido a a historial activos
                             //descontar saldo

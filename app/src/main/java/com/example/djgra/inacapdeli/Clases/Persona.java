@@ -164,7 +164,13 @@ public class Persona implements Serializable{
         lstProductosFavoritos.add(pro);
     }
 
-
+    public void terminarPedido(Pedido pedido){
+        for(int x=0; x < lstPedidos.size(); x++){
+            if(lstPedidos.get(x).getId_cliente() == pedido.getId_cliente()){
+                lstPedidos.remove(pedido);
+            }
+        }
+    }
 
 
 

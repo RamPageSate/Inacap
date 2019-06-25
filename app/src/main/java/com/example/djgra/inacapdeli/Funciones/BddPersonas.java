@@ -95,6 +95,7 @@ public class BddPersonas {
                 map.put("persona_nombre",persona.getNombre());
                 map.put("persona_apellido",persona.getApellido());
                 map.put("persona_pass",persona.getContrasena());
+                map.put("persona_saldo", String.valueOf(persona.getSaldo()));
                 return map;
             }
         };

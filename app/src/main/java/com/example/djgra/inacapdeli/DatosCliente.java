@@ -65,6 +65,7 @@ public class DatosCliente extends AppCompatActivity {
             NuevosDatos.setApellido(cliente.getApellido());
             NuevosDatos.setFoto(cliente.getFoto());
             NuevosDatos.setContrasena(cliente.getContrasena());
+            NuevosDatos.setSaldo(cliente.getSaldo());
         }
 
         btnInicio.setOnClickListener(new View.OnClickListener() {

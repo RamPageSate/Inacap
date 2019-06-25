@@ -130,7 +130,6 @@ public class Login extends AppCompatActivity {
                                                             producto_favorito.setId_cliente(persona.getCodigo());
                                                             producto_favorito.setId_producto(response.getJSONObject(x).getInt("id_producto"));
                                                             persona.addProductoFavorito(producto_favorito);
-                                                            Log.d("TAG_", "c->"+ producto_favorito.getId_producto());
                                                         }catch (JSONException e) {
                                                             e.printStackTrace();
                                                         }
