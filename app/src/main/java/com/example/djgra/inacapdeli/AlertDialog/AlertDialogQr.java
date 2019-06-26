@@ -26,7 +26,7 @@ public class AlertDialogQr extends AlertDialog {
         Button btnListo = view.findViewById(R.id.btnListoQr);
         TextView tvCantidad = view.findViewById(R.id.tvCantidadPedidoQr);
         ImageView imgQr = view.findViewById(R.id.imgQr);
-        tvNombre.setText(cliente.getNombre()+ " " + cliente.getApellido());
+        tvNombre.setText(tvNombre.getText()+ " "+cliente.getNombre()+ " " + cliente.getApellido());
         tvCantidad.setText(tvCantidad.getText() +""+String.valueOf(cantidadPedidos));
         imgQr.setImageBitmap(Functions.StringToBitMap(cliente.getCodigoQr()));
 

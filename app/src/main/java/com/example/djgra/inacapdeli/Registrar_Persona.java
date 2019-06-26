@@ -219,7 +219,7 @@ public class Registrar_Persona extends AppCompatActivity {
     private int validarFormulario() {
         int ok = 0;
         //validar solo letras
-        if (etNombre.getText().toString().isEmpty()) {
+        if (etNombre.getText().toString().trim().isEmpty()) {
             etNombre.setError("Ingrese Nombre");
             ok++;
         } else {
@@ -228,7 +228,7 @@ public class Registrar_Persona extends AppCompatActivity {
                 ok++;
             }
         }
-        if (etApellido.getText().toString().isEmpty()) {
+        if (etApellido.getText().toString().trim().isEmpty()) {
             etApellido.setError("Ingrese Nombre");
         } else {
             if (Functions.validarLetras(etApellido.getText().toString().trim()) != true) {
