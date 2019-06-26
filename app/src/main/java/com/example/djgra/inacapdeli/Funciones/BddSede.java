@@ -1,6 +1,5 @@
 package com.example.djgra.inacapdeli.Funciones;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 
 import com.android.volley.AuthFailureError;
@@ -13,15 +12,17 @@ import com.android.volley.toolbox.Volley;
 import com.example.djgra.inacapdeli.Clases.Sede;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BddSede {
     private static Map<String,String> map = new HashMap<>();
     private static  String urlBase = "https://laxjbz6j-site.gtempurl.com/igniter/funcion/";
+
+    /*
+     *
+     * */
     public static void setSede(final Sede sede, Context context, Response.Listener<String> listener, Response.ErrorListener errorListener){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.POST,urlBase+"setSede",listener,errorListener){
