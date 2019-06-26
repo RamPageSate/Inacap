@@ -35,6 +35,12 @@ public class BddTipo {
         requestQueue.add(request);
     }
 
+    /**
+     * @param tipo          Tipo que se quiere insertar en la base de datos
+     * @param context       Contexto de la actividad
+     * @param errorListener Accion en caso de error que se desea al capturar  la respuesta
+     * @param listener      Accion que se desea al capturar la respuesta.
+     */
     public static void setTipo(final Tipo tipo, Context context, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, urlBase + "setTipo", listener, errorListener) {
