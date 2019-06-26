@@ -22,8 +22,7 @@ import java.util.Map;
 public class BddPedido {
     private static Map<String,String> map = new HashMap<>();
     private static  String urlBase = "https://laxjbz6j-site.gtempurl.com/igniter/funcion/";
-    //pedido_fecha_hora pedido_estado id_cliente id_vendedor id_condicion_pedido
-    //trans transaccion_id trans_fecha_hora transaccion_monto transaccion_estado id_pedido
+
     public static void setPedido(final Pedido pedido, final Context context, Response.Listener listener, Response.ErrorListener error) {
         final RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest jsonRequest = new StringRequest(Request.Method.POST, urlBase+"setPedido",listener,error)
@@ -45,7 +44,6 @@ public class BddPedido {
     }
 
 
-    //getPedidoByCliente(id_cliente) get
     public static void getPedidoByCliente(final int id_cliente,Context context, Response.Listener<JSONArray> listener){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JsonArrayRequest stringRequest = new JsonArrayRequest(Request.Method.POST,urlBase+"getPedidoByCliente?id_cliente="+id_cliente,null, listener,null){
@@ -69,12 +67,17 @@ public class BddPedido {
                 map.clear();
                 map=new HashMap<String, String>();
                 map.put("pedido_id", String.valueOf(pedido_id));
-                map.put("condidion_pedido", String.valueOf(id_condidcion));
+                map.put("id_condicion_pedido", String.valueOf(id_condidcion));
 
                 return map;
             }
         };
         requestQueue.add(stringRequest);
+    }
+
+
+    public static void getPedidoFaltante(Context context, Response.Listener listener, Response.ErrorListener errorListener){
+
     }
 
 

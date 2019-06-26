@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/BlancoInacap">
+
+    <ImageView
+        android:id="@+id/imgQr"
+        android:layout_width="118dp"
+        android:layout_height="108dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logooficial" />
+
+    <TextView
+        android:id="@+id/tvNombreQr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/NegroInacap"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/imgQr"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Nombre" />
+
+    <TextView
+        android:id="@+id/tvCantidadPedidoQr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Pedidos: "
+        android:textColor="@color/NegroInacap"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/imgQr"
+        app:layout_constraintTop_toBottomOf="@+id/tvNombreQr" />
+
+    <Button
+        android:id="@+id/btnListoQr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:background="#F5B7B1  "
+        android:text="A Comer !!"
+        android:textColor="@color/RojoInacap"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCantidadPedidoQr" />
+</android.support.constraint.ConstraintLayout>

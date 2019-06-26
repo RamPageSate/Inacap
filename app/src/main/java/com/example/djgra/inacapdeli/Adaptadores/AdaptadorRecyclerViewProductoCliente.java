@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -133,7 +134,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
                 Producto_Favorito pro = new Producto_Favorito();
                 pro.setId_cliente(cliente.getCodigo());
                 pro.setId_producto(lstProductos.get(position).getCodigo());
-                if(categoria.getCodigo() == 48){
+                if(categoria != null){
                     //falta el deleteProductoFavorito corregir ubicacion
                     int lugar = posicionProducto(lstProductos,lstProductos.get(position).getCodigo());
                     lstProductos.remove(lugar);
@@ -144,7 +145,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
                             @Override
                             public void onResponse(Object response) {
                                 holder.btnLike.setBackgroundResource(R.drawable.like);
-                                Toast.makeText(context, "Agrego cambio", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "Agrego a MIS FAVORITAS", Toast.LENGTH_SHORT).show();
                                 //cuando este en la categoria 48 mis favoritas poder quitar el producto con like = 0
 
                             }
@@ -152,7 +153,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 holder.btnLike.setBackgroundResource(R.drawable.nolike);
-                                Toast.makeText(context, "No pudo cambiar estado", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "No pudo Agregar a Favoritos", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }else{
@@ -177,7 +178,6 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
         TextView nombreProducto, descripcionProducto, precioProducto, cantidadProducto;
         ImageView imgProducto;
         ImageButton btnAgregar, btnDescontar, btnLike;
-
 
         //referencio los view
         public ViewHolderProducto(@NonNull View itemView) {

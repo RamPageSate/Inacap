@@ -1,7 +1,7 @@
 package com.example.djgra.inacapdeli;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -11,33 +11,35 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ScrollView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.example.djgra.inacapdeli.Adaptadores.AdaptadorPedidosClientes;
+import com.example.djgra.inacapdeli.AlertDialog.AlertDialogQr;
 import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.Funciones.BddPedido;
 import com.example.djgra.inacapdeli.Funciones.BddProductos;
 import com.example.djgra.inacapdeli.Funciones.Functions;
-
 import org.json.JSONArray;
 import org.json.JSONException;
-
 import java.util.ArrayList;
-
 public class PedidosCliente extends AppCompatActivity {
 
-    Pedido pedido = new Pedido();
     RecyclerView rcPedidos;
     Persona cliente = new Persona();
-    //ScrollView scroll;
     ImageView imagensinPedido;
     Button btnAnteriores, btnActivos;
+    ArrayList<Pedido> lstPedidosPorRetirar = new ArrayList<>();
     ImageButton btnInicio;
+    LinearLayout linearSeleccionarTodo;
+    Button btnRetirar;
+    CheckBox cbSeleccionarTodo;
     int code=0;
     AdaptadorPedidosClientes adaptadorPedidosClientes;
     @Override
@@ -45,12 +47,14 @@ public class PedidosCliente extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedidos_cliente);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        //scroll = (ScrollView) findViewById(R.id.scPedidosCliente);
         rcPedidos = (RecyclerView) findViewById(R.id.rcPedidosCliente);
         btnActivos = findViewById(R.id.btnPedidosActivosCliente);
         imagensinPedido = findViewById(R.id.fondossinpedidos);
         btnAnteriores = findViewById(R.id.btnPedidosAnterioresCliente);
         btnInicio = findViewById(R.id.btnInicioPedidos);
+        btnRetirar = findViewById(R.id.btnRetirarPedidoActivo);
+        linearSeleccionarTodo = findViewById(R.id.linearSeleccionarTodod);
+        cbSeleccionarTodo = findViewById(R.id.cbSeleccionarTodo);
         btnAnteriores.setEnabled(false);
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
@@ -133,6 +137,13 @@ public class PedidosCliente extends AppCompatActivity {
             }
         });
 
+        cbSeleccionarTodo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cargarVistaPedidosActivos();
+            }
+        });
+
         btnAnteriores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,20 +153,46 @@ public class PedidosCliente extends AppCompatActivity {
 
             }
         });
+        btnRetirar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!lstPedidosPorRetirar.isEmpty()){
+                    //cambio la condicion del pedido en 5 retirar
+                    int cantidadPedido = 0;
+                    for(Pedido pedido : lstPedidosPorRetirar){
+                        pedido.setId_condicion_pedido(5);
+                        cantidadPedido++;
+                        BddPedido.updateCondicionPedido(pedido.getCodigo(), 5, PedidosCliente.this, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(PedidosCliente.this, "Cambio condicion", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }, null);
+                    }
+                    cargarVistaPedidosActivos();
+                    cbSeleccionarTodo.setChecked(false);
+                    AlertDialogQr alertDialogQr = new AlertDialogQr(PedidosCliente.this, cantidadPedido,cliente);
+                    alertDialogQr.show();
+                }else{
+                    Toast.makeText(PedidosCliente.this, "Seleccione para retirar", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
     //cargar vistas anterior primero
     private void cargarVistaPedidoAnterior(){
+        linearSeleccionarTodo.setVisibility(View.INVISIBLE);
         if(!cliente.lstPedidosEntregados().isEmpty()){
             imagensinPedido.setVisibility(View.INVISIBLE);
             adaptadorPedidosClientes = null;
             rcPedidos.setAdapter(adaptadorPedidosClientes);
             rcPedidos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-            adaptadorPedidosClientes = new AdaptadorPedidosClientes(cliente.lstPedidosEntregados(),PedidosCliente.this,"ENTREGADOS");
+            adaptadorPedidosClientes = new AdaptadorPedidosClientes(cliente.lstPedidosEntregados(),PedidosCliente.this,"ENTREGADOS",lstPedidosPorRetirar,cbSeleccionarTodo);
             rcPedidos.setHasFixedSize(true);
             rcPedidos.setItemViewCacheSize(cliente.lstPedidosEntregados().size());
             rcPedidos.setAdapter(adaptadorPedidosClientes);
         }else{
-            //cargar la imagen de vacio
             adaptadorPedidosClientes = null;
             rcPedidos.setAdapter(adaptadorPedidosClientes);
             imagensinPedido.setImageDrawable(getResources().getDrawable(R.drawable.anteriores));
@@ -167,14 +204,16 @@ public class PedidosCliente extends AppCompatActivity {
     private void cargarVistaPedidosActivos(){
         if(!cliente.lstPedidosPendientes().isEmpty()){
             imagensinPedido.setVisibility(View.INVISIBLE);
+            linearSeleccionarTodo.setVisibility(View.VISIBLE);
             adaptadorPedidosClientes = null;
             rcPedidos.setAdapter(adaptadorPedidosClientes);
             rcPedidos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-            adaptadorPedidosClientes = new AdaptadorPedidosClientes(cliente.lstPedidosPendientes(),PedidosCliente.this,"PENDIENTES");
+            adaptadorPedidosClientes = new AdaptadorPedidosClientes(cliente.lstPedidosPendientes(),PedidosCliente.this,"PENDIENTES",lstPedidosPorRetirar,cbSeleccionarTodo);
             rcPedidos.setHasFixedSize(true);
             rcPedidos.setItemViewCacheSize(cliente.lstPedidosEntregados().size());
             rcPedidos.setAdapter(adaptadorPedidosClientes);
         }else{
+            linearSeleccionarTodo.setVisibility(View.INVISIBLE);
             adaptadorPedidosClientes = null;
             rcPedidos.setAdapter(adaptadorPedidosClientes);
             imagensinPedido.setVisibility(View.VISIBLE);

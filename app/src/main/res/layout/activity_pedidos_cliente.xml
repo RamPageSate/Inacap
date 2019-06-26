@@ -10,7 +10,7 @@
         android:id="@+id/rcPedidosCliente"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
@@ -112,5 +112,41 @@
         app:layout_constraintTop_toBottomOf="@+id/btnPedidosAnterioresCliente"
         app:layout_constraintVertical_bias="0.308"
         app:srcCompat="@drawable/sinactivos" />
+
+    <LinearLayout
+        android:id="@+id/linearSeleccionarTodod"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnPedidosActivosCliente">
+
+        <CheckBox
+            android:id="@+id/cbSeleccionarTodo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:text="Seleccionar Todo" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnRetirarPedidoActivo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:background="#F5B7B1  "
+                android:text="Retirar"
+                android:textColor="@color/RojoInacap" />
+        </LinearLayout>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

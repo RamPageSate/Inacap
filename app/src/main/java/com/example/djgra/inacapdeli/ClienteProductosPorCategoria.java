@@ -1,5 +1,4 @@
 package com.example.djgra.inacapdeli;
-
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.djgra.inacapdeli.Adaptadores.AdaptadorRecyclerViewProductoCliente;
 import com.example.djgra.inacapdeli.Clases.Categoria;
 import com.example.djgra.inacapdeli.Clases.Pedido;
@@ -78,9 +75,6 @@ public class ClienteProductosPorCategoria extends AppCompatActivity {
                 finish();
             }
         });
-
-
-
     }
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -148,7 +148,7 @@ public class Persona implements Serializable{
             ok = true;
         }else{
             for(Producto_Favorito pro : lstProductosFavoritos){
-                if(pro.like == 1){
+                if(pro.getId_producto() == item.getId_producto()){
                     lstProductosFavoritos.remove(pro);
                     ok = false;
                 }else{
