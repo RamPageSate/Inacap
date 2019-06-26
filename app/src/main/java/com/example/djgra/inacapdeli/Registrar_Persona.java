@@ -31,6 +31,8 @@ import com.example.djgra.inacapdeli.Funciones.Functions;
 
 //import net.glxn.qrgen.android.QRCode;
 
+import net.glxn.qrgen.android.QRCode;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -136,9 +138,9 @@ public class Registrar_Persona extends AppCompatActivity {
 
                     }
 
-                    //String email = per.getCorreo();
-                    //Bitmap qr = QRCode.from(email).bitmap();
-                    //per.setCodigoQr(Functions.getStringImage(qr));
+                    String email = per.getCorreo();
+                    Bitmap qr = QRCode.from(email).bitmap();
+                    per.setCodigoQr(Functions.getStringImage(qr));
 
                     progressDialog = Functions.CargarDatos("Agregando Persona", Registrar_Persona.this);
                     progressDialog.show();
