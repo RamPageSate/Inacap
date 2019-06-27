@@ -56,7 +56,6 @@ public class DetallePagarCliente extends AppCompatActivity {
         linearPagar = findViewById(R.id.linearPagarDetalle);
         btnSalir = findViewById(R.id.btnSalirPDC);
         totalBarra = findViewById(R.id.totaldetalle);
-        linearPagar.setEnabled(false);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             pedido = (Pedido) bundle.getSerializable("pedido");
@@ -102,7 +101,6 @@ public class DetallePagarCliente extends AppCompatActivity {
                         }else{
                             horaSeleccionada = HoraRetiro(fecha);
                             tvClickAqui.setTextColor(Color.parseColor("#3C3F41"));
-                            linearPagar.setEnabled(true);
                             tvClickAqui.setText(fecha);
                         }
 
@@ -115,34 +113,48 @@ public class DetallePagarCliente extends AppCompatActivity {
         linearPagar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(pedido.totalPagarPedido() != 0 && horaSeleccionada > getTimeStamp()){
-                    pedido.setId_cliente(PrincipalCliente.clientePrincipal.getCodigo());
-                    pedido.setLstProductoPedido(pedido.listaProductosFinal(pedido.getLstProductoPedido()));
-                    pedido.setPedido_estado(1);
-                    pedido.setId_condicion_pedido(2);
-                    pedido.setId_vendedor(pedido.getId_cliente());
-                    pedido.setFechaPedido(sdf.format(getDate(horaSeleccionada)));
-                    Toast.makeText(DetallePagarCliente.this, ""+pedido.getFechaPedido(), Toast.LENGTH_SHORT).show();
-                    final ProgressDialog progressDialog = Functions.CargarDatos("Realizando Pedido", DetallePagarCliente.this);
-                    BddPedido.setPedido(pedido, DetallePagarCliente.this, new Response.Listener() {
-                        @Override
-                        public void onResponse(Object response) {
-                            Toast.makeText(DetallePagarCliente.this, "Pedido Realizado", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(DetallePagarCliente.this,PedidosCliente.class);
-                            intent.putExtra("cliente",PrincipalCliente.clientePrincipal);
-                            intent.putExtra("code",3);
-                            startActivity(intent);
-                            finish();
-                            progressDialog.dismiss();
-                            //enviar pedido a vendedor//
-                            //eliminartodo el pedido ya comptado
-                            //enviar pedido a a historial activos
-                            //descontar saldo
-                            //cuando paga hay que resetear la barra verde
-                        }
-                    }, Functions.FalloInternet(DetallePagarCliente.this,progressDialog,"No realizo Compra"));
+                boolean validad = true;
+                String mensaje = "";
+                if (PrincipalCliente.clientePrincipal.getSaldo() > pedido.totalPagarPedido()) {
+                    if (pedido.totalPagarPedido() == 0) {
+                        mensaje = "No tiene Productos ";
+                        validad = false;
+                    }
+                    if (tvClickAqui.getText().equals("Click Aqui") || tvClickAqui.getText().equals("Seleccione otra Hora")) {
+                        validad = false;
+                        mensaje = mensaje + " y Escoja Hora";
+                    }
+
+                    if (validad == true) {
+                        pedido.setId_cliente(PrincipalCliente.clientePrincipal.getCodigo());
+                        pedido.setLstProductoPedido(pedido.listaProductosFinal(pedido.getLstProductoPedido()));
+                        pedido.setPedido_estado(1);
+                        pedido.setId_condicion_pedido(2);
+                        pedido.setId_vendedor(pedido.getId_cliente());
+                        pedido.setFechaPedido(sdf.format(getDate(horaSeleccionada)));
+                        final ProgressDialog progressDialog = Functions.CargarDatos("Realizando Pedido", DetallePagarCliente.this);
+                        BddPedido.setPedido(pedido, DetallePagarCliente.this, new Response.Listener() {
+                            @Override
+                            public void onResponse(Object response) {
+                                Toast.makeText(DetallePagarCliente.this, "Pedido Realizado", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(DetallePagarCliente.this, PedidosCliente.class);
+                                intent.putExtra("cliente", PrincipalCliente.clientePrincipal);
+                                intent.putExtra("code", 3);
+                                startActivity(intent);
+                                finish();
+                                progressDialog.dismiss();
+                                //enviar pedido a vendedor//
+                                //eliminartodo el pedido ya comptado
+                                //enviar pedido a a historial activos
+                                //descontar saldo
+                                //cuando paga hay que resetear la barra verde
+                            }
+                        }, Functions.FalloInternet(DetallePagarCliente.this, progressDialog, "No realizo Compra"));
+                    } else {
+                        Toast.makeText(DetallePagarCliente.this, mensaje, Toast.LENGTH_SHORT).show();
+                    }
                 }else{
-                    Toast.makeText(DetallePagarCliente.this, "No Tiene Nada Que Pagar", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DetallePagarCliente.this, "No cuenta con Saldo Suficiente", Toast.LENGTH_SHORT).show();
                 }
             }
         });

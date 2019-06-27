@@ -34,8 +34,6 @@ public class BddPedido {
                 map.put("pedido_fecha_hora", pedido.getFechaPedido());
                 map.put("pedido_estado", String.valueOf(pedido.getPedido_estado()));
                 map.put("id_cliente", String.valueOf(pedido.getId_cliente()));
-                map.put("id_vendedor",String.valueOf(pedido.getId_vendedor()));
-                map.put("id_condicion_pedido", String.valueOf(pedido.getId_condicion_pedido()));
                 map.put("producto_id", new JSONObject(arrayToMap(pedido.getLstProductoPedido())).toString());
                 return map;
             }

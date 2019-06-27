@@ -39,7 +39,6 @@ public class PedidosCliente extends AppCompatActivity {
     ImageButton btnInicio;
     LinearLayout linearSeleccionarTodo;
     Button btnRetirar;
-    CheckBox cbSeleccionarTodo;
     int code=0;
     AdaptadorPedidosClientes adaptadorPedidosClientes;
     @Override
@@ -54,7 +53,6 @@ public class PedidosCliente extends AppCompatActivity {
         btnInicio = findViewById(R.id.btnInicioPedidos);
         btnRetirar = findViewById(R.id.btnRetirarPedidoActivo);
         linearSeleccionarTodo = findViewById(R.id.linearSeleccionarTodod);
-        cbSeleccionarTodo = findViewById(R.id.cbSeleccionarTodo);
         btnAnteriores.setEnabled(false);
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
@@ -137,12 +135,6 @@ public class PedidosCliente extends AppCompatActivity {
             }
         });
 
-        cbSeleccionarTodo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cargarVistaPedidosActivos();
-            }
-        });
 
         btnAnteriores.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,31 +148,11 @@ public class PedidosCliente extends AppCompatActivity {
         btnRetirar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!lstPedidosPorRetirar.isEmpty()){
-                    //cambio la condicion del pedido en 5 retirar
-                    int cantidadPedido = 0;
-                    for(Pedido pedido : lstPedidosPorRetirar){
-                        pedido.setId_condicion_pedido(5);
-                        cantidadPedido++;
-                        BddPedido.updateCondicionPedido(pedido.getCodigo(), 5, PedidosCliente.this, new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Toast.makeText(PedidosCliente.this, "Cambio condicion", Toast.LENGTH_SHORT).show();
-
-                            }
-                        }, null);
-                    }
-                    cargarVistaPedidosActivos();
-                    cbSeleccionarTodo.setChecked(false);
-                    AlertDialogQr alertDialogQr = new AlertDialogQr(PedidosCliente.this, cantidadPedido,cliente);
+                    AlertDialogQr alertDialogQr = new AlertDialogQr(PedidosCliente.this,cliente);
                     alertDialogQr.show();
-                }else{
-                    Toast.makeText(PedidosCliente.this, "Seleccione para retirar", Toast.LENGTH_SHORT).show();
-                }
             }
         });
     }
-    //cargar vistas anterior primero
     private void cargarVistaPedidoAnterior(){
         linearSeleccionarTodo.setVisibility(View.INVISIBLE);
         if(!cliente.lstPedidosEntregados().isEmpty()){
@@ -188,7 +160,7 @@ public class PedidosCliente extends AppCompatActivity {
             adaptadorPedidosClientes = null;
             rcPedidos.setAdapter(adaptadorPedidosClientes);
             rcPedidos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-            adaptadorPedidosClientes = new AdaptadorPedidosClientes(cliente.lstPedidosEntregados(),PedidosCliente.this,"ENTREGADOS",lstPedidosPorRetirar,cbSeleccionarTodo);
+            adaptadorPedidosClientes = new AdaptadorPedidosClientes(cliente.lstPedidosEntregados(),PedidosCliente.this,"ENTREGADOS",lstPedidosPorRetirar);
             rcPedidos.setHasFixedSize(true);
             rcPedidos.setItemViewCacheSize(cliente.lstPedidosEntregados().size());
             rcPedidos.setAdapter(adaptadorPedidosClientes);
@@ -208,7 +180,7 @@ public class PedidosCliente extends AppCompatActivity {
             adaptadorPedidosClientes = null;
             rcPedidos.setAdapter(adaptadorPedidosClientes);
             rcPedidos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-            adaptadorPedidosClientes = new AdaptadorPedidosClientes(cliente.lstPedidosPendientes(),PedidosCliente.this,"PENDIENTES",lstPedidosPorRetirar,cbSeleccionarTodo);
+            adaptadorPedidosClientes = new AdaptadorPedidosClientes(cliente.lstPedidosPendientes(),PedidosCliente.this,"PENDIENTES",lstPedidosPorRetirar);
             rcPedidos.setHasFixedSize(true);
             rcPedidos.setItemViewCacheSize(cliente.lstPedidosEntregados().size());
             rcPedidos.setAdapter(adaptadorPedidosClientes);

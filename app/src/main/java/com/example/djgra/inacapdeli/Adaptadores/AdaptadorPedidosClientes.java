@@ -27,14 +27,12 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
     ArrayList<Pedido> lstPedidos = new ArrayList<>();
     Activity context = new Activity();
     String tipoHistorial = "";
-    CheckBox cbSeleccionarTodo;
     ArrayList<Pedido> pedidosPorRetirar = new ArrayList<>();
-    public AdaptadorPedidosClientes(ArrayList<Pedido> lstPedidos, Activity context, String tipoHistorial, ArrayList<Pedido> pedidosPorRetirar, CheckBox cbSeleccionarTodo) {
+    public AdaptadorPedidosClientes(ArrayList<Pedido> lstPedidos, Activity context, String tipoHistorial, ArrayList<Pedido> pedidosPorRetirar) {
         this.lstPedidos = lstPedidos;
         this.context = context;
         this.tipoHistorial = tipoHistorial;
         this.pedidosPorRetirar = pedidosPorRetirar;
-        this.cbSeleccionarTodo = cbSeleccionarTodo;
     }
 
     @Override
@@ -45,27 +43,11 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
 
     @Override
     public void onBindViewHolder(final ViewHolderPedidosClientes holder, final int position) {
-        if(cbSeleccionarTodo.isChecked()){
-            holder.cbRetirar.setChecked(true);
-        }else{
-            holder.cbRetirar.setChecked(false);
-        }
         if(tipoHistorial.equals("PENDIENTES")){
             holder.btnVolverComprar.setEnabled(false);
             holder.btnVolverComprar.setVisibility(View.INVISIBLE);
             holder.btnEliminar.setVisibility(View.INVISIBLE);
             holder.btnEliminar.setEnabled(false);
-            holder.cbRetirar.setVisibility(View.VISIBLE);
-            holder.cbRetirar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                   if(holder.cbRetirar.isChecked() == true){
-                       pedidosPorRetirar.add(lstPedidos.get(position));
-                   }else{
-                       pedidosPorRetirar.remove(lstPedidos.get(position));
-                   }
-                }
-            });
         }
         holder.tvNumeroPedido.setText(String.valueOf(lstPedidos.get(position).getCodigo()));
         int total = 0;
@@ -111,7 +93,6 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
         ImageButton btnEliminar;
         RecyclerView rcProductos;
         Button btnVolverComprar;
-        CheckBox cbRetirar;
 
 
         public ViewHolderPedidosClientes(View itemView) {
@@ -124,7 +105,6 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
             rcProductos = itemView.findViewById(R.id.rcProductosPedidoAnteriorCliente);
             btnVolverComprar = itemView.findViewById(R.id.btnVolverComprarPedidoAnteriorCliente);
             tvFecha = itemView.findViewById(R.id.tvFechaPedidoAnteriorCliente);
-            cbRetirar =  itemView.findViewById(R.id.cbRetirar);
         }
     }
 }
