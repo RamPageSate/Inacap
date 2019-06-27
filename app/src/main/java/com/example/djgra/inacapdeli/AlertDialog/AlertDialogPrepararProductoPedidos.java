@@ -42,7 +42,6 @@ public class AlertDialogPrepararProductoPedidos extends AlertDialog {
                 BddPedido.updateCondicionPedido(codigoPedido, 4, context, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(context, "Cambio ", Toast.LENGTH_SHORT).show();
                         dismiss();
                         for (int x = 0; x < lstPedido.size(); x++){
                             if(lstPedido.get(x).getCodigo() == codigoPedido){
