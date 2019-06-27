@@ -28,6 +28,7 @@ public class Inicio extends AppCompatActivity {
 
                 Intent intent = new Intent(Inicio.this, Login.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -36,6 +37,7 @@ public class Inicio extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Inicio.this,  Registrar_Persona.class);
                 startActivity(intent);
+                finish();
             }
         });
 

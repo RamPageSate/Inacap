@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 public class AlertDialogPrepararProductoPedidos extends AlertDialog {
 
 
-    public AlertDialogPrepararProductoPedidos(final Activity context, ArrayList<Producto> lstProducto, final int codigoPedido, final ArrayList<Pedido> lstPedido, final ListView lst) {
+    public AlertDialogPrepararProductoPedidos(final Activity context, ArrayList<Producto> lstProducto, final Pedido pedido, final ArrayList<Pedido> lstPedido, final ListView lst) {
         super(context);
         setCancelable(false);
         setCanceledOnTouchOutside(false);
@@ -32,6 +33,8 @@ public class AlertDialogPrepararProductoPedidos extends AlertDialog {
         setView(view);
         ListView lstvProductos = view.findViewById(R.id.lstProductoPreparando);
         Button btnTerminar = view.findViewById(R.id.btnTerminarPrepararPedido);
+        TextView nPedido = view.findViewById(R.id.tvNPedidoPreparandoPedido);
+        nPedido.setText("N°" + pedido.getCodigo());
         Button btnCancelar = view.findViewById(R.id.btnCancelarPrepararPedido);
         btnTerminar.setEnabled(false);
         AdaptadorProductosPorPreparar adpatador = new AdaptadorProductosPorPreparar(lstProducto,btnTerminar,context);
@@ -39,12 +42,12 @@ public class AlertDialogPrepararProductoPedidos extends AlertDialog {
         btnTerminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BddPedido.updateCondicionPedido(codigoPedido, 4, context, new Response.Listener<String>() {
+                BddPedido.updateCondicionPedido(pedido, 4, context, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         dismiss();
                         for (int x = 0; x < lstPedido.size(); x++){
-                            if(lstPedido.get(x).getCodigo() == codigoPedido){
+                            if(lstPedido.get(x).getCodigo() == pedido.getCodigo()){
                                 lstPedido.remove(x);
                                 break;
                             }

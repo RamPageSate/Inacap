@@ -146,6 +146,7 @@ public class Login extends AppCompatActivity {
                                                 c.putExtra("usr", persona);
                                                 progress.dismiss();
                                                 startActivity(c);
+                                                finish();
 
                                             }
                                         }, null);

@@ -53,7 +53,7 @@ public class AdaptadorProductosPorPreparar extends BaseAdapter {
         final RadioButton rdFalta = item.findViewById(R.id.rdFalta);
         final RadioButton rdListo = item.findViewById(R.id.rdListo);
         tvNombre.setText(listaProducto.get(position).getNombre());
-        //tvCantidad.setText(listaProducto.get(position).getCantidad());
+        tvCantidad.setText(String.valueOf(listaProducto.get(position).getCantidad()));
         rdFalta.setId(200 + position);
         rdListo.setId(400 + position);
         rdGrupo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

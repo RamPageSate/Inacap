@@ -2,6 +2,7 @@ package com.example.djgra.inacapdeli;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,7 @@ public class PrepararPedido extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preparar_pedido);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Bundle bundle = getIntent().getExtras();
         lstPedidosPorPreparar = (ListView) findViewById(R.id.lstPedidosPorPreparar);
         btnSalir = (ImageButton) findViewById(R.id.btnSalirPorPreparar);
@@ -49,6 +51,7 @@ public class PrepararPedido extends AppCompatActivity {
         lstPedidosPorPreparar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                lstPedido.get(position).setId_vendedor(vendedor.getCodigo());
                 final ProgressDialog progressDialog = Functions.CargarDatos("Cargando Productos... !", PrepararPedido.this);
                 BddProductos.getProductoByPedido(lstPedido.get(position).getCodigo(), PrepararPedido.this, new Response.Listener<JSONArray>() {
                     @Override
@@ -73,7 +76,7 @@ public class PrepararPedido extends AppCompatActivity {
                                 }
                             }
                             progressDialog.dismiss();
-                            AlertDialogPrepararProductoPedidos alert = new AlertDialogPrepararProductoPedidos(PrepararPedido.this,lstPedido.get(position).getLstProductoPedido(),lstPedido.get(position).getCodigo(),lstPedido,lstPedidosPorPreparar);
+                            AlertDialogPrepararProductoPedidos alert = new AlertDialogPrepararProductoPedidos(PrepararPedido.this,lstPedido.get(position).getLstProductoPedido(),lstPedido.get(position),lstPedido,lstPedidosPorPreparar);
                             alert.show();
                         }
 

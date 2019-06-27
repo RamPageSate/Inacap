@@ -10,6 +10,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.djgra.inacapdeli.Clases.Pedido;
+import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Clases.Producto;
 
 import org.json.JSONArray;
@@ -57,14 +58,15 @@ public class BddPedido {
     }
 
 
-    public static void updateCondicionPedido(final int pedido_id, final int id_condidcion, Context context, Response.Listener<String> listener, Response.ErrorListener errorListener){
+    public static void updateCondicionPedido(final Pedido pedido, final int id_condidcion, Context context, Response.Listener<String> listener, Response.ErrorListener errorListener){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, urlBase+"updateCondicionPedido",listener,errorListener){
             @Override
             protected Map<String,String> getParams() throws AuthFailureError{
                 map.clear();
                 map=new HashMap<String, String>();
-                map.put("pedido_id", String.valueOf(pedido_id));
+                map.put("pedido_id", String.valueOf(pedido.getCodigo()));
+                map.put("id_vendedor",String.valueOf(pedido.getId_vendedor()));
                 map.put("id_condicion_pedido", String.valueOf(id_condidcion));
 
                 return map;
@@ -78,6 +80,23 @@ public class BddPedido {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,urlBase+"getPedidoFaltante", null, listener, errorListener);
             requestQueue.add(request);
+
+    }
+
+    public static void getPedidoListo(final Persona vendedor, Context context, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener){
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,urlBase+"getPedidoFaltante", null, listener, errorListener){
+            @Override
+            protected Map<String,String> getParams() throws AuthFailureError{
+                map.clear();
+                map=new HashMap<String, String>();
+                map.put("pedido_id", String.valueOf(vendedor.getCodigo()));
+                return map;
+            }
+        };
+
+
+        requestQueue.add(request);
 
     }
 

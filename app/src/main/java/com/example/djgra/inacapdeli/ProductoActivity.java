@@ -2,6 +2,7 @@ package com.example.djgra.inacapdeli;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +52,7 @@ public class ProductoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_producto);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         btnAgregar = findViewById(R.id.btnAddLstProductos);
         btnSalir = findViewById(R.id.btnSalirLstProducto);
         spCategorias = findViewById(R.id.spCategoriaLstProducto);

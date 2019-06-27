@@ -2,6 +2,7 @@ package com.example.djgra.inacapdeli;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,7 @@ public class PrincipalVendedor extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal_vendedor);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             vendedor = (Persona) bundle.getSerializable("usr");
