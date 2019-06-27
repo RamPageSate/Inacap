@@ -40,6 +40,8 @@ public class BddTipo {
      * @param context       Contexto de la actividad
      * @param errorListener Accion en caso de error que se desea al capturar  la respuesta
      * @param listener      Accion que se desea al capturar la respuesta.
+     * @return void
+     * Metodod para insertar un tipo en el web service.
      */
     public static void setTipo(final Tipo tipo, Context context, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -55,6 +57,14 @@ public class BddTipo {
         requestQueue.add(stringRequest);
     }
 
+    /**
+     * @param tipo          Tipo para ser modificado en el web service
+     * @param context       Contexto de la actividad
+     * @param errorListener Accion en caso de error que se desea al capturar  la respuesta
+     * @param listener      Accion que se desea al capturar la respuesta.
+     * @return void
+     * Metodo para modificar un tipo.
+     */
     public static void updateTipo(final Tipo tipo, Context context, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, urlBase + "updateTipo", listener, errorListener) {
