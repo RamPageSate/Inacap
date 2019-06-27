@@ -20,11 +20,16 @@ import java.util.regex.Pattern;
 
 public class Functions {
 
-    static Map<String,String> map = new HashMap<>();
-    private static  String urlBase = "https://laxjbz6j-site.gtempurl.com/igniter/funcion/";
+    static Map<String, String> map = new HashMap<>();
+    private static String urlBase = "https://laxjbz6j-site.gtempurl.com/igniter/funcion/";
 
-    //SACAR
-    public static ProgressDialog CargarDatos(String cargar,  Context context){
+    /**
+     * @param context Contexto de la actividad
+     * @param cargar  Texto para mostrar en el dialog
+     * @return ProgressDialog
+     * Metodo para mostrar un alertdialog de carga
+     */
+    public static ProgressDialog CargarDatos(String cargar, Context context) {
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("" + cargar);
@@ -32,12 +37,17 @@ public class Functions {
         progressDialog.setCanceledOnTouchOutside(true);
         progressDialog.show();
 
-        return  progressDialog;
+        return progressDialog;
     }
 
 
-
-    public static Response.ErrorListener FalloInternet(final Context context, final ProgressDialog progressDialog, final String Mensaje){
+    /**
+     * @param context        Contexto de la actividad
+     * @param Mensaje        Mensaje en caso de fallo del internet
+     * @param progressDialog Progres dialog para ser cerradp
+     * @return Response
+     */
+    public static Response.ErrorListener FalloInternet(final Context context, final ProgressDialog progressDialog, final String Mensaje) {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -46,14 +56,19 @@ public class Functions {
                 alert.setTitle("FALLÓ LA CONEXIÓN");
                 alert.setIcon(R.drawable.nowifi);
                 alert.setMessage(Mensaje);
-                Log.d("TAG_",""+ error.toString());
-                alert.setNegativeButton("Cancelar",null);
+                Log.d("TAG_", "" + error.toString());
+                alert.setNegativeButton("Cancelar", null);
                 alert.show();
             }
         };
         return errorListener;
     }
 
+    /**
+     * @param bmp Bitmap para ser cambiado a string
+     * @return String
+     * Metodo que transforma un bitmap en un string
+     */
     public static String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
@@ -63,17 +78,28 @@ public class Functions {
 
 
     }
-    public static Bitmap StringToBitMap(String encodedString){
-        try{
-            byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
-            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+
+    /**
+     * @param encodedString String para ser transformado en bitmap
+     * @return Bitmap
+     * Metodo para transformar un string en Bitmap
+     */
+    public static Bitmap StringToBitMap(String encodedString) {
+        try {
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
             return bitmap;
-        }catch(Exception e){
+        } catch (Exception e) {
             e.getMessage();
             return null;
         }
     }
 
+    /**
+     * @param dato String para ser validado
+     * @return boolean
+     * Metodo para validar un string
+     */
     public static boolean validarLetras(String dato) {
         boolean ok = false;
 
@@ -87,8 +113,11 @@ public class Functions {
         return ok;
     }
 
-
-
+    /**
+     * @param pass Cadena de texto para ser validado
+     * @return boolean
+     * Metodo para validar la contraseña
+     */
     public static boolean contraseñaSegura(String pass) {
         boolean ok = false;
         Pattern regex = Pattern.compile("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{6,12}$");

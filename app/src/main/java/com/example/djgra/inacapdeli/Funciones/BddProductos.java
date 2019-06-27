@@ -3,7 +3,6 @@ package com.example.djgra.inacapdeli.Funciones;
 import android.content.Context;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,6 +25,13 @@ public class BddProductos {
     private static Map<String, String> map = new HashMap<>();
     private static String urlBase = "https://laxjbz6j-site.gtempurl.com/igniter/funcion/";
 
+    /**
+     * @param context       Contexto de la actividad
+     * @param errorListener Accion en caso de error que se desea al capturar  la respuesta
+     * @param listener      Accion que se desea al capturar la respuesta.
+     * @return void.
+     * Metodo para traer todos los productos
+     */
 
     public static void getProducto(Context context, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -37,9 +43,16 @@ public class BddProductos {
         requestQueue.add(request);
     }
 
+    /**
+     * @param pedido_id     id del pedido para traer sus productos
+     * @param context       Contexto de la actividad
+     * @param errorListener Accion en caso de error que se desea al capturar  la respuesta
+     * @param listener      Accion que se desea al capturar la respuesta.
+     *                      Metodo que trae los productos segun su pedido
+     */
     public static void getProductoByPedido(final int pedido_id, Context context, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,urlBase+"getProductoByPedido?pedido_id="+pedido_id, null, listener, errorListener){
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlBase + "getProductoByPedido?pedido_id=" + pedido_id, null, listener, errorListener) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 map.clear();
@@ -51,6 +64,12 @@ public class BddProductos {
         requestQueue.add(request);
     }
 
+    /**
+     * @param producto      Producto que se desea cambiar
+     * @param context       Contexto de la actividad
+     * @param errorListener Accion en caso de error que se desea al capturar  la respuesta
+     * @param listener      Accion que se desea al capturar la respuesta.
+     */
     public static void updateProducto(final Producto producto, Context context, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, urlBase + "setProducto", listener, errorListener) {
@@ -74,7 +93,14 @@ public class BddProductos {
 
     }
 
-
+    /**
+     * @param producto      Producto para ser insertado
+     * @param context       Contexto de la actividad
+     * @param errorListener Accion en caso de error que se desea al capturar  la respuesta
+     * @param listener      Accion que se desea al capturar la respuesta.
+     * @return void
+     * Metodo que inserta un producto en el web service
+     */
     public static void setProducto(final Producto producto, Context context, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, urlBase + "setProducto", listener, errorListener) {
@@ -96,6 +122,11 @@ public class BddProductos {
         requestQueue.add(stringRequest);
     }
 
+    /**
+     * @param arrayList Lista de categorias para ser convertida
+     * @return Map
+     * Metodo para convertir un ArrayList en una Map
+     */
 
     private static Map<String, Integer> arrayToMap(ArrayList<Categoria> arrayList) {
         Map<String, Integer> retorno = new HashMap<>();
@@ -105,10 +136,17 @@ public class BddProductos {
         return retorno;
     }
 
-
-    public static void setProductoFavorito(final Producto_Favorito producto, Context context,Response.Listener listener, Response.ErrorListener errorListener){
+    /**
+     * @param producto      producto que quieres que sea el favorito.
+     * @param context       Contexto de la actividad
+     * @param errorListener Accion en caso de error que se desea al capturar  la respuesta
+     * @param listener      Accion que se desea al capturar la respuesta.
+     * @return void
+     * Metodo para colocar un producto como favorito
+     */
+    public static void setProductoFavorito(final Producto_Favorito producto, Context context, Response.Listener listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlBase+"setProductoFavorito", listener, errorListener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlBase + "setProductoFavorito", listener, errorListener) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 map.clear();
@@ -121,9 +159,17 @@ public class BddProductos {
         requestQueue.add(stringRequest);
     }
 
-    public static void getProductoFavorito(final int id_cliente, Context context, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener)  {
+    /**
+     * @param id_cliente    id del cliente para traer sus productos favoritos
+     * @param context       Contexto de la actividad
+     * @param errorListener Accion en caso de error que se desea al capturar  la respuesta
+     * @param listener      Accion que se desea al capturar la respuesta.
+     * @return void
+     * Metodo para traer todos los productos favoritos segun el cliente.
+     */
+    public static void getProductoFavorito(final int id_cliente, Context context, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,urlBase+"getProductoFavorito?id_cliente="+id_cliente, null, listener, errorListener){
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlBase + "getProductoFavorito?id_cliente=" + id_cliente, null, listener, errorListener) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 map.clear();
