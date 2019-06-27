@@ -1,19 +1,13 @@
 package com.example.djgra.inacapdeli.Adaptadores;
-
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.R;
-
 import java.util.ArrayList;
-import java.util.zip.Inflater;
-
 public class AdaptadorPedidosPorPreparar extends BaseAdapter {
     ArrayList<Pedido> lstPedido;
     Activity context;
@@ -46,7 +40,6 @@ public class AdaptadorPedidosPorPreparar extends BaseAdapter {
         TextView tvNPedido = item.findViewById(R.id.tvNPedidoPreparar);
         TextView tvFecha = item.findViewById(R.id.tvFechaPreparar);
         TextView tvHora = item.findViewById(R.id.tvHoraPreparar);
-        TextView tvArticulos = item.findViewById(R.id.tvClientePreoarar);
         if(!lstPedido.isEmpty()){
                 tvNPedido.setText(String.valueOf(lstPedido.get(position).getCodigo()));
                 String fecha="", hora="";
@@ -60,7 +53,6 @@ public class AdaptadorPedidosPorPreparar extends BaseAdapter {
                 }
                 tvFecha.setText(fecha);
                 tvHora.setText(hora);
-                tvArticulos.setText(String.valueOf(lstPedido.get(position).cantidadArticulos()));
         }
 
         return item;

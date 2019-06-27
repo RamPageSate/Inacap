@@ -91,20 +91,6 @@ public class PrepararPedido extends AppCompatActivity {
             }
         });
 
-        new Handler().postDelayed(new Runnable(){
-            public void run(){
-                Pedido pedido = new Pedido();
-                pedido.setCodigo(123330);
-                pedido.setFechaPedido("2019/06/24 13:20:34");
-                lstPedido.add(pedido);
-                llenarTabla();
-            }
-        }, 10000);
-
-
-
-
-
     }
     public void llenarTabla(){
         adaptador = new AdaptadorPedidosPorPreparar(lstPedido,PrepararPedido.this);

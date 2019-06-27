@@ -41,7 +41,7 @@ public class DetallePagarCliente extends AppCompatActivity {
     ImageButton btnSalir;
     Long horaSeleccionada= System.currentTimeMillis();
     public static TextView tvSubtotalDetallePagar, tvTotalDetalle;
-    TextView tvClickAqui, cantidadBarar, totalBarra;
+    TextView tvClickAqui, cantidadBarar, totalBarra, tvSaldo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +54,14 @@ public class DetallePagarCliente extends AppCompatActivity {
         tvTotalDetalle = (TextView) findViewById(R.id.tvTotalPagarDetalleCliente);
         cantidadBarar = findViewById(R.id.cantdetalle);
         linearPagar = findViewById(R.id.linearPagarDetalle);
+        tvSaldo = findViewById(R.id.tvSaldoDetallePagarCliente);
         btnSalir = findViewById(R.id.btnSalirPDC);
         totalBarra = findViewById(R.id.totaldetalle);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             pedido = (Pedido) bundle.getSerializable("pedido");
             codigoActividad = bundle.getInt("code");
+            tvSaldo.setText(String.valueOf(PrincipalCliente.clientePrincipal.getSaldo()));
         }
         AdaptadorDetalleProductoPagar adapter = new AdaptadorDetalleProductoPagar(pedido.getLstProductoPedido(),cantidadBarar,totalBarra,pedido,DetallePagarCliente.this);
         rcProductos.setAdapter(adapter);
@@ -113,19 +115,24 @@ public class DetallePagarCliente extends AppCompatActivity {
         linearPagar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean validad = true;
+                int validad = 0;
                 String mensaje = "";
                 if (PrincipalCliente.clientePrincipal.getSaldo() > pedido.totalPagarPedido()) {
                     if (pedido.totalPagarPedido() == 0) {
                         mensaje = "No tiene Productos ";
-                        validad = false;
+                        validad++;
                     }
                     if (tvClickAqui.getText().equals("Click Aqui") || tvClickAqui.getText().equals("Seleccione otra Hora")) {
-                        validad = false;
-                        mensaje = mensaje + " y Escoja Hora";
+                        if(validad == 1){
+                            mensaje = mensaje + " y Escoja Hora";
+                        }else {
+                            mensaje = mensaje + "Escoja Hora";
+                        }
+                        validad++;
+
                     }
 
-                    if (validad == true) {
+                    if (validad == 0) {
                         pedido.setId_cliente(PrincipalCliente.clientePrincipal.getCodigo());
                         pedido.setLstProductoPedido(pedido.listaProductosFinal(pedido.getLstProductoPedido()));
                         pedido.setPedido_estado(1);

@@ -74,7 +74,10 @@ public class BddPedido {
     }
 
 
-    public static void getPedidoFaltante(Context context, Response.Listener listener, Response.ErrorListener errorListener){
+    public static void getPedidoFaltante(Context context, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener){
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,urlBase+"getPedidoFaltante", null, listener, errorListener);
+            requestQueue.add(request);
 
     }
 
