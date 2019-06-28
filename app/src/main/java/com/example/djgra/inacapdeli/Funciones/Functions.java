@@ -3,6 +3,7 @@ package com.example.djgra.inacapdeli.Funciones;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -10,6 +11,7 @@ import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.R;
 
 import java.io.ByteArrayOutputStream;

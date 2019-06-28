@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LectorCodigoQr"></activity>
+        <activity android:name=".EntregarPedidoPorCodigoQr"></activity>
+        <activity android:name=".LectorCodigoQr" />
         <activity android:name=".EntregarPedido" />
         <activity android:name=".PrepararPedido" />
         <activity android:name=".PrincipalVendedor" />

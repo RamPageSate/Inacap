@@ -1,7 +1,9 @@
 package com.example.djgra.inacapdeli;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ public class PrincipalVendedor extends AppCompatActivity {
         }
         btnPorPreparar = findViewById(R.id.btnPrepararPedido);
         btnEntregarPedido = findViewById(R.id.btnEntregarPedido);
+        btnCerrarSesion = findViewById(R.id.btnCerrarSesionVendedor);
 
 
         btnEntregarPedido.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +47,18 @@ public class PrincipalVendedor extends AppCompatActivity {
             }
         });
 
+
+        btnCerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences preferences = getSharedPreferences("usuarioConectado", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editorPreferencias = preferences.edit();
+                editorPreferencias.clear();
+                editorPreferencias.commit();
+                Intent intent =  new Intent(PrincipalVendedor.this, Inicio.class);
+                startActivity(intent);
+            }
+        });
 
         btnPorPreparar.setOnClickListener(new View.OnClickListener() {
             @Override

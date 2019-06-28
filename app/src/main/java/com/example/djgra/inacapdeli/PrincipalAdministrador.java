@@ -3,6 +3,7 @@ package com.example.djgra.inacapdeli;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class PrincipalAdministrador extends AppCompatActivity {
-    ImageButton btnCategoria, btnLstVendedores, btnSede, btnFabricante, btnProductos, btnTipo;
+    ImageButton btnCategoria, btnLstVendedores, btnSede, btnFabricante, btnProductos, btnTipo, btnCerrarSesion;
     private int btn = 0, posicionUdpdateDelete = 0;
     private static ArrayList<Categoria> lstCategorias = new ArrayList<>();
     private static ArrayList<Sede> lstSedes = new ArrayList<>();
@@ -64,7 +65,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnFabricante = findViewById(R.id.btnFabricante);
         btnLstVendedores = findViewById(R.id.btnLstVendedores);
         btnSede = findViewById(R.id.btnSede);
-
+        btnCerrarSesion = findViewById(R.id.btnCerrarSesionAdministrador);
 
 // region categorias CRUD
         btnCategoria.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +101,17 @@ public class PrincipalAdministrador extends AppCompatActivity {
         });
         //endregion CRUD
 
+        btnCerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences preferences = getSharedPreferences("usuarioConectado", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editorPreferencias = preferences.edit();
+                editorPreferencias.clear();
+                editorPreferencias.commit();
+                Intent intent =  new Intent(PrincipalAdministrador.this, Inicio.class);
+                startActivity(intent);
+            }
+        });
 
         //region productos
         btnProductos.setOnClickListener(new View.OnClickListener() {
