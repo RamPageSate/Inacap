@@ -122,7 +122,6 @@ public class Registrar_Persona extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (validarFormulario() == 0) {
-                    //nombre, apellido, pass, email, foto, codigo_qr, sede
                     final Persona per = new Persona();
                     per.setApellido(etApellido.getText().toString());
                     per.setNombre(etNombre.getText().toString());
@@ -210,7 +209,7 @@ public class Registrar_Persona extends AppCompatActivity {
                     ok = false;
                 }
             } else {
-                etCorreo.setError("Correo mal Ingresado");
+                etCorreo.setError("Formato inválido, ejemplo: nombre@inacapmail.cl");
             }
         }
         return ok;
@@ -218,7 +217,6 @@ public class Registrar_Persona extends AppCompatActivity {
 
     private int validarFormulario() {
         int ok = 0;
-        //validar solo letras
         if (etNombre.getText().toString().trim().isEmpty()) {
             etNombre.setError("Ingrese Nombre");
             ok++;
@@ -264,7 +262,10 @@ public class Registrar_Persona extends AppCompatActivity {
         return ok;
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

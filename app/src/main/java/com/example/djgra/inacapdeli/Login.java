@@ -155,11 +155,13 @@ public class Login extends AppCompatActivity {
                                         Intent inten = new Intent(Login.this, PrincipalVendedor.class);
                                         inten.putExtra("usr", persona);
                                         startActivity(inten);
+                                        finish();
                                         break;
                                     case (3):
                                         Intent i = new Intent(Login.this, PrincipalAdministrador.class);
                                         i.putExtra("admin", persona);
                                         startActivity(i);
+                                        finish();
                                         break;
                                 }
                             } else {
