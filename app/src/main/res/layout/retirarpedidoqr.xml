@@ -31,7 +31,7 @@
         android:id="@+id/tvCantidadQr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="60dp"
         android:layout_marginLeft="60dp"
         android:layout_marginTop="4dp"
         android:text="TextView"

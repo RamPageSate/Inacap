@@ -115,7 +115,7 @@ public class Persona implements Serializable{
     public ArrayList<Pedido> lstPedidosPendientes(){
         ArrayList<Pedido> lista = new ArrayList<>();
         for(int x=0; x< lstPedidos.size(); x++){
-            if(lstPedidos.get(x).getId_condicion_pedido() == 2){
+            if(lstPedidos.get(x).getId_condicion_pedido() == 2){  // o 4 que es listo
                 lista.add(lstPedidos.get(x));
             }
         }
