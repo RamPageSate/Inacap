@@ -43,6 +43,7 @@ public class PrincipalVendedor extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(PrincipalVendedor.this, EntregarPedido.class);
+                i.putExtra("usr", vendedor);
                 startActivity(i);
             }
         });

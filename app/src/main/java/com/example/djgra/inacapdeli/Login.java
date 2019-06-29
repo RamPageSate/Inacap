@@ -78,9 +78,6 @@ public class Login extends AppCompatActivity {
 
     public void Logeo() {
         final ProgressDialog progress = Functions.CargarDatos("Conectando", Login.this);
-        progress.show();
-        progress.setCancelable(false);
-
         Boolean validador = true;
         if (etEmail.getText().toString().isEmpty()) {
             etEmail.setError("CAMPO OBLIGATORIO");
@@ -99,7 +96,6 @@ public class Login extends AppCompatActivity {
             final String email = etEmail.getText().toString();
 
             final String contraseña = etPass.getText().toString();
-
 
             BddPersonas.getPersona(email, Login.this, new Response.Listener<String>() {
                 @Override

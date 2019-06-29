@@ -85,12 +85,12 @@ public class BddPedido {
 
     public static void getPedidoListo(final Persona vendedor, Context context, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,urlBase+"getPedidoFaltante", null, listener, errorListener){
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,urlBase+"getPedidoListo?id_vendedor="+ vendedor.getCodigo(), null, listener, errorListener){
             @Override
             protected Map<String,String> getParams() throws AuthFailureError{
                 map.clear();
                 map=new HashMap<String, String>();
-                map.put("pedido_id", String.valueOf(vendedor.getCodigo()));
+                map.put("id_vendedor", String.valueOf(vendedor.getCodigo()));
                 return map;
             }
         };

@@ -2,6 +2,7 @@ package com.example.djgra.inacapdeli.AlertDialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.example.djgra.inacapdeli.Adaptadores.AdaptadorProductosPorPreparar;
 import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.Funciones.BddPedido;
+import com.example.djgra.inacapdeli.Funciones.Functions;
 import com.example.djgra.inacapdeli.PrepararPedido;
 import com.example.djgra.inacapdeli.R;
 
@@ -39,6 +41,7 @@ public class AlertDialogPrepararProductoPedidos extends AlertDialog {
         btnTerminar.setEnabled(false);
         AdaptadorProductosPorPreparar adpatador = new AdaptadorProductosPorPreparar(lstProducto,btnTerminar,context);
         lstvProductos.setAdapter(adpatador);
+        final ProgressDialog progressDialog = Functions.CargarDatos("Pedido Listo", context);
         btnTerminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,6 +49,7 @@ public class AlertDialogPrepararProductoPedidos extends AlertDialog {
                     @Override
                     public void onResponse(String response) {
                         dismiss();
+                        progressDialog.dismiss();
                         for (int x = 0; x < lstPedido.size(); x++){
                             if(lstPedido.get(x).getCodigo() == pedido.getCodigo()){
                                 lstPedido.remove(x);

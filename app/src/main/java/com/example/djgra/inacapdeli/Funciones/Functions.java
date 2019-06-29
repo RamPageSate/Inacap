@@ -35,8 +35,8 @@ public class Functions {
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("" + cargar);
-        progressDialog.setCancelable(true);
-        progressDialog.setCanceledOnTouchOutside(true);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
         return progressDialog;
