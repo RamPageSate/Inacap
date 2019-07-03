@@ -68,26 +68,26 @@ public class EntregarPedidoPorCodigoQr extends AppCompatActivity{
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == 99){
-            final ProgressDialog progressDialog = Functions.CargarDatos("Cargando Cliente.. !", EntregarPedidoPorCodigoQr.this);
-            BddPersonas.getPersona(tvCliente.getText().toString(), EntregarPedidoPorCodigoQr.this, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    if (!response.equals("[]")) {
-                        try {
-                            JSONObject objeto = new JSONObject(response);
-                            final Persona persona = new Persona();
-                            persona.setNombre(objeto.getString("persona_nombre"));
-                            persona.setApellido(objeto.getString("persona_apellido"));
-                            persona.setCodigo(objeto.getInt("persona_id"));
-                            cliente =persona;
-                            tvCliente.setText("Cliente -> "+ cliente.getNombre() + " " + cliente.getApellido());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+                        super.onActivityResult(requestCode, resultCode, data);
+                        if(resultCode == 99){
+                            final ProgressDialog progressDialog = Functions.CargarDatos("Cargando Cliente.. !", EntregarPedidoPorCodigoQr.this);
+                            BddPersonas.getPersona(tvCliente.getText().toString(), EntregarPedidoPorCodigoQr.this, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    if (!response.equals("[]")) {
+                                        try {
+                                            JSONObject objeto = new JSONObject(response);
+                                            final Persona persona = new Persona();
+                                            persona.setNombre(objeto.getString("persona_nombre"));
+                                            persona.setApellido(objeto.getString("persona_apellido"));
+                                            persona.setCodigo(objeto.getInt("persona_id"));
+                                            cliente =persona;
+                                            tvCliente.setText("Cliente -> "+ cliente.getNombre() + " " + cliente.getApellido());
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
                    BddPedido.getPedidoListo(vendedor, EntregarPedidoPorCodigoQr.this, new Response.Listener<JSONArray>() {
                        @Override
                        public void onResponse(JSONArray response) {
@@ -123,11 +123,11 @@ public class EntregarPedidoPorCodigoQr extends AppCompatActivity{
                                                                e.printStackTrace();
                                                            }
                                                        }
+                                                       cliente.agregarPedido(pedido);
+                                                       adaptadorPedidosQr =new AdaptadorPedidosQr(cliente.getLstPedidos(),EntregarPedidoPorCodigoQr.this);
+                                                       lstvPedidos.setAdapter(adaptadorPedidosQr);
+                                                       progressDialog.dismiss();
                                                    }
-                                                   cliente.agregarPedido(pedido);
-                                                   adaptadorPedidosQr =new AdaptadorPedidosQr(cliente.getLstPedidos(),EntregarPedidoPorCodigoQr.this);
-                                                   lstvPedidos.setAdapter(adaptadorPedidosQr);
-                                                   progressDialog.dismiss();
                                                }
                                            }, null);
                                        }

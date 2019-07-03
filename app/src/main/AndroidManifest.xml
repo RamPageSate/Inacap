@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LectoQr"></activity>
+        <activity android:name=".Recargar"></activity>
+        <activity android:name=".LectoQr" />
         <activity android:name=".EntregarPedidoPorCodigoQr" />
         <activity android:name=".EntregarPedido" />
         <activity android:name=".PrepararPedido" />

@@ -22,7 +22,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 public class PrincipalVendedor extends AppCompatActivity {
-    ImageButton btnPorPreparar, btnEntregarPedido, btnHistorialPedidos, btnCerrarSesion;
+    ImageButton btnPorPreparar, btnEntregarPedido, btnHistorialPedidos, btnCerrarSesion, btnRecargarSaldo;
     Persona vendedor;
 
     @Override
@@ -37,6 +37,7 @@ public class PrincipalVendedor extends AppCompatActivity {
         btnPorPreparar = findViewById(R.id.btnPrepararPedido);
         btnEntregarPedido = findViewById(R.id.btnEntregarPedido);
         btnCerrarSesion = findViewById(R.id.btnCerrarSesionVendedor);
+        btnRecargarSaldo =  findViewById(R.id.btnRecargarSaldo);
 
 
         btnEntregarPedido.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +49,15 @@ public class PrincipalVendedor extends AppCompatActivity {
             }
         });
 
+
+        btnRecargarSaldo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PrincipalVendedor.this, Recargar.class);
+                i.putExtra("usr", vendedor);
+                startActivity(i);
+            }
+        });
 
         btnCerrarSesion.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -82,4 +82,40 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView52"
         app:srcCompat="@drawable/cerrarsesionvendedor" />
+
+    <ImageButton
+        android:id="@+id/btnRecargarSaldo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="90dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView51"
+        app:srcCompat="@drawable/recargarsaldo" />
+
+    <TextView
+        android:id="@+id/textView58"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="46dp"
+        android:layout_marginRight="46dp"
+        android:text="Cerrar Sesion"
+        android:textColor="@color/NegroInacap"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnCerrarSesionVendedor" />
+
+    <TextView
+        android:id="@+id/textView60"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginLeft="36dp"
+        android:text="Recargar Saldo"
+        android:textColor="@color/NegroInacap"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRecargarSaldo" />
 </android.support.constraint.ConstraintLayout>
