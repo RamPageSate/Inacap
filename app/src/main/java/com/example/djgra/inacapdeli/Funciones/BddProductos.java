@@ -159,6 +159,21 @@ public class BddProductos {
         requestQueue.add(stringRequest);
     }
 
+    public static void deleteProductoFavorito(final Producto_Favorito producto, Context context, Response.Listener listener, Response.ErrorListener errorListener){
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlBase + "deleteProductoFavorito", listener, errorListener) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                map.clear();
+                map = new HashMap<String, String>();
+                map.put("id_cliente", String.valueOf(producto.getId_cliente()));
+                map.put("id_producto", String.valueOf(producto.getId_producto()));
+                return map;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
     /**
      * @param id_cliente    id del cliente para traer sus productos favoritos
      * @param context       Contexto de la actividad

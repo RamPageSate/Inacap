@@ -31,8 +31,6 @@ public class ProductoActivity extends AppCompatActivity {
     ImageButton btnSalir, btnAgregar;
     Spinner spCategorias;
     ListView lstvProductos;
-    Producto productoSeleccionado ;
-    private Date fecha;
     public static ArrayList<Producto> lstProductos = new ArrayList<>();
     public static ArrayList<Categoria> lstCategoria = new ArrayList<>();
     AdaptadorProductosAdministrador adapterProductos;
@@ -41,7 +39,6 @@ public class ProductoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-            //codigo de respues
         actualizarListView();
     }
 
@@ -91,14 +88,13 @@ public class ProductoActivity extends AppCompatActivity {
 
     public void actualizarListView(){
         lstProductos.removeAll(lstProductos);
-        final ProgressDialog progressDialog = Functions.CargarDatos("Cangando Productos", ProductoActivity.this);
+        final ProgressDialog progressDialog = Functions.CargarDatos("Cargando Productos", ProductoActivity.this);
         BddProductos.getProducto(ProductoActivity.this, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 if (!response.toString().equals("[]")) {
                     for (int x = 0; x < response.length(); x++) {
                         try {
-                            Log.d("TAG_", "cargara los productos");
                             final Producto producto = new Producto();
                             producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
                             producto.setNombre(response.getJSONObject(x).getString("producto_nombre"));
@@ -116,7 +112,7 @@ public class ProductoActivity extends AppCompatActivity {
                                     if (!response.toString().equals("[]")) {
                                         ArrayList<Categoria> categoriasProducto = new ArrayList<>();
                                         for (int x = 0; x < response.length(); x++) {
-                                            try {//falta agrgar las categorias asignadas al producto
+                                            try {
                                                 Categoria categoria = new Categoria(response.getJSONObject(x).getInt("categoria_id"), response.getJSONObject(x).getInt("categoria_estado"), response.getJSONObject(x).getString("categoria_nombre"));
                                                 categoriasProducto.add(categoria);
                                             } catch (JSONException e) {

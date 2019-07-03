@@ -135,7 +135,6 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
                 pro.setId_cliente(cliente.getCodigo());
                 pro.setId_producto(lstProductos.get(position).getCodigo());
                 if(categoria != null){
-                    //falta el deleteProductoFavorito corregir ubicacion
                     int lugar = posicionProducto(lstProductos,lstProductos.get(position).getCodigo());
                     lstProductos.remove(lugar);
                     notifyItemRemoved(lugar);
@@ -157,7 +156,18 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
                             }
                         });
                     }else{
-                        //quitarlo de la base de datos
+                        BddProductos.deleteProductoFavorito(pro, context, new Response.Listener() {
+                            @Override
+                            public void onResponse(Object response) {
+
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                holder.btnLike.setBackgroundResource(R.drawable.like);
+                                Toast.makeText(context, "No quitarlo de tus Favoritos", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                         holder.btnLike.setBackgroundResource(R.drawable.nolike);
                     }
                 }

@@ -51,7 +51,6 @@ public class PrincipalAdministrador extends AppCompatActivity {
     private AlertDialogCategoria categorias;
 
     private ProgressDialog progressDialog;
-    ListView lstvVendedores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,14 +116,13 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnProductos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog = Functions.CargarDatos("Cangando Productos", PrincipalAdministrador.this);
+                progressDialog = Functions.CargarDatos("Cargando Productos", PrincipalAdministrador.this);
                 BddProductos.getProducto(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         if (!response.toString().equals("[]")) {
                             for (int x = 0; x < response.length(); x++) {
                                 try {
-                                    Log.d("TAG_", "cargara los productos");
                                     final Producto producto = new Producto();
                                     producto.setCodigo(response.getJSONObject(x).getInt("producto_id"));
                                     producto.setNombre(response.getJSONObject(x).getString("producto_nombre"));
@@ -142,7 +140,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                             if (!response.toString().equals("[]")) {
                                                 ArrayList<Categoria> categoriasProducto = new ArrayList<>();
                                                 for (int x=0; x < response.length();x++){
-                                                    try {//falta agrgar las categorias asignadas al producto
+                                                    try {
                                                         Categoria categoria = new Categoria(response.getJSONObject(x).getInt("categoria_id"), response.getJSONObject(x).getInt("categoria_estado"), response.getJSONObject(x).getString("categoria_nombre"));
                                                         categoriasProducto.add(categoria);
                                                     } catch (JSONException e) {
@@ -158,9 +156,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             }
-                            // falta traer las categorias asociadas a los productos
                         }
-                        //traer categorias
                         BddCategoria.getCategoria(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {
@@ -199,7 +195,6 @@ public class PrincipalAdministrador extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
                         if (!response.toString().equals("[]")) {
                             for (int x = 0; x < response.length(); ++x) {
-                                Log.d("TAG_", "encotnó vendedor" + x);
                                 try {
                                     int codigo = response.getJSONObject(x).getInt("persona_id");
                                     String nombre = response.getJSONObject(x).getString("persona_nombre");
@@ -255,7 +250,7 @@ public class PrincipalAdministrador extends AppCompatActivity {
         btnSede.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog = Functions.CargarDatos("Cargando", PrincipalAdministrador.this);
+                progressDialog = Functions.CargarDatos("Cargando...", PrincipalAdministrador.this);
 
                 BddSede.getSede(PrincipalAdministrador.this, new Response.Listener<JSONArray>() {
                     @Override
@@ -348,32 +343,4 @@ public class PrincipalAdministrador extends AppCompatActivity {
         });
         //endregion
     }
-
-
-    public static void CargarListViewCategoria(final ListView lstView, final Context context, ArrayList<Categoria> list) {
-        lstView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        lstView.setItemsCanFocus(true);
-        for (int x = 0; x < list.size(); x++) {
-            if (list.get(x).getEstado() == 1) {
-                lstView.setItemChecked(x, true);
-                lstView.deferNotifyDataSetChanged();
-            }
-        }
-    }
-
-    public static void CargarListViewSede(final ListView lstView, final Context context, ArrayList<Sede> list) {
-        ArrayAdapter<Sede> adapt = new ArrayAdapter<Sede>(context, android.R.layout.simple_list_item_multiple_choice, list);
-        lstView.setAdapter(adapt);
-        lstView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        lstView.setItemsCanFocus(true);
-        for (int x = 0; x < list.size(); x++) {
-            if (list.get(x).getEstado() == 1) {
-                lstView.setItemChecked(x, true);
-                lstView.deferNotifyDataSetChanged();
-            }
-        }
-    }
-
-
-
 }

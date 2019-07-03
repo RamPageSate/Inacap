@@ -41,7 +41,6 @@ public class AlertDialogPrepararProductoPedidos extends AlertDialog {
         btnTerminar.setEnabled(false);
         AdaptadorProductosPorPreparar adpatador = new AdaptadorProductosPorPreparar(lstProducto,btnTerminar,context);
         lstvProductos.setAdapter(adpatador);
-        final ProgressDialog progressDialog = Functions.CargarDatos("Pedido Listo", context);
         btnTerminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,13 +48,13 @@ public class AlertDialogPrepararProductoPedidos extends AlertDialog {
                     @Override
                     public void onResponse(String response) {
                         dismiss();
-                        progressDialog.dismiss();
                         for (int x = 0; x < lstPedido.size(); x++){
                             if(lstPedido.get(x).getCodigo() == pedido.getCodigo()){
                                 lstPedido.remove(x);
                                 break;
                             }
                         }
+                        Toast.makeText(context, "Pedido Listo", Toast.LENGTH_SHORT).show();
                         AdaptadorPedidosPorPreparar adaptadorPedidosPorPreparar = new AdaptadorPedidosPorPreparar(lstPedido,context);
                         lst.setAdapter(adaptadorPedidosPorPreparar);
                         lst.deferNotifyDataSetChanged();

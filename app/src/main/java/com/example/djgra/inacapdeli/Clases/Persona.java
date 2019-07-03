@@ -151,6 +151,7 @@ public class Persona implements Serializable{
                 if(pro.getId_producto() == item.getId_producto()){
                     lstProductosFavoritos.remove(pro);
                     ok = false;
+                    break;
                 }else{
                     lstProductosFavoritos.add(item);
                     ok = true;

@@ -161,12 +161,19 @@ public class Pedido implements Serializable {
         ArrayList<Producto> lista = new ArrayList<>();
         for (int x=0; x < lst.size(); x++){
             if(lista.isEmpty()){
+                lst.get(x).setCantidad(1);
                 lista.add(lst.get(x));
             }else{
+                int validador = 0;
                 for(int c=0; c < lista.size(); c++){
-                    if(lista.get(c).getCodigo() != lst.get(x).getCodigo()){
-                        lista.add(lst.get(x));
+                    if(lista.get(c).getCodigo() == lst.get(x).getCodigo()){
+                        validador++;
+                        lista.get(c).setCantidad(lista.get(c).getCantidad() + 1);
                     }
+                }
+                if(validador == 0){
+                    lst.get(x).setCantidad(1);
+                    lista.add(lst.get(x));
                 }
             }
         }

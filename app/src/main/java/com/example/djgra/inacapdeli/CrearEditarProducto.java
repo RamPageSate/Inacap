@@ -198,7 +198,6 @@ public class CrearEditarProducto extends AppCompatActivity {
                 onBackPressed();
             }
         });
-// esta devuelve categoriasSeleccionadas
 //region btnAgregarCategorias
 
         btnAgregarCategrias.setOnClickListener(new View.OnClickListener() {
