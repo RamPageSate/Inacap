@@ -47,6 +47,7 @@ public class AlertDialogActualizarPerfil extends AlertDialog {
                                 checkVerde.setVisibility(View.VISIBLE);
                                 btnActualizar.setEnabled(true);
                                 btnActualizar.setBackgroundColor(Color.parseColor("#FF0000"));
+                                dismiss();
                                 Toast.makeText(context, "Guardado", Toast.LENGTH_SHORT).show();
                             } else {
                                 etPrincipal.setText("");
@@ -72,6 +73,7 @@ public class AlertDialogActualizarPerfil extends AlertDialog {
                                 checkVerde.setVisibility(View.VISIBLE);
                                 btnActualizar.setEnabled(true);
                                 btnActualizar.setBackgroundColor(Color.parseColor("#FF0000"));
+                                dismiss();
                                 Toast.makeText(context, "Guardado", Toast.LENGTH_SHORT).show();
                             } else {
                                 etPrincipal.setText("");
@@ -121,6 +123,7 @@ public class AlertDialogActualizarPerfil extends AlertDialog {
                             etNuevaContraseña.setVisibility(View.INVISIBLE);
                             btnGuardar.setBackgroundColor(Color.parseColor("#808080"));
                             btnGuardar.setEnabled(false);
+                            dismiss();
                             Toast.makeText(context, "Contraseña Cambiada", Toast.LENGTH_SHORT).show();
                         } else {
                             etNuevaContraseña.setText("");

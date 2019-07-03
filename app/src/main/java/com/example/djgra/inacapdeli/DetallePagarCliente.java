@@ -21,8 +21,10 @@ import com.example.djgra.inacapdeli.Adaptadores.AdaptadorDetalleProductoPagar;
 import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.Funciones.BddPedido;
+import com.example.djgra.inacapdeli.Funciones.BddPersonas;
 import com.example.djgra.inacapdeli.Funciones.Functions;
 
+import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,7 +63,7 @@ public class DetallePagarCliente extends AppCompatActivity {
         if (bundle != null) {
             pedido = (Pedido) bundle.getSerializable("pedido");
             codigoActividad = bundle.getInt("code");
-            tvSaldo.setText(String.valueOf(PrincipalCliente.clientePrincipal.getSaldo()));
+            tvSaldo.setText("$ " + PrincipalCliente.clientePrincipal.getSaldo());
         }
         AdaptadorDetalleProductoPagar adapter = new AdaptadorDetalleProductoPagar(pedido.getLstProductoPedido(),cantidadBarar,totalBarra,pedido,DetallePagarCliente.this);
         rcProductos.setAdapter(adapter);
@@ -143,6 +145,14 @@ public class DetallePagarCliente extends AppCompatActivity {
                         BddPedido.setPedido(pedido, DetallePagarCliente.this, new Response.Listener() {
                             @Override
                             public void onResponse(Object response) {
+                                int saldo = PrincipalCliente.clientePrincipal.getSaldo() -  Integer.parseInt(totalBarra.getText().toString());
+                                PrincipalCliente.clientePrincipal.setSaldo(saldo);
+                                BddPersonas.updatePersona(PrincipalCliente.clientePrincipal, DetallePagarCliente.this, new Response.Listener() {
+                                    @Override
+                                    public void onResponse(Object response) {
+                                        tvSaldo.setText("$" + PrincipalCliente.clientePrincipal.getSaldo());
+                                    }
+                                },null);
                                 Toast.makeText(DetallePagarCliente.this, "Pedido Realizado", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(DetallePagarCliente.this, PedidosCliente.class);
                                 intent.putExtra("cliente", PrincipalCliente.clientePrincipal);
@@ -150,11 +160,6 @@ public class DetallePagarCliente extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                                 progressDialog.dismiss();
-                                //enviar pedido a vendedor//
-                                //eliminartodo el pedido ya comptado
-                                //enviar pedido a a historial activos
-                                //descontar saldo
-                                //cuando paga hay que resetear la barra verde
                             }
                         }, Functions.FalloInternet(DetallePagarCliente.this, progressDialog, "No realizo Compra"));
                     } else {

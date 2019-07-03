@@ -226,6 +226,7 @@ public class PrincipalCliente extends AppCompatActivity {
         } else {
             linearPagar.setVisibility(View.INVISIBLE);
         }
+        tvSaldoActual.setText("Saldo: $ " + clientePrincipal.getSaldo());
     }
     public static ArrayList<Producto> FiltrarListaPorCategoria(Categoria categoria) {
         ArrayList<Producto> lista = new ArrayList<>();

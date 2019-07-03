@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/linearLayout7"
         android:layout_width="0dp"
-        android:layout_height="63dp"
+        android:layout_height="53dp"
         android:background="#3C3F41"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="10dp"
             android:text="Mi Perfil"
             android:textColor="@color/BlancoInacap"
             android:textSize="24sp" />
@@ -29,8 +29,8 @@
 
     <ImageView
         android:id="@+id/imgActualizarPerfil"
-        android:layout_width="95dp"
-        android:layout_height="98dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="8dp"
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="24dp"
         android:text="Foto de perfil"
         android:textColor="@color/NegroInacap"
         android:textSize="14sp"
@@ -206,16 +206,16 @@
     <Button
         android:id="@+id/btnActualizarPerfil"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="27dp"
-        android:layout_marginLeft="27dp"
-        android:layout_marginEnd="27dp"
-        android:layout_marginRight="27dp"
-        android:layout_marginBottom="12dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="2dp"
         android:background="@color/RojoInacap"
         android:text="G U A R D A R     C A M B I O S"
         android:textColor="@color/BlancoInacap"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -223,20 +223,20 @@
     <Button
         android:id="@+id/btnCerrarSesion"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:background="#FC882E"
+        android:drawableRight="@drawable/cerrarsesion"
         android:text="C E R R A R    S E S I O N"
         android:textColor="@color/BlancoInacap"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/btnActualizarPerfil"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:drawableRight="@drawable/cerrarsesion" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout8"
