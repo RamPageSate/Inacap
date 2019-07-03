@@ -130,7 +130,6 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //falta agregar a la BD tabla favoritos
                 Producto_Favorito pro = new Producto_Favorito();
                 pro.setId_cliente(cliente.getCodigo());
                 pro.setId_producto(lstProductos.get(position).getCodigo());
@@ -168,7 +167,6 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
                                 Toast.makeText(context, "No quitarlo de tus Favoritos", Toast.LENGTH_SHORT).show();
                             }
                         });
-                        holder.btnLike.setBackgroundResource(R.drawable.nolike);
                     }
                 }
             }
