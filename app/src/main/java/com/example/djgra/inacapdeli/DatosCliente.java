@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.example.djgra.inacapdeli.AlertDialog.AlertDialogActualizarPerfil;
+import com.example.djgra.inacapdeli.AlertDialog.AlertDialogQr;
 import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Funciones.BddPersonas;
 import com.example.djgra.inacapdeli.Funciones.Functions;
@@ -35,7 +36,7 @@ public class DatosCliente extends AppCompatActivity {
     Persona NuevosDatos = new Persona();
     boolean Actualizo = false;
     ImageView imagen;
-    ImageButton btnInicio;
+    ImageButton btnInicio, btnRecargar;
     Button btnActualizarPerfil, btnCerrarSession;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class DatosCliente extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmailPerfil);
         btnCerrarSession = findViewById(R.id.btnCerrarSesion);
         etPass = findViewById(R.id.etPassPerfil);
+        btnRecargar = findViewById(R.id.btnRecargarPerfil);
         btnActualizarPerfil = findViewById(R.id.btnActualizarPerfil);
         imagen = findViewById(R.id.imgActualizarPerfil);
         btnInicio = findViewById(R.id.btnInicioPerfil);
@@ -91,6 +93,14 @@ public class DatosCliente extends AppCompatActivity {
                 editorPreferencias.commit();
                 Intent intent =  new Intent(DatosCliente.this, Inicio.class);
                 startActivity(intent);
+            }
+        });
+
+        btnRecargar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialogQr alertDialogQr = new AlertDialogQr(DatosCliente.this,cliente,"RECARGAR");
+                alertDialogQr.show();
             }
         });
 

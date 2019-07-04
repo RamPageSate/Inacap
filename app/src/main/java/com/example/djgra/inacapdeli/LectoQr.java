@@ -13,7 +13,6 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class LectoQr extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
-
     ZXingScannerView scannerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +23,11 @@ public class LectoQr extends AppCompatActivity implements ZXingScannerView.Resul
 
     @Override
     public void handleResult(Result result) {
-        EntregarPedidoPorCodigoQr.tvCliente.setText(result.getText());
+        if(EntregarPedidoPorCodigoQr.tvCliente != null){
+            EntregarPedidoPorCodigoQr.tvCliente.setText(result.getText());
+        }else{
+            Recargar.tvCliente.setText(result.getText());
+        }
         Intent intent = getIntent();
         setResult(99);
         onBackPressed();

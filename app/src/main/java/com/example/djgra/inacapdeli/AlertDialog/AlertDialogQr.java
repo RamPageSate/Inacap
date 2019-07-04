@@ -12,13 +12,14 @@ import android.widget.TextView;
 
 import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Funciones.Functions;
+import com.example.djgra.inacapdeli.Login;
 import com.example.djgra.inacapdeli.PrincipalCliente;
 import com.example.djgra.inacapdeli.R;
 
 import java.util.ArrayList;
 
 public class AlertDialogQr extends AlertDialog {
-    public AlertDialogQr(final Activity context, final Persona cliente) {
+    public AlertDialogQr(final Activity context, final Persona cliente, final String accion) {
         super(context);
         setCancelable(false);
         setCanceledOnTouchOutside(false);
@@ -27,18 +28,23 @@ public class AlertDialogQr extends AlertDialog {
         setView(view);
         TextView tvNombre = view.findViewById(R.id.tvNombreQr);
         Button btnListo = view.findViewById(R.id.btnListoQr);
-        TextView tvCantidad = view.findViewById(R.id.tvCantidadPedidoQr);
         ImageView imgQr = view.findViewById(R.id.imgQr);
         tvNombre.setText(tvNombre.getText()+ " "+cliente.getNombre()+ " " + cliente.getApellido());
-        tvCantidad.setText("");
         imgQr.setImageBitmap(Functions.StringToBitMap(cliente.getCodigoQr()));
-
+        if(accion.equals("RECARGAR")){
+            btnListo.setText("LISTO");
+        }
         btnListo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, PrincipalCliente.class);
-                intent.putExtra("usr",cliente);
-                context.startActivity(intent);
+                if(accion.equals("RETIRAR")){
+                    Intent intent = new Intent(context, PrincipalCliente.class);
+                    intent.putExtra("usr",cliente);
+                    context.startActivity(intent);
+                }else{
+                    Intent intent = new Intent(context, Login.class);
+                    context.startActivity(intent);
+                }
             }
         });
     }

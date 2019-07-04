@@ -36,6 +36,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
     LinearLayout linearLayout;
     Persona cliente;
     Categoria categoria;
+
     public AdaptadorRecyclerViewProductoCliente(ArrayList<Producto> lstProductos, TextView cantidadProductosPedido, TextView totalPagarPedido, Pedido pedido, Activity context, LinearLayout linearLayout, Persona cliente, Categoria categoria) {
         this.lstProductos = lstProductos;
         this.cantidadProductosPedido = cantidadProductosPedido;
@@ -62,58 +63,58 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
         holder.descripcionProducto.setText(lstProductos.get(position).getDescripcion());
         holder.precioProducto.setText("$ " + lstProductos.get(position).getPrecio());
         holder.imgProducto.setImageBitmap(Functions.StringToBitMap(lstProductos.get(position).getFoto()));
-        if(!cliente.getLstProductosFavoritos().isEmpty()){
-            for(int x=0; x < cliente.getLstProductosFavoritos().size(); x++){
-                if(cliente.getLstProductosFavoritos().get(x).getId_producto() == lstProductos.get(position).getCodigo()){
+        if (!cliente.getLstProductosFavoritos().isEmpty()) {
+            for (int x = 0; x < cliente.getLstProductosFavoritos().size(); x++) {
+                if (cliente.getLstProductosFavoritos().get(x).getId_producto() == lstProductos.get(position).getCodigo()) {
                     holder.btnLike.setBackgroundResource(R.drawable.like);
                 }
             }
         }
-        if(!pedido.getLstProductoPedido().isEmpty()){
-            for(int x=0 ; x < pedido.getLstProductoPedido().size(); x++){
-                if(pedido.getLstProductoPedido().get(x).getCodigo() == lstProductos.get(position).getCodigo()){
+        if (!pedido.getLstProductoPedido().isEmpty()) {
+            for (int x = 0; x < pedido.getLstProductoPedido().size(); x++) {
+                if (pedido.getLstProductoPedido().get(x).getCodigo() == lstProductos.get(position).getCodigo()) {
                     lstProductos.get(position).setCantidad(pedido.getLstProductoPedido().get(x).getCantidad());
                     holder.cantidadProducto.setVisibility(View.VISIBLE);
                     holder.btnDescontar.setVisibility(View.VISIBLE);
                     holder.cantidadProducto.setText(String.valueOf(pedido.getLstProductoPedido().get(x).getCantidad()));
-                }else{
+                } else {
                     holder.cantidadProducto.setText("1");
                 }
                 cantidadProductosPedido.setText(String.valueOf(pedido.cantidadArticulos()));
                 totalPagarPedido.setText(String.valueOf(pedido.totalPagarPedido()));
             }
-        }else{
+        } else {
             holder.cantidadProducto.setVisibility(View.INVISIBLE);
             holder.cantidadProducto.setText("0");
         }
         holder.btnDescontar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(pedido.quitarProductoListaPedido(lstProductos.get(position)) == true){
+                if (pedido.quitarProductoListaPedido(lstProductos.get(position)) == true) {
                     cantidadProductosPedido.setText(String.valueOf(pedido.cantidadArticulos()));
                     holder.cantidadProducto.setText("0");
                     holder.cantidadProducto.setVisibility(View.INVISIBLE);
                     holder.btnDescontar.setVisibility(View.INVISIBLE);
                     totalPagarPedido.setText(String.valueOf(pedido.totalPagarPedido()));
 
-                }else{
+                } else {
                     cantidadProductosPedido.setText(String.valueOf(pedido.cantidadArticulos()));
                     totalPagarPedido.setText(String.valueOf(pedido.totalPagarPedido()));
-                    holder.cantidadProducto.setText(String.valueOf(Integer.parseInt(holder.cantidadProducto.getText().toString()) -1));
+                    holder.cantidadProducto.setText(String.valueOf(Integer.parseInt(holder.cantidadProducto.getText().toString()) - 1));
                 }
-                    //solo desconto la cantidad
-                if(Integer.parseInt(cantidadProductosPedido.getText().toString()) == 0){
+                //solo desconto la cantidad
+                if (Integer.parseInt(cantidadProductosPedido.getText().toString()) == 0) {
                     linearLayout.setVisibility(View.INVISIBLE);
                 }
-                Log.d("TAG","quita");
+                Log.d("TAG", "quita");
             }
         });
         holder.btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(pedido.cantidadArticulos() == 10){
+                if (pedido.cantidadArticulos() == 10) {
                     Toast.makeText(context, "Solo 10 productos por pedido", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     pedido.agregarProductoListaPedido(lstProductos.get(position));
                     holder.cantidadProducto.setVisibility(View.VISIBLE);
                     holder.cantidadProducto.setText(String.valueOf(pedido.cantidadProductoPedido(lstProductos.get(position).getCodigo())));
@@ -122,7 +123,7 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
                     cantidadProductosPedido.setText(String.valueOf(pedido.cantidadArticulos()));
                     totalPagarPedido.setText(String.valueOf(pedido.totalPagarPedido()));
                 }
-                Log.d("TAG","suma");
+                Log.d("TAG", "suma");
             }
         });
 
@@ -133,43 +134,41 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
                 Producto_Favorito pro = new Producto_Favorito();
                 pro.setId_cliente(cliente.getCodigo());
                 pro.setId_producto(lstProductos.get(position).getCodigo());
-                if(categoria != null){
-                    int lugar = posicionProducto(lstProductos,lstProductos.get(position).getCodigo());
-                    lstProductos.remove(lugar);
-                    notifyItemRemoved(lugar);
-                }else{
-                    if(cliente.ProductoFavorito(pro) == true){
-                        BddProductos.setProductoFavorito(pro, context, new Response.Listener() {
-                            @Override
-                            public void onResponse(Object response) {
-                                holder.btnLike.setBackgroundResource(R.drawable.like);
-                                Toast.makeText(context, "Agrego a MIS FAVORITAS", Toast.LENGTH_SHORT).show();
-                                //cuando este en la categoria 48 mis favoritas poder quitar el producto con like = 0
-
+                if (cliente.ProductoFavorito(pro) == true) {
+                    BddProductos.setProductoFavorito(pro, context, new Response.Listener() {
+                        @Override
+                        public void onResponse(Object response) {
+                            holder.btnLike.setBackgroundResource(R.drawable.like);
+                            Toast.makeText(context, "Agrego a MIS FAVORITAS", Toast.LENGTH_SHORT).show();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            holder.btnLike.setBackgroundResource(R.drawable.nolike);
+                            Toast.makeText(context, "No pudo Agregar a Favoritos", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    BddProductos.deleteProductoFavorito(pro, context, new Response.Listener() {
+                        @Override
+                        public void onResponse(Object response) {
+                            holder.btnLike.setBackgroundResource(R.drawable.nolike);
+                            if(categoria != null){
+                                int lugar = posicionProducto(lstProductos,lstProductos.get(position).getCodigo());
+                                lstProductos.remove(lugar);
+                                notifyItemRemoved(lugar);
                             }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                holder.btnLike.setBackgroundResource(R.drawable.nolike);
-                                Toast.makeText(context, "No pudo Agregar a Favoritos", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }else{
-                        BddProductos.deleteProductoFavorito(pro, context, new Response.Listener() {
-                            @Override
-                            public void onResponse(Object response) {
-
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                holder.btnLike.setBackgroundResource(R.drawable.like);
-                                Toast.makeText(context, "No quitarlo de tus Favoritos", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            holder.btnLike.setBackgroundResource(R.drawable.like);
+                            Toast.makeText(context, "No quitarlo de tus Favoritos", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
+
         });
 
     }
@@ -204,10 +203,10 @@ public class AdaptadorRecyclerViewProductoCliente extends RecyclerView.Adapter<A
     }
 
 
-    private int posicionProducto (ArrayList<Producto> lst, int  codigoProducto){
+    private int posicionProducto(ArrayList<Producto> lst, int codigoProducto) {
         int posicion = 0;
-        for(int x= 0;  x < lst.size(); x++){
-            if(lst.get(x).getCodigo() == codigoProducto){
+        for (int x = 0; x < lst.size(); x++) {
+            if (lst.get(x).getCodigo() == codigoProducto) {
                 posicion = x;
             }
         }

@@ -148,7 +148,7 @@ public class PedidosCliente extends AppCompatActivity {
         btnRetirar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    AlertDialogQr alertDialogQr = new AlertDialogQr(PedidosCliente.this,cliente);
+                    AlertDialogQr alertDialogQr = new AlertDialogQr(PedidosCliente.this,cliente,"RETIRAR");
                     alertDialogQr.show();
             }
         });

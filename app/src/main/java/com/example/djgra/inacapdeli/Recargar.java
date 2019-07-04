@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.djgra.inacapdeli.Clases.Persona;
 import com.example.djgra.inacapdeli.Funciones.BddPersonas;
 import com.example.djgra.inacapdeli.Funciones.Functions;
@@ -24,7 +25,7 @@ public class Recargar extends AppCompatActivity {
     Persona vendedodr,  cliente;
     ImageButton btnSalir, btnQr;
     EditText etRecargar;
-    TextView tvCliente;
+    public static TextView tvCliente;
     Button btnRecargar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,26 @@ public class Recargar extends AppCompatActivity {
                 if(cliente != null){
                     if(etRecargar.getText().toString().isEmpty() || etRecargar.getText().toString().equals("0")){
                         etRecargar.setError("Ingrese Monto");
+                    }else{
+                        int saldo = Integer.parseInt(etRecargar.getText().toString()) + cliente.getSaldo();
+                        cliente.setSaldo(saldo);
+                        final ProgressDialog progressDialog = Functions.CargarDatos("Recargando Saldo..",Recargar.this);
+                        BddPersonas.updatePersona(cliente, Recargar.this, new Response.Listener() {
+                            @Override
+                            public void onResponse(Object response) {
+                                Toast.makeText(Recargar.this, "Recarga Exitosa", Toast.LENGTH_SHORT).show();
+                                cliente = null;
+                                etRecargar.setText("");
+                                tvCliente.setText("Cliente ->");
+                                progressDialog.dismiss();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(Recargar.this, "No se Pudo Recargar", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            }
+                        });
                     }
                 }else{
                     Toast.makeText(Recargar.this, "Escanear Cliente Para Recargar", Toast.LENGTH_SHORT).show();
@@ -75,9 +96,17 @@ public class Recargar extends AppCompatActivity {
                         try {
                             JSONObject objeto = new JSONObject(response);
                             final Persona persona = new Persona();
+                            persona.setCorreo(objeto.getString("persona_email"));
+                            persona.setContrasena(objeto.getString("persona_contrasena"));
                             persona.setNombre(objeto.getString("persona_nombre"));
                             persona.setApellido(objeto.getString("persona_apellido"));
+                            persona.setFoto(objeto.getString("persona_foto"));
+                            persona.setCodigoQr(objeto.getString("persona_codigo_qr"));
+                            persona.setEstado(objeto.getInt("persona_estado"));
+                            persona.setRol(objeto.getInt("id_rol"));
                             persona.setCodigo(objeto.getInt("persona_id"));
+                            persona.setSaldo(objeto.getInt("persona_saldo"));
+                            persona.setSede(objeto.getInt("id_sede"));
                             cliente = persona;
                             tvCliente.setText("Cliente -> " + cliente.getNombre() + " " + cliente.getApellido());
                             progressDialog.dismiss();
