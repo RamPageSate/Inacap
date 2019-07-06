@@ -44,9 +44,9 @@ public class PedidosCliente extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pedidos_cliente);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        rcPedidos = (RecyclerView) findViewById(R.id.rcPedidosCliente);
+        setContentView(R.layout.activity_pedidos_cliente);
+        rcPedidos = findViewById(R.id.rcPedidosCliente);
         btnActivos = findViewById(R.id.btnPedidosActivosCliente);
         imagensinPedido = findViewById(R.id.fondossinpedidos);
         btnAnteriores = findViewById(R.id.btnPedidosAnterioresCliente);
@@ -87,12 +87,12 @@ public class PedidosCliente extends AppCompatActivity {
                                                 producto.setId_fabricante(response.getJSONObject(x).getInt("id_fabricante"));
                                                 producto.setId_tipo(response.getJSONObject(x).getInt("id_tipo"));
                                                 lista.add(producto);
-                                                Log.d("TAG_", "CP-> " + producto.getNombre());
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
                                         }
                                         pedido.setLstProductoPedido(lista);
+                                        Log.d("TAG_", "CP-> " + pedido.getCodigo());
                                         cliente.agregarPedido(pedido);
                                     }
                                 }
@@ -102,14 +102,13 @@ public class PedidosCliente extends AppCompatActivity {
                             pedido.setId_cliente(response.getJSONObject(x).getInt("id_cliente"));
                             pedido.setId_vendedor(response.getJSONObject(x).getInt("id_vendedor"));
                             pedido.setId_condicion_pedido(response.getJSONObject(x).getInt("id_condicion_pedido"));
-                            Log.d("TAG_", "entro Pedidos");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                     progressDialog.dismiss();
+                    cargarVistaPedidoAnterior();
                 }
-                cargarVistaPedidoAnterior();
             }
         });
 

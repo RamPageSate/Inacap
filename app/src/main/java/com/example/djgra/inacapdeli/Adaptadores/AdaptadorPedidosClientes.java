@@ -15,9 +15,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
 import com.example.djgra.inacapdeli.Clases.Pedido;
 import com.example.djgra.inacapdeli.Clases.Producto;
 import com.example.djgra.inacapdeli.DetallePagarCliente;
+import com.example.djgra.inacapdeli.Funciones.BddPedido;
 import com.example.djgra.inacapdeli.R;
 
 
@@ -64,7 +66,12 @@ public class AdaptadorPedidosClientes extends RecyclerView.Adapter<AdaptadorPedi
         holder.btnEliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Eliminara Pedido", Toast.LENGTH_SHORT).show();
+                BddPedido.updateCondicionPedido(lstPedidos.get(position), 3, context, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(context, "Eliminado del historial", Toast.LENGTH_SHORT).show();
+                    }
+                }, null);
             }
         });
 

@@ -49,26 +49,24 @@ public class AdaptadorPedidosQr extends BaseAdapter {
         cbRetira.setId(300 + position);
         tvNumeroPedido.setText(String.valueOf(lstPedido.get(position).getCodigo()));
         tvCantidaArticulo.setText(String.valueOf(lstPedido.get(position).cantidadArticulos()));
+        if(cbRetirarTodo.isChecked() == true){
+            cbRetira.setChecked(true);
+            lstPedido.get(position).setId_condicion_pedido(1);
+        }else{
+            cbRetira.setChecked(false);
+            lstPedido.get(position).setId_condicion_pedido(5);
+        }
         cbRetira.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(cbRetira.isChecked() == true){
+                    lstPedido.get(position).setId_condicion_pedido(1);
+                }else{
                     lstPedido.get(position).setId_condicion_pedido(5);
                 }
             }
         });
-        cbRetirarTodo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(cbRetirarTodo.isChecked() == true){
 
-                    cbRetira.setChecked(true);
-                    //poner todos en condicion 5    solo marca 1
-                }else{
-                    cbRetira.setChecked(false);
-                }
-            }
-        });
 
         return item;
     }

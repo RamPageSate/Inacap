@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.example.djgra.inacapdeli.Adaptadores.AdaptadorPedidosQr;
@@ -71,11 +72,42 @@ public class EntregarPedidoPorCodigoQr extends AppCompatActivity {
                 finish();
             }
         });
-
+        cbRetirarTodo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(cliente != null){
+                    if(cbRetirarTodo.isChecked() == true){
+                        adaptadorPedidosQr = new AdaptadorPedidosQr(cliente.getLstPedidos(), EntregarPedidoPorCodigoQr.this, cbRetirarTodo);
+                        lstvPedidos.setAdapter(adaptadorPedidosQr);
+                    }else{
+                        adaptadorPedidosQr = new AdaptadorPedidosQr(cliente.getLstPedidos(), EntregarPedidoPorCodigoQr.this, cbRetirarTodo);
+                        lstvPedidos.setAdapter(adaptadorPedidosQr);
+                    }
+                }
+            }
+        });
         btnEntregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ArrayList<Pedido> lstPedidosEntregados = new ArrayList<>();
+                for(int x=0; x < cliente.getLstPedidos().size(); x++){
+                    if(cliente.getLstPedidos().get(x).getId_condicion_pedido() == 1){
+                        lstPedidosEntregados.add(cliente.getLstPedidos().get(x));
+                    }
+                }
+                if(!lstPedidosEntregados.isEmpty()){
+                    for(int x =0; x < lstPedidosEntregados.size() ; x++){
+                        BddPedido.updateCondicionPedido(lstPedidosEntregados.get(x), 1, EntregarPedidoPorCodigoQr.this, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(EntregarPedidoPorCodigoQr.this, "Pedido Entregado", Toast.LENGTH_SHORT).show();
+                                //actualizar la lista revisar el a comer
+                            }
+                        }, null);
+                    }
+                }else{
+                    Toast.makeText(EntregarPedidoPorCodigoQr.this, "Debe Marcar Pedido para retiro", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
